@@ -12,11 +12,20 @@ type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
 export default async function Home(props: { searchParams: SearchParams }) {
   const searchParams = await props.searchParams;
-  const { data: articles, meta } = await getArticles({
-    tag: typeof searchParams.tag === "string" ? searchParams.tag : undefined,
-    category: typeof searchParams.category === "string" ? searchParams.category : undefined,
-    search: typeof searchParams.q === "string" ? searchParams.q : undefined,
-  });
+  let articles: Awaited<ReturnType<typeof getArticles>>["data"] = [];
+  let meta: Awaited<ReturnType<typeof getArticles>>["meta"] = { page: 1, pageSize: 10, total: 0 };
+
+  try {
+    const result = await getArticles({
+      tag: typeof searchParams.tag === "string" ? searchParams.tag : undefined,
+      category: typeof searchParams.category === "string" ? searchParams.category : undefined,
+      search: typeof searchParams.q === "string" ? searchParams.q : undefined,
+    });
+    articles = result.data;
+    meta = result.meta;
+  } catch (error) {
+    console.error("Failed to load articles, falling back to empty list", error);
+  }
   const showAds = shouldShowAds("FREE");
 
   return (
