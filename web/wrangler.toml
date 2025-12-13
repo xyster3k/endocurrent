@@ -1,0 +1,8 @@
+name = "endocurrent"
+compatibility_date = "2024-09-02"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = ".vercel/output/static"
+
+[vars]
+NEXT_PUBLIC_SITE_URL = "https://endo.example.com"
+# Clerk / Supabase secrets should be set in Cloudflare Pages project settings, not committed.
