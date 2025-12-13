@@ -4,6 +4,7 @@ import { getSessionUser, requireRole } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { estimateReadingTime } from "@/lib/reading-time";
 import { env } from "@/lib/env";
+import type { Database } from "@/db/types";
 
 export const runtime = "edge";
 
@@ -74,18 +75,20 @@ export async function POST(req: NextRequest) {
   }
 
   const supabase = createSupabaseServerClient({ useServiceRole: true });
-  const { data, error } = await supabase
+  const insertPayload: Database["public"]["Tables"]["articles"]["Insert"] = {
+    title,
+    slug: title.toLowerCase().replace(/\s+/g, "-"),
+    summary,
+    body_markdown,
+    status: "draft_ai",
+    reading_time_minutes: reading.minutes,
+    word_count: reading.words,
+    author_id: user?.id ?? null,
+  };
+  const supabaseUnsafe = supabase as any;
+  const { data, error } = await supabaseUnsafe
     .from("articles")
-    .insert({
-      title,
-      slug: title.toLowerCase().replace(/\s+/g, "-"),
-      summary,
-      body_markdown,
-      status: "draft_ai",
-      reading_time_minutes: reading.minutes,
-      word_count: reading.words,
-      author_id: user?.id ?? null,
-    })
+    .insert(insertPayload)
     .select()
     .maybeSingle();
 
