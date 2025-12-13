@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
 const hasClerkEnv =
@@ -10,13 +10,26 @@ const isProtectedRoute = createRouteMatcher(["/admin(.*)", "/api/admin(.*)"]);
 
 const noopMiddleware = () => NextResponse.next();
 
-export default hasClerkEnv
-  ? clerkMiddleware((auth, req) => {
-      if (isProtectedRoute(req)) {
-        auth().protect();
-      }
-    })
-  : noopMiddleware;
+function buildMiddleware() {
+  if (!hasClerkEnv) return noopMiddleware;
+
+  const wrapped = clerkMiddleware((auth, req) => {
+    if (isProtectedRoute(req)) {
+      auth().protect();
+    }
+  });
+
+  return (req: NextRequest) => {
+    try {
+      return wrapped(req);
+    } catch (err) {
+      console.error("Middleware error (falling through):", err);
+      return NextResponse.next();
+    }
+  };
+}
+
+export default buildMiddleware();
 
 export const config = {
   matcher: ["/((?!.*\\.|_next).*)"],
