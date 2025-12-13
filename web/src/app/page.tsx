@@ -6,6 +6,7 @@ import { shouldShowAds } from "@/lib/ads";
 import { getArticles } from "@/lib/data/articles";
 
 export const revalidate = 300;
+export const runtime = "edge";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 

@@ -10,6 +10,7 @@ import { getArticleBySlug } from "@/lib/data/articles";
 import { buildArticleJsonLd } from "@/lib/seo";
 
 export const revalidate = 300;
+export const runtime = "edge";
 
 type Params = Promise<{ slug: string }>;
 

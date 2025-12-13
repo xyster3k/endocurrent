@@ -5,6 +5,7 @@ import { getSessionUser, requireRole } from "@/lib/auth";
 import { getArticles } from "@/lib/data/articles";
 
 export const dynamic = "force-dynamic";
+export const runtime = "edge";
 
 export default async function AdminHome() {
   const user = await getSessionUser();
