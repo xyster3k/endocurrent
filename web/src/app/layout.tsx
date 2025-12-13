@@ -31,6 +31,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const publishableKey = env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+  const hasClerk =
+    typeof publishableKey === "string" &&
+    publishableKey.startsWith("pk_") &&
+    publishableKey !== "pk_test_placeholder";
+
   const shell = (
     <html lang="en" className="min-h-full">
       <body
@@ -58,12 +64,12 @@ export default function RootLayout({
     </html>
   );
 
-  if (!env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) {
+  if (!hasClerk) {
     return shell;
   }
 
   return (
-    <ClerkProvider publishableKey={env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
+    <ClerkProvider publishableKey={publishableKey}>
       {shell}
     </ClerkProvider>
   );

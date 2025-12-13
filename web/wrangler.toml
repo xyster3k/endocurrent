@@ -5,7 +5,7 @@ pages_build_output_dir = ".vercel/output/static"
 
 [vars]
 NEXT_PUBLIC_SITE_URL = "https://endo.example.com"
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY = "pk_test_placeholder"
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY = ""
 NEXT_PUBLIC_SUPABASE_URL = "https://your-project.supabase.co"
 NEXT_PUBLIC_SUPABASE_ANON_KEY = "public-anon-key"
 NEXT_PUBLIC_ADSENSE_CLIENT = "ca-pub-xxxxxxxxxxxxxxxx"
