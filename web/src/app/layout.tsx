@@ -19,7 +19,6 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: env.siteUrl,
   title: "EndoCurrent — Endocrinology briefs",
   description:
     "A modern endocrinology news and insights site with weekly digests, peer-reviewed summaries, and AI-assisted drafts for editors.",
@@ -62,8 +61,10 @@ export default function RootLayout({
       </body>
     </html>
   );
+
   if (!hasClerk) {
     return shell;
   }
+
   return <ClerkProvider publishableKey={publishableKey}>{shell}</ClerkProvider>;
 }
