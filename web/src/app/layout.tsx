@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { ClerkProvider } from "@clerk/nextjs";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
@@ -30,6 +31,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const publishableKey = env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+  const hasClerk =
+    typeof publishableKey === "string" &&
+    publishableKey.startsWith("pk_") &&
+    publishableKey !== "pk_test_placeholder";
+
   const shell = (
     <html lang="en" className="min-h-full">
       <body
@@ -56,5 +63,8 @@ export default function RootLayout({
       </body>
     </html>
   );
-  return shell;
+  if (!hasClerk) {
+    return shell;
+  }
+  return <ClerkProvider publishableKey={publishableKey}>{shell}</ClerkProvider>;
 }
