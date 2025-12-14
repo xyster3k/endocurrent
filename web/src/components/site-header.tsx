@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
 import { ActivitySquare, ShieldCheck, Sparkles } from "lucide-react";
-import { env } from "@/lib/env";
 
 const navLinks = [
   { href: "/", label: "Feed" },
@@ -16,9 +15,9 @@ const navLinks = [
 export function SiteHeader() {
   const pathname = usePathname();
   const hasClerk =
-    typeof env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY === "string" &&
-    env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY.startsWith("pk_") &&
-    env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY !== "pk_test_placeholder";
+    typeof process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY === "string" &&
+    process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY.startsWith("pk_") &&
+    process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY !== "pk_test_placeholder";
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-white/10 bg-white/80 backdrop-blur-lg dark:bg-black/60">
@@ -40,7 +39,7 @@ export function SiteHeader() {
               key={link.href}
               href={link.href}
               className={cn(
-                "rounded-full px-3 py-1.5 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800",
+                "rounded-full px-3 py-1.5 text-slate-700 transition-colors hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800",
                 pathname === link.href &&
                   "bg-slate-900 text-white dark:bg-white dark:text-black"
               )}

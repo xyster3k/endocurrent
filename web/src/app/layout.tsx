@@ -6,7 +6,6 @@ import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { adsenseClient } from "@/lib/ads";
-import { env } from "@/lib/env";
 import { cn } from "@/lib/utils";
 
 const geistSans = Geist({
@@ -31,7 +30,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const publishableKey = env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+  const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
   const hasClerk =
     typeof publishableKey === "string" &&
     publishableKey.startsWith("pk_") &&
@@ -46,7 +45,7 @@ export default function RootLayout({
           "min-h-screen bg-background text-foreground antialiased"
         )}
       >
-        {adsenseClient && !env.adsDisabled ? (
+        {adsenseClient && process.env.ADS_DISABLED !== "true" ? (
           <Script
             id="adsense-script"
             async
