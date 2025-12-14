@@ -51,8 +51,8 @@ export default async function Home(props: { searchParams: SearchParams }) {
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
-                href="/admin"
-                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-800 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50"
+                href="/admin/posts"
+                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-900 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg dark:border-slate-700 dark:bg-slate-900 dark:text-white"
               >
                 Go to editor tools
                 <Compass className="h-4 w-4" />

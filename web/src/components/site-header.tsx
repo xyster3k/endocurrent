@@ -41,7 +41,7 @@ export function SiteHeader() {
               className={cn(
                 "rounded-full px-3 py-1.5 text-slate-700 transition-colors hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800",
                 pathname === link.href &&
-                  "bg-slate-900 text-white dark:bg-white dark:text-black"
+                  "bg-slate-900 text-white shadow-sm dark:bg-white dark:text-black"
               )}
             >
               {link.label}
