@@ -1,5 +1,7 @@
- "use client";
+"use client";
 import React, { useState } from "react";
+
+export const runtime = "edge";
 
 function DisplayNameForm() {
   const [name, setName] = useState("");

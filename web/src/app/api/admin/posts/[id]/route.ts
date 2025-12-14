@@ -21,7 +21,12 @@ type Params = Promise<{ id: string }>;
 export async function GET(_req: Request, props: { params: Params }) {
   const params = await props.params;
   const user = await getSessionUser();
-  requireRole(user, ["editor", "admin"]);
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  try {
+    requireRole(user, ["editor", "admin"]);
+  } catch {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
 
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
     const post = mockArticles.find((a) => a.id === params.id);
@@ -39,7 +44,12 @@ export async function GET(_req: Request, props: { params: Params }) {
 export async function PUT(req: Request, props: { params: Params }) {
   const params = await props.params;
   const user = await getSessionUser();
-  requireRole(user, ["editor", "admin"]);
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  try {
+    requireRole(user, ["editor", "admin"]);
+  } catch {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
 
   const body = await req.json();
   const parsed = updateSchema.safeParse(body);
@@ -67,7 +77,12 @@ export async function PUT(req: Request, props: { params: Params }) {
 export async function DELETE(_req: Request, props: { params: Params }) {
   const params = await props.params;
   const user = await getSessionUser();
-  requireRole(user, ["editor", "admin"]);
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  try {
+    requireRole(user, ["editor", "admin"]);
+  } catch {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
 
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
     return NextResponse.json({ ok: true, message: "Supabase not configured; mock delete only." });

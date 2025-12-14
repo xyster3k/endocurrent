@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "EndoCurrent — Endocrinology briefs",
+  title: "EndoCurrent | Endocrinology briefs",
   description:
     "A modern endocrinology news and insights site with weekly digests, peer-reviewed summaries, and AI-assisted drafts for editors.",
 };
