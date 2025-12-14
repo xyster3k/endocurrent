@@ -26,12 +26,7 @@ type Params = Promise<{ id: string }>;
 export async function PUT(req: Request, props: { params: Params }) {
   const params = await props.params;
   const user = await getSessionUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  try {
-    requireRole(user, ["editor", "admin"]);
-  } catch {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  }
+  requireRole(user, ["editor", "admin"]);
   const body = await req.json();
   const parsed = updateSchema.safeParse(body);
   if (!parsed.success) {
@@ -82,12 +77,7 @@ export async function PUT(req: Request, props: { params: Params }) {
 export async function DELETE(_req: Request, props: { params: Params }) {
   const params = await props.params;
   const user = await getSessionUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  try {
-    requireRole(user, ["editor", "admin"]);
-  } catch {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  }
+  requireRole(user, ["editor", "admin"]);
 
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
     return NextResponse.json({ ok: true, message: "Supabase not configured; mock delete menu." });

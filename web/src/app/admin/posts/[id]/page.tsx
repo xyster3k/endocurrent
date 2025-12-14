@@ -1,4 +1,4 @@
-"use client";
+ "use client";
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
@@ -12,6 +12,7 @@ type Post = {
   body_markdown: string;
   category?: string | null;
   status?: string | null;
+  tags?: string[];
 };
 
 export default function EditPostPage() {
@@ -75,18 +76,33 @@ function EditPostClient({ id }: { id?: string }) {
               onChange={(e) => setPost({ ...post, slug: e.target.value })}
             />
           </Field>
-          <Field label="Category">
-            <input
-              className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-blue-500 dark:border-slate-700 dark:bg-slate-950"
-              value={post.category ?? ""}
-              onChange={(e) => setPost({ ...post, category: e.target.value })}
-            />
-          </Field>
-          <Field label="Status">
-            <select
-              className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-blue-500 dark:border-slate-700 dark:bg-slate-950"
-              value={post.status ?? "draft"}
-              onChange={(e) => setPost({ ...post, status: e.target.value })}
+        <Field label="Category">
+          <input
+            className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-blue-500 dark:border-slate-700 dark:bg-slate-950"
+            value={post.category ?? ""}
+            onChange={(e) => setPost({ ...post, category: e.target.value })}
+          />
+        </Field>
+        <Field label="Tags (comma separated)">
+          <input
+            className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-blue-500 dark:border-slate-700 dark:bg-slate-950"
+            value={post.tags?.join(", ") ?? ""}
+            onChange={(e) =>
+              setPost({
+                ...post,
+                tags: e.target.value
+                  .split(",")
+                  .map((t) => t.trim())
+                  .filter(Boolean),
+              })
+            }
+          />
+        </Field>
+        <Field label="Status">
+          <select
+            className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-blue-500 dark:border-slate-700 dark:bg-slate-950"
+            value={post.status ?? "draft"}
+            onChange={(e) => setPost({ ...post, status: e.target.value })}
             >
               <option value="draft">Draft</option>
               <option value="published">Published</option>

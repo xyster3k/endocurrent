@@ -1,6 +1,6 @@
 import { auth, currentUser } from "@clerk/nextjs/server";
 
-export type UserRole = "user" | "editor" | "admin";
+export type UserRole = "subscriber" | "user" | "editor" | "admin";
 
 export type SessionUser = {
   id: string;
@@ -9,24 +9,19 @@ export type SessionUser = {
 };
 
 export async function getSessionUser(): Promise<SessionUser | null> {
-  try {
-    const user = await currentUser();
-    if (!user) return null;
+  const user = await currentUser();
+  if (!user) return null;
 
-    const role =
-      (user.publicMetadata.role as UserRole | undefined) ||
-      (user.privateMetadata.role as UserRole | undefined) ||
-      "user";
+  const role =
+    (user.publicMetadata.role as UserRole | undefined) ||
+    (user.privateMetadata.role as UserRole | undefined) ||
+    "subscriber";
 
-    return {
-      id: user.id,
-      email: user.primaryEmailAddress?.emailAddress ?? null,
-      role,
-    };
-  } catch (error) {
-    console.error("Clerk currentUser failed, returning null", error);
-    return null;
-  }
+  return {
+    id: user.id,
+    email: user.primaryEmailAddress?.emailAddress ?? null,
+    role,
+  };
 }
 
 export async function requireAuth() {

@@ -19,12 +19,7 @@ const postSchema = z.object({
 
 export async function GET() {
   const user = await getSessionUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  try {
-    requireRole(user, ["editor", "admin"]);
-  } catch {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  }
+  requireRole(user, ["editor", "admin"]);
 
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
     return NextResponse.json({ data: mockArticles }, { status: 200 });
@@ -40,12 +35,7 @@ export async function GET() {
 
 export async function POST(req: Request) {
   const user = await getSessionUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  try {
-    requireRole(user, ["editor", "admin"]);
-  } catch {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  }
+  requireRole(user, ["editor", "admin"]);
 
   const payload = await req.json();
   const parsed = postSchema.safeParse(payload);

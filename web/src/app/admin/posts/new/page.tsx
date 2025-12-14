@@ -1,7 +1,5 @@
-"use client";
+ "use client";
 import React, { useState } from "react";
-
-export const runtime = "edge";
 
 function PostForm() {
   const [title, setTitle] = useState("");
@@ -9,6 +7,7 @@ function PostForm() {
   const [summary, setSummary] = useState("");
   const [body, setBody] = useState("");
   const [category, setCategory] = useState("");
+  const [tags, setTags] = useState("");
   const [status, setStatus] = useState("draft");
   const [message, setMessage] = useState<string | null>(null);
 
@@ -23,6 +22,10 @@ function PostForm() {
         summary,
         body_markdown: body,
         category,
+        tags: tags
+          .split(",")
+          .map((t) => t.trim())
+          .filter(Boolean),
         status,
       }),
     });
@@ -57,6 +60,14 @@ function PostForm() {
             value={category}
             onChange={(e) => setCategory(e.target.value)}
             placeholder="thyroid / diabetes / oncology / general"
+          />
+        </Field>
+        <Field label="Tags (comma separated)">
+          <input
+            className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-blue-500 dark:border-slate-700 dark:bg-slate-950"
+            value={tags}
+            onChange={(e) => setTags(e.target.value)}
+            placeholder="thyroid, diabetes"
           />
         </Field>
         <Field label="Status">
@@ -100,6 +111,8 @@ function PostForm() {
     </div>
   );
 }
+
+export const runtime = "edge";
 
 export default function NewPostPage() {
   return (

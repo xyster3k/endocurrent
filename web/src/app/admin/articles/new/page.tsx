@@ -1,35 +1,26 @@
 import React from "react";
+import { redirect } from "next/navigation";
 import { getSessionUser, requireRole } from "@/lib/auth";
 
 export const runtime = "edge";
 
 export default async function NewArticlePage() {
   const user = await getSessionUser();
-  const hasClerk =
-    typeof process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY === "string" &&
-    process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY.startsWith("pk_") &&
-    process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY !== "pk_test_placeholder";
   if (!user) {
+    redirect("/sign-in");
+  }
+  try {
+    requireRole(user, ["editor", "admin"]);
+  } catch {
     return (
       <div className="mx-auto flex max-w-4xl flex-col gap-4 px-6 py-12">
         <h1 className="text-3xl font-semibold">Create article</h1>
-        <p className="text-slate-600 dark:text-slate-300">Sign in with an editor or admin account to create articles.</p>
-        {hasClerk ? (
-          <a
-            href="/sign-in"
-            className="inline-flex w-fit items-center gap-2 rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg dark:bg-white dark:text-black"
-          >
-            Go to sign in
-          </a>
-        ) : (
-          <p className="text-sm text-amber-600">
-            Clerk publishable key is missing, so sign in is disabled. Add NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY.
-          </p>
-        )}
+        <p className="text-slate-600 dark:text-slate-300">
+          You need an editor or admin role to create articles. Current role: {user.role}.
+        </p>
       </div>
     );
   }
-  requireRole(user, ["editor", "admin"]);
 
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-6 px-6 py-10">
@@ -37,8 +28,8 @@ export default async function NewArticlePage() {
         <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Admin</p>
         <h1 className="text-3xl font-semibold">Create article</h1>
         <p className="text-slate-600 dark:text-slate-300">
-          Markdown body with live preview is recommended. Images go to Supabase Storage;
-          references stay structured for downstream rendering.
+          Markdown body with live preview is recommended. Images go to Supabase Storage; references stay structured for
+          downstream rendering.
         </p>
       </div>
 
@@ -116,13 +107,7 @@ export default async function NewArticlePage() {
   );
 }
 
-function Field({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="flex flex-col gap-2 text-sm font-medium text-slate-800 dark:text-slate-200">
       <span>{label}</span>

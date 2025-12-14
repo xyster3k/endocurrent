@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { getSessionUser, requireRole } from "@/lib/auth";
 import { getArticles } from "@/lib/data/articles";
 
@@ -6,31 +7,22 @@ export const runtime = "edge";
 
 export default async function AdminArticlesPage() {
   const user = await getSessionUser();
-  const hasClerk =
-    typeof process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY === "string" &&
-    process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY.startsWith("pk_") &&
-    process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY !== "pk_test_placeholder";
   if (!user) {
+    redirect("/sign-in");
+  }
+  try {
+    requireRole(user, ["editor", "admin"]);
+  } catch {
     return (
       <div className="mx-auto flex max-w-4xl flex-col gap-4 px-6 py-12">
         <h1 className="text-3xl font-semibold">Articles</h1>
-        <p className="text-slate-600 dark:text-slate-300">Sign in with an editor or admin account to manage articles.</p>
-        {hasClerk ? (
-          <Link
-            href="/sign-in"
-            className="inline-flex w-fit items-center gap-2 rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg dark:bg-white dark:text-black"
-          >
-            Go to sign in
-          </Link>
-        ) : (
-          <p className="text-sm text-amber-600">
-            Clerk publishable key is missing, so sign in is disabled. Add NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY.
-          </p>
-        )}
+        <p className="text-slate-600 dark:text-slate-300">
+          You need an editor or admin role to manage articles. Current role: {user.role}.
+        </p>
       </div>
     );
   }
-  requireRole(user, ["editor", "admin"]);
+
   const { data } = await getArticles({ includeDrafts: true });
 
   return (
