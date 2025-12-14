@@ -41,7 +41,8 @@ export function SiteHeader() {
               href={link.href}
               className={cn(
                 "rounded-full px-3 py-1.5 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800",
-                pathname === link.href && "bg-slate-900 text-white dark:bg-white dark:text-black"
+                pathname === link.href &&
+                  "bg-slate-900 text-white dark:bg-white dark:text-black"
               )}
             >
               {link.label}
@@ -68,8 +69,8 @@ export function SiteHeader() {
               </SignedIn>
             </>
           ) : (
-            <span className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white dark:bg-white dark:text-black">
-              Auth not configured
+            <span className="rounded-full bg-slate-500 px-4 py-2 text-sm font-semibold text-white">
+              Sign in unavailable
             </span>
           )}
         </div>
