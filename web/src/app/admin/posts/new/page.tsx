@@ -99,8 +99,6 @@ function PostForm() {
   );
 }
 
-export const runtime = "edge";
-
 export default function NewPostPage() {
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-6 px-6 py-10">
