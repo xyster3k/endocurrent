@@ -16,13 +16,22 @@ export default function middleware(req: NextRequest) {
   if (!hasClerk) {
     return NextResponse.next();
   }
-  try {
-    return clerkMiddleware((auth, request) => {
-      if (isProtectedRoute(request)) {
-        auth().protect();
+  const handler = clerkMiddleware((auth, request) => {
+    if (isProtectedRoute(request)) {
+      const session = auth();
+      // Newer Clerk supports protect(); fall back to manual redirect if unavailable.
+      if (session && typeof (session as any).protect === "function") {
+        return (session as any).protect();
       }
-    })(req);
-  } catch {
+      if (!session?.userId) {
+        return NextResponse.redirect(new URL("/sign-in", request.url));
+      }
+    }
+  });
+  try {
+    return handler(req);
+  } catch (error) {
+    // If Clerk blows up, don’t take down the whole site; let the request through.
     return NextResponse.next();
   }
 }
