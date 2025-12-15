@@ -24,7 +24,8 @@ export async function POST(req: NextRequest) {
   }
 
   const supabase = createSupabaseServerClient({ useServiceRole: true });
-  const { error } = await supabase.from("user_subscriptions").upsert(
+  const subs = (supabase as any).from("user_subscriptions");
+  const { error } = await subs.upsert(
     {
       user_id: userId,
       plan: data.plan || "PREMIUM",

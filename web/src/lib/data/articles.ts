@@ -49,18 +49,18 @@ export async function getArticles(
     if (error || !data) throw error;
 
     return {
-      data: data.map((row) => ({
-        id: row.id,
-        slug: row.slug,
-        title: row.title,
-        summary: row.summary ?? "",
-        category: row.category,
+      data: (data as any[]).map((row) => ({
+        id: (row as any).id,
+        slug: (row as any).slug,
+        title: (row as any).title,
+        summary: (row as any).summary ?? "",
+        category: (row as any).category,
         tags: [],
-        reading_time_minutes: row.reading_time_minutes ?? 0,
-        published_at: row.published_at,
+        reading_time_minutes: (row as any).reading_time_minutes ?? 0,
+        published_at: (row as any).published_at,
         cover_image_url: null,
         author: null,
-        status: row.status as ArticleSummary["status"],
+        status: (row as any).status as ArticleSummary["status"],
       })),
       meta: { page, pageSize, total: count ?? data.length },
     };
@@ -83,31 +83,27 @@ export async function getArticleBySlug(slug: string): Promise<ArticleDetail | nu
 
   try {
     const supabase = createSupabaseServerClient();
-    const { data, error } = await supabase
-      .from("articles")
-      .select("*")
-      .eq("slug", slug)
-      .maybeSingle();
+    const { data, error } = await supabase.from("articles").select("*").eq("slug", slug).maybeSingle();
     if (error) throw error;
     if (!data) return null;
     return {
-      id: data.id,
-      slug: data.slug,
-      title: data.title,
-      summary: data.summary ?? "",
-      body_markdown: data.body_markdown,
-      category: data.category,
+      id: (data as any).id,
+      slug: (data as any).slug,
+      title: (data as any).title,
+      summary: (data as any).summary ?? "",
+      body_markdown: (data as any).body_markdown ?? "",
+      category: (data as any).category,
       tags: [],
-      reading_time_minutes: data.reading_time_minutes ?? 0,
-      word_count: data.word_count ?? 0,
-      published_at: data.published_at,
+      reading_time_minutes: (data as any).reading_time_minutes ?? 0,
+      word_count: (data as any).word_count ?? 0,
+      published_at: (data as any).published_at,
       cover_image_url: null,
       author: null,
       references: [],
       images: [],
       like_count: 0,
       dislike_count: 0,
-      status: data.status as ArticleSummary["status"],
+      status: (data as any).status as ArticleSummary["status"],
     };
   } catch (error) {
     console.error("Falling back to mock article", error);
