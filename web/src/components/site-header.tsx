@@ -63,27 +63,40 @@ export function SiteHeader() {
             {menuItems.length > 0 ? (
               <div className="invisible absolute left-1/2 z-30 mt-2 w-72 -translate-x-1/2 rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl opacity-0 transition group-hover:visible group-hover:opacity-100 dark:border-slate-700 dark:bg-slate-900">
                 <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Sections</p>
-                <div className="space-y-2">
+                <div className="space-y-3">
                   {(menuTree["root"] ?? []).map((item) => (
                     <div key={item.id}>
-                      <Link href={item.url} className="font-semibold text-slate-800 hover:text-blue-600 dark:text-slate-100 dark:hover:text-blue-400">
-                        {item.label}
-                      </Link>
-                      <div className="ml-3 mt-1 space-y-1 text-sm text-slate-600 dark:text-slate-300">
-                        {(menuTree[item.id] ?? []).map((child) => (
-                          <div key={child.id} className="flex items-center justify-between">
-                            <Link href={child.url} className="hover:text-blue-600 dark:hover:text-blue-400">
-                              {child.label}
-                            </Link>
-                            {child.category ? (
-                              <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-200">
-                                {child.category}
-                              </span>
-                            ) : null}
-                          </div>
-                        ))}
-                        {menuTree[item.id]?.length === 0 && <span className="text-xs text-slate-400">Empty</span>}
-                      </div>
+                      {item.url ? (
+                        <Link href={item.url} className="block font-semibold text-slate-800 hover:text-blue-600 dark:text-slate-100 dark:hover:text-blue-400">
+                          {item.label}
+                        </Link>
+                      ) : (
+                        <div className="font-bold text-slate-900 dark:text-slate-50">
+                          {item.label}
+                        </div>
+                      )}
+                      {menuTree[item.id] && menuTree[item.id].length > 0 && (
+                        <div className="ml-3 mt-1.5 space-y-1.5 text-sm">
+                          {menuTree[item.id].map((child) => (
+                            <div key={child.id} className="flex items-center justify-between">
+                              {child.url ? (
+                                <Link href={child.url} className="text-slate-700 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400">
+                                  {child.label}
+                                </Link>
+                              ) : (
+                                <span className="font-medium text-slate-800 dark:text-slate-200">
+                                  {child.label}
+                                </span>
+                              )}
+                              {child.category ? (
+                                <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-200">
+                                  {child.category}
+                                </span>
+                              ) : null}
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>

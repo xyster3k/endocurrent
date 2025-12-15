@@ -7,8 +7,8 @@ export const runtime = "edge";
 
 const itemSchema = z.object({
   label: z.string().min(1),
-  url: z.string().min(1),
-  category: z.string().optional(),
+  url: z.string().optional().nullable(),
+  category: z.string().optional().nullable(),
   parent_id: z.string().nullable().optional(),
   order_index: z.number().int().nullable().optional(),
 });
@@ -32,7 +32,7 @@ export async function PUT(req: Request, props: { params: Params }) {
     .from("menu_items")
     .update({
       label: parsed.data.label,
-      url: parsed.data.url,
+      url: parsed.data.url || null,
       category: parsed.data.category ?? null,
       parent_id: parsed.data.parent_id ?? null,
       order_index: parsed.data.order_index ?? null,
