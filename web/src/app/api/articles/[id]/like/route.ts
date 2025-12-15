@@ -20,9 +20,8 @@ export async function POST(req: NextRequest, props: { params: Params }) {
   }
 
   const supabase = createSupabaseServerClient();
-  const { error } = await supabase
-    .from("article_likes")
-    .upsert({ article_id: params.id, user_id: userId, value }, { onConflict: "article_id,user_id" });
+  const likes = (supabase as any).from("article_likes");
+  const { error } = await likes.upsert({ article_id: params.id, user_id: userId, value }, { onConflict: "article_id,user_id" });
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

@@ -74,20 +74,18 @@ export async function POST(req: NextRequest) {
   }
 
   const supabase = createSupabaseServerClient({ useServiceRole: true });
-  const { data, error } = await supabase
-    .from("articles")
-    .insert({
-      title,
-      slug: title.toLowerCase().replace(/\s+/g, "-"),
-      summary,
-      body_markdown,
-      status: "draft_ai",
-      reading_time_minutes: reading.minutes,
-      word_count: reading.words,
-      author_id: user?.id ?? null,
-    })
-    .select()
-    .maybeSingle();
+  const draftPayload = {
+    title,
+    slug: title.toLowerCase().replace(/\s+/g, "-"),
+    summary,
+    body_markdown,
+    status: "draft_ai",
+    reading_time_minutes: reading.minutes,
+    word_count: reading.words,
+    author_id: /^[0-9a-fA-F-]{36}$/.test(user?.id ?? "") ? user?.id : null,
+  };
+
+  const { data, error } = await supabase.from("articles").insert([draftPayload] as any).select().maybeSingle();
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });

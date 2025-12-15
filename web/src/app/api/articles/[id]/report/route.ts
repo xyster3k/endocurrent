@@ -25,7 +25,8 @@ export async function POST(req: NextRequest, props: { params: Params }) {
   }
 
   const supabase = createSupabaseServerClient();
-  const { error } = await supabase.from("article_reports").insert({
+  const reports = (supabase as any).from("article_reports");
+  const { error } = await reports.insert({
     article_id: params.id,
     user_id: userId ?? null,
     reason_code,

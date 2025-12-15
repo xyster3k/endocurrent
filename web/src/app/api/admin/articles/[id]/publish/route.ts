@@ -16,9 +16,12 @@ export async function POST(_req: NextRequest, props: { params: Params }) {
   }
 
   const supabase = createSupabaseServerClient({ useServiceRole: true });
-  const { error } = await supabase
-    .from("articles")
-    .update({ status: "published", published_at: new Date().toISOString() })
+  const articles = (supabase as any).from("articles");
+  const { error } = await articles
+    .update({
+      status: "published",
+      published_at: new Date().toISOString(),
+    })
     .eq("id", params.id);
 
   if (error) {

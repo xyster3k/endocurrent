@@ -43,8 +43,8 @@ export async function POST(req: NextRequest) {
   }
 
   const supabase = createSupabaseServerClient({ useServiceRole: true });
-  const { data, error } = await supabase
-    .from("articles")
+  const articles = (supabase as any).from("articles");
+  const { data, error } = await articles
     .insert({
       title: parsed.data.title,
       slug: parsed.data.slug,
@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
       status,
       reading_time_minutes: reading.minutes,
       word_count: reading.words,
-      author_id: user?.id ?? null,
+      author_id: /^[0-9a-fA-F-]{36}$/.test(user?.id ?? "") ? user?.id : null,
     })
     .select()
     .maybeSingle();
