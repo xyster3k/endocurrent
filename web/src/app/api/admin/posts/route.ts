@@ -44,6 +44,8 @@ export async function POST(req: Request) {
   }
 
   const reading = estimateReadingTime(parsed.data.body_markdown || "");
+  const publishedAt =
+    parsed.data.status === "published" ? new Date().toISOString() : null;
 
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
     return NextResponse.json({
@@ -65,6 +67,7 @@ export async function POST(req: Request) {
       status: parsed.data.status,
       reading_time_minutes: reading.minutes,
       word_count: reading.words,
+      published_at: publishedAt,
       // Clerk user ids are not UUID; store author_id only if it is a valid UUID, else null.
       author_id: /^[0-9a-fA-F-]{36}$/.test(user?.id ?? "") ? (user!.id as any) : null,
     })

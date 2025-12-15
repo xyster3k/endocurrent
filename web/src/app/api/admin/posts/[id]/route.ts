@@ -59,6 +59,10 @@ export async function PUT(req: Request, props: { params: Params }) {
     updates.reading_time_minutes = reading.minutes;
     updates.word_count = reading.words;
   }
+  // If status is set to published and no published_at provided, stamp now.
+  if (parsed.data.status === "published" && !("published_at" in updates)) {
+    updates.published_at = new Date().toISOString();
+  }
   // Never write a non-UUID author_id (Clerk ids are not UUIDs).
   if (updates.author_id && typeof updates.author_id === "string" && !/^[0-9a-fA-F-]{36}$/.test(updates.author_id)) {
     delete updates.author_id;
