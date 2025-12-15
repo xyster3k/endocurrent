@@ -65,7 +65,8 @@ export async function POST(req: Request) {
       status: parsed.data.status,
       reading_time_minutes: reading.minutes,
       word_count: reading.words,
-      author_id: user?.id ?? null,
+      // Clerk user ids are not UUID; store author_id only if it is a valid UUID, else null.
+      author_id: /^[0-9a-fA-F-]{36}$/.test(user?.id ?? "") ? (user!.id as any) : null,
     })
     .select()
     .maybeSingle();
