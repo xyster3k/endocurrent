@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Compass } from "lucide-react";
 import { ArticleCard } from "@/components/article-card";
-import { AdSlot } from "@/components/ad-slot";
+import { AdSlotClient } from "@/components/ad-slot-client";
 import { shouldShowAds } from "@/lib/ads";
 import { getArticles } from "@/lib/data/articles";
 
@@ -45,14 +45,14 @@ export default async function Home(props: { searchParams: SearchParams }) {
             <div className="flex flex-wrap gap-3">
               <Link
                 href="/articles/weekly-endocrine-digest"
-                className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-3 text-sm font-semibold text-white shadow-md transition hover:-translate-y-0.5 hover:shadow-lg dark:bg-white dark:text-black"
+                className="btn-primary inline-flex items-center gap-2 rounded-full px-4 py-3 text-sm font-semibold"
               >
                 Read the sample article
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/admin/posts"
-                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-900 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg dark:border-slate-700 dark:bg-slate-900 dark:text-white"
+                className="btn-primary inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-3 text-sm font-semibold"
               >
                 Go to editor tools
                 <Compass className="h-4 w-4" />
@@ -110,7 +110,7 @@ export default async function Home(props: { searchParams: SearchParams }) {
             <div key={article.id} className="space-y-3">
               <ArticleCard article={article} />
               {showAds && idx % 2 === 1 ? (
-                <AdSlot slotId={`feed-${idx}`} show={showAds} />
+                <AdSlotClient slotId={`feed-${idx}`} show={showAds} />
               ) : null}
             </div>
           ))}

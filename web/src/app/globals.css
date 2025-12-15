@@ -9,6 +9,8 @@
   --accent-soft: #e5efff;
   --success: #00c389;
   --warning: #f97316;
+  --btn-bg: #0f172a;
+  --btn-text: #ffffff;
 }
 
 @theme inline {
@@ -28,6 +30,8 @@
     --card: #0b1222;
     --accent: #4ea3ff;
     --accent-soft: #0c1a32;
+    --btn-bg: #e5e7eb;
+    --btn-text: #0b1222;
   }
 }
 
@@ -41,4 +45,20 @@ body {
 
 a {
   color: inherit;
+}
+
+.btn-primary {
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  transition: transform 120ms ease, box-shadow 120ms ease, opacity 120ms ease;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  opacity: 0.92;
+}
+
+/* Safety net so dark pills always show text */
+.bg-slate-900 {
+  color: var(--btn-text) !important;
 }
