@@ -10,7 +10,11 @@ export default function SignUpPage() {
   const redirectUrl = search?.get("redirect_url") || "/admin";
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-12 dark:bg-slate-950">
-      <SignUp redirectUrl={redirectUrl} signInUrl="/sign-in" />
+      <SignUp
+        forceRedirectUrl={redirectUrl}
+        fallbackRedirectUrl={redirectUrl}
+        signInUrl="/sign-in"
+      />
     </div>
   );
 }
