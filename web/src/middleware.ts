@@ -24,7 +24,8 @@ export default function middleware(req: NextRequest) {
         return (session as any).protect();
       }
       if (!session?.userId) {
-        return NextResponse.redirect(new URL("/sign-in", request.url));
+        const target = encodeURIComponent(request.url);
+        return NextResponse.redirect(new URL(`/sign-in?redirect_url=${target}`, request.url));
       }
     }
   });
