@@ -74,9 +74,15 @@ export async function POST(req: NextRequest) {
   }
 
   const supabase = createSupabaseServerClient({ useServiceRole: true });
+  const slug = title
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-+|-+$/g, "");
   const draftPayload = {
     title,
-    slug: title.toLowerCase().replace(/\s+/g, "-"),
+    slug,
     summary,
     body_markdown,
     status: "draft_ai",

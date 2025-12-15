@@ -28,6 +28,9 @@ export function LikeToggle({
       try {
         await fetch(`/api/articles/${articleId}/like`, {
           method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify({ value }),
         });
       } catch (error) {

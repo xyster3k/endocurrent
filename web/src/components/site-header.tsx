@@ -66,11 +66,15 @@ export function SiteHeader() {
                 <div className="space-y-2">
                   {(menuTree["root"] ?? []).map((item) => (
                     <div key={item.id}>
-                      <div className="font-semibold text-slate-800 dark:text-slate-100">{item.label}</div>
+                      <Link href={item.url} className="font-semibold text-slate-800 hover:text-blue-600 dark:text-slate-100 dark:hover:text-blue-400">
+                        {item.label}
+                      </Link>
                       <div className="ml-3 mt-1 space-y-1 text-sm text-slate-600 dark:text-slate-300">
                         {(menuTree[item.id] ?? []).map((child) => (
                           <div key={child.id} className="flex items-center justify-between">
-                            <span>{child.label}</span>
+                            <Link href={child.url} className="hover:text-blue-600 dark:hover:text-blue-400">
+                              {child.label}
+                            </Link>
                             {child.category ? (
                               <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-200">
                                 {child.category}

@@ -3,6 +3,7 @@ import { z } from "zod";
 import { getSessionUser, requireRole } from "@/lib/auth";
 import { estimateReadingTime } from "@/lib/reading-time";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { getArticles } from "@/lib/data/articles";
 
 export const runtime = "edge";
 
@@ -15,6 +16,32 @@ const bodySchema = z.object({
   tags: z.union([z.string(), z.array(z.string())]).optional(),
   status: z.enum(["draft", "draft_ai", "published", "archived"]).optional(),
 });
+
+export async function GET(req: NextRequest) {
+  const user = await getSessionUser();
+  requireRole(user, ["editor", "admin"]);
+
+  const { searchParams } = new URL(req.url);
+  const page = Number(searchParams.get("page") || 1);
+  const pageSize = Number(searchParams.get("pageSize") || 10);
+  const status = searchParams.get("status") as "draft" | "draft_ai" | "published" | "archived" | undefined;
+  const category = searchParams.get("category") || undefined;
+  const search = searchParams.get("search") || undefined;
+
+  try {
+    const result = await getArticles({
+      page,
+      pageSize,
+      status,
+      category,
+      search,
+      includeDrafts: true,
+    });
+    return NextResponse.json(result);
+  } catch (error) {
+    return NextResponse.json({ error: "Failed to fetch articles", details: String(error) }, { status: 500 });
+  }
+}
 
 export async function POST(req: NextRequest) {
   const user = await getSessionUser();
