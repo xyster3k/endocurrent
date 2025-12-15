@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { ShieldCheck, SquarePen, Table2, Wand2 } from "lucide-react";
 import { getSessionUser, requireRole } from "@/lib/auth";
 import { getArticles } from "@/lib/data/articles";
@@ -11,11 +10,26 @@ export const runtime = "edge";
 export default async function AdminHome() {
   const user = await getSessionUser();
   if (!user) {
-    redirect("/sign-in");
+    return (
+      <div className="mx-auto flex max-w-4xl flex-col gap-4 px-6 py-12">
+        <h1 className="text-3xl font-semibold">Admin</h1>
+        <p className="text-slate-600 dark:text-slate-300">You’re not signed in. Please sign in to continue.</p>
+        <Link
+          href="/sign-in?redirect_url=/admin"
+          className="inline-flex w-fit items-center gap-2 rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg dark:bg-white dark:text-black"
+        >
+          Go to sign in
+        </Link>
+      </div>
+    );
   }
+  let roleOk = true;
   try {
     requireRole(user, ["editor", "admin"]);
   } catch {
+    roleOk = false;
+  }
+  if (!roleOk) {
     return (
       <div className="mx-auto flex max-w-4xl flex-col gap-4 px-6 py-12">
         <h1 className="text-3xl font-semibold">Admin</h1>
