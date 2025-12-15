@@ -10,6 +10,7 @@ export default function EditArticlePage() {
   const articleId = params.id as string;
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [categories, setCategories] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     title: "",
     slug: "",
@@ -20,6 +21,13 @@ export default function EditArticlePage() {
   });
 
   useEffect(() => {
+    // Fetch categories
+    fetch("/api/categories")
+      .then((res) => res.json())
+      .then((data) => setCategories(data.data || []))
+      .catch((err) => console.error("Failed to fetch categories:", err));
+
+    // Fetch article
     const fetchArticle = async () => {
       try {
         setLoading(true);
@@ -181,12 +189,18 @@ export default function EditArticlePage() {
             />
           </Field>
           <Field label="Category">
-            <input
+            <select
               value={formData.category}
               onChange={(e) => setFormData({ ...formData, category: e.target.value })}
               className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-blue-500 dark:border-slate-700 dark:bg-slate-950"
-              placeholder="thyroid / diabetes / oncology / general"
-            />
+            >
+              <option value="">Select a category...</option>
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
           </Field>
           <Field label="Status">
             <select
