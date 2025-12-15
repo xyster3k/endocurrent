@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { clerkClient } from "@clerk/nextjs/server";
 import { getSessionUser, requireRole } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -19,16 +20,31 @@ export async function PUT(req: Request) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
 
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
-    return NextResponse.json({ ok: true, message: "Supabase not configured; mock update only." });
+  // Always store display name in Clerk public metadata so it works with Clerk IDs
+  try {
+    await clerkClient.users.updateUser(user!.id, {
+      publicMetadata: {
+        ...(user?.role ? { role: user.role } : {}),
+        display_name: parsed.data.display_name,
+      },
+    });
+  } catch (error) {
+    return NextResponse.json({ error: `Failed to update Clerk profile: ${String(error)}` }, { status: 500 });
   }
 
-  const supabase = createSupabaseServerClient({ useServiceRole: true });
-  const { error } = await supabase
-    .from("profiles")
-    .update({ display_name: parsed.data.display_name })
-    .eq("id", user?.id);
+  // Optionally mirror to Supabase profiles if configured AND the user id is a UUID
+  if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    const supabase = createSupabaseServerClient({ useServiceRole: true });
+    const isUuid = /^[0-9a-fA-F-]{36}$/.test(user?.id ?? "");
+    if (isUuid) {
+      const { error } = await supabase
+        .from("profiles")
+        .upsert({ id: user?.id, display_name: parsed.data.display_name, role: user?.role ?? "subscriber" });
+      if (error) {
+        return NextResponse.json({ error: `Failed to update Supabase profile: ${error.message}` }, { status: 500 });
+      }
+    }
+  }
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ ok: true }, { status: 200 });
 }

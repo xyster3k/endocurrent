@@ -34,7 +34,8 @@ export async function getArticles(
     let query = supabase
       .from("articles")
       .select("*", { count: "exact" })
-      .order("published_at", { ascending: false })
+      .order("published_at", { ascending: false, nullsLast: true })
+      .order("created_at", { ascending: false })
       .range((page - 1) * pageSize, page * pageSize - 1);
 
     if (!filters.includeDrafts) {
