@@ -22,7 +22,12 @@ export async function PUT(req: Request) {
 
   // Always store display name in Clerk public metadata so it works with Clerk IDs
   try {
-    await clerkClient.users.updateUser(user!.id, {
+    const updateUser = clerkClient?.users?.updateUser;
+    if (typeof updateUser !== "function") {
+      throw new Error("Clerk server key not available – check CLERK_SECRET_KEY");
+    }
+
+    await updateUser(user!.id, {
       publicMetadata: {
         ...(user?.role ? { role: user.role } : {}),
         display_name: parsed.data.display_name,

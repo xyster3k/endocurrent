@@ -96,7 +96,7 @@ export async function getArticleBySlug(slug: string): Promise<ArticleDetail | nu
       slug: data.slug,
       title: data.title,
       summary: data.summary ?? "",
-      body_markdown: data.body_markdown,
+      body_markdown: data.body_markdown ?? "",
       category: data.category,
       tags: [],
       reading_time_minutes: data.reading_time_minutes ?? 0,

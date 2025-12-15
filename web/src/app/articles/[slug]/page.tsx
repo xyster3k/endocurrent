@@ -145,6 +145,7 @@ export default async function ArticlePage(props: { params: Params }) {
 }
 
 function renderMarkdown(body: string) {
+  if (!body) return null;
   const lines = body.split("\n").filter(Boolean);
   return lines.map((line, idx) => {
     if (line.startsWith("###")) {
