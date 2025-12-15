@@ -33,6 +33,7 @@ export type ArticleSummary = {
 
 export type ArticleDetail = ArticleSummary & {
   body_markdown: string;
+  word_count?: number;
   references?: ArticleReference[];
   images?: ArticleImage[];
   like_count?: number;

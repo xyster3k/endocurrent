@@ -1,16 +1,16 @@
 import { cookies } from "next/headers";
-import { createServerClient, type SupabaseClient } from "@supabase/ssr";
+import { createServerClient } from "@supabase/ssr";
 import { env } from "@/lib/env";
 import type { Database } from "@/db/types";
 
-export type TypedServerClient = SupabaseClient<Database>;
+export type TypedServerClient = ReturnType<typeof createServerClient<Database>>;
 
 export function createSupabaseServerClient(opts?: { useServiceRole?: boolean }) {
   if (!env.NEXT_PUBLIC_SUPABASE_URL || !env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
     throw new Error("Supabase URL or anon key is missing");
   }
 
-  const cookieStore = cookies();
+  const cookieStore: any = cookies();
 
   const supabase = createServerClient<Database>(
     env.NEXT_PUBLIC_SUPABASE_URL,
