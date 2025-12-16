@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+export const runtime = "edge";
+
 export default function NewArticlePage() {
   const router = useRouter();
   const [categories, setCategories] = useState<string[]>([]);
