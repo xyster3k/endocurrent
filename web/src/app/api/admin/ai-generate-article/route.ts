@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  const supabase = createSupabaseServerClient({ useServiceRole: true });
+  const supabase = await createSupabaseServerClient({ useServiceRole: true });
   const slug = title
     .toLowerCase()
     .replace(/[^\w\s-]/g, "")

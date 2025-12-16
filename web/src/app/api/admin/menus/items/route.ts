@@ -27,7 +27,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true, data: { ...parsed.data, id: "mock" } });
   }
 
-  const supabase = createSupabaseServerClient({ useServiceRole: true });
+  const supabase = await createSupabaseServerClient({ useServiceRole: true });
   const { data, error } = await (supabase as any)
     .from("menu_items")
     .insert({

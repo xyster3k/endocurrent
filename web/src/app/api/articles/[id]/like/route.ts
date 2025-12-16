@@ -19,7 +19,7 @@ export async function POST(req: NextRequest, props: { params: Params }) {
     return NextResponse.json({ ok: true, message: "Supabase not configured; like skipped." });
   }
 
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
   const likes = (supabase as any).from("article_likes");
   const { error } = await likes.upsert({ article_id: params.id, user_id: userId, value }, { onConflict: "article_id,user_id" });
   if (error) {

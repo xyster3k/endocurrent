@@ -5,12 +5,12 @@ import type { Database } from "@/db/types";
 
 export type TypedServerClient = ReturnType<typeof createServerClient<Database>>;
 
-export function createSupabaseServerClient(opts?: { useServiceRole?: boolean }) {
+export async function createSupabaseServerClient(opts?: { useServiceRole?: boolean }) {
   if (!env.NEXT_PUBLIC_SUPABASE_URL || !env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
     throw new Error("Supabase URL or anon key is missing");
   }
 
-  const cookieStore: any = cookies();
+  const cookieStore = await cookies();
 
   const supabase = createServerClient<Database>(
     env.NEXT_PUBLIC_SUPABASE_URL,

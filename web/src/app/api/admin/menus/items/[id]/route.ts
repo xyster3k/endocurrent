@@ -27,7 +27,7 @@ export async function PUT(req: Request, props: { params: Params }) {
     return NextResponse.json({ ok: true });
   }
 
-  const supabase = createSupabaseServerClient({ useServiceRole: true });
+  const supabase = await createSupabaseServerClient({ useServiceRole: true });
   const { data, error } = await (supabase as any)
     .from("menu_items")
     .update({
@@ -53,7 +53,7 @@ export async function DELETE(_req: Request, props: { params: Params }) {
     return NextResponse.json({ ok: true });
   }
 
-  const supabase = createSupabaseServerClient({ useServiceRole: true });
+  const supabase = await createSupabaseServerClient({ useServiceRole: true });
   const { error } = await (supabase as any).from("menu_items").delete().eq("id", params.id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ ok: true });

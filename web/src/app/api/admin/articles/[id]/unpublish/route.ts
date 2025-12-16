@@ -15,7 +15,7 @@ export async function POST(_req: NextRequest, props: { params: Params }) {
     return NextResponse.json({ ok: true, message: "Supabase not configured; unpublish skipped." });
   }
 
-  const supabase = createSupabaseServerClient({ useServiceRole: true });
+  const supabase = await createSupabaseServerClient({ useServiceRole: true });
   const articles = (supabase as any).from("articles");
   const { error } = await articles
     .update({

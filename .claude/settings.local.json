@@ -14,7 +14,8 @@
       "Bash(npm uninstall:*)",
       "Bash(npm view:*)",
       "Bash(npm run build:cloudflare:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(find:*)"
     ]
   }
 }

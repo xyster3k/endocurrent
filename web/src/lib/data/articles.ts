@@ -30,7 +30,7 @@ export async function getArticles(
   }
 
   try {
-    const supabase = createSupabaseServerClient();
+    const supabase = await createSupabaseServerClient();
     let query = supabase
       .from("articles")
       .select("*", { count: "exact" })
@@ -83,7 +83,7 @@ export async function getArticleBySlug(slug: string): Promise<ArticleDetail | nu
   }
 
   try {
-    const supabase = createSupabaseServerClient();
+    const supabase = await createSupabaseServerClient();
     const { data, error } = await supabase.from("articles").select("*").eq("slug", slug).maybeSingle();
     if (error) throw error;
     if (!data) return null;
@@ -119,7 +119,7 @@ export async function getFeaturedArticle(): Promise<ArticleSummary | null> {
   }
 
   try {
-    const supabase = createSupabaseServerClient();
+    const supabase = await createSupabaseServerClient();
     const { data, error } = await supabase
       .from("articles")
       .select("*")

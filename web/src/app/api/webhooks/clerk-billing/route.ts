@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true, message: "Supabase not configured; webhook logged." });
   }
 
-  const supabase = createSupabaseServerClient({ useServiceRole: true });
+  const supabase = await createSupabaseServerClient({ useServiceRole: true });
   const subs = (supabase as any).from("user_subscriptions");
   const { error } = await subs.upsert(
     {

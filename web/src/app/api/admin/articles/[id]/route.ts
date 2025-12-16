@@ -39,7 +39,7 @@ export async function PUT(req: NextRequest, props: { params: Params }) {
     });
   }
 
-  const supabase = createSupabaseServerClient({ useServiceRole: true });
+  const supabase = await createSupabaseServerClient({ useServiceRole: true });
   const articles = (supabase as any).from("articles");
   const { data, error } = await articles
     .update({
@@ -64,7 +64,7 @@ export async function DELETE(_req: NextRequest, props: { params: Params }) {
     return NextResponse.json({ ok: true, message: "Supabase not configured; mock delete." });
   }
 
-  const supabase = createSupabaseServerClient({ useServiceRole: true });
+  const supabase = await createSupabaseServerClient({ useServiceRole: true });
   const { error } = await supabase.from("articles").delete().eq("id", params.id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ ok: true });

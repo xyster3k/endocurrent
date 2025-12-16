@@ -12,7 +12,7 @@ export async function GET() {
   }
 
   try {
-    const supabase = createSupabaseServerClient();
+    const supabase = await createSupabaseServerClient();
 
     // Get all unique categories from menu_items where category is not null
     const { data, error } = await supabase

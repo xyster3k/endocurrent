@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  const supabase = createSupabaseServerClient({ useServiceRole: true });
+  const supabase = await createSupabaseServerClient({ useServiceRole: true });
   const articles = (supabase as any).from("articles");
   const { data, error } = await articles
     .insert({

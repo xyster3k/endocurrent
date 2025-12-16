@@ -8,7 +8,7 @@ export async function GET() {
     return NextResponse.json({ data: { menus: [], items: [] } }, { status: 200 });
   }
 
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
   const { data: menus, error: menuErr } = await supabase.from("menus").select("*").limit(1);
   if (menuErr) return NextResponse.json({ error: menuErr.message }, { status: 500 });
   if (!menus || menus.length === 0) return NextResponse.json({ data: { menus: [], items: [] } }, { status: 200 });

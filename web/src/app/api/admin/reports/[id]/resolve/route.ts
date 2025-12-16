@@ -15,7 +15,7 @@ export async function POST(_req: NextRequest, props: { params: Params }) {
     return NextResponse.json({ ok: true, message: "Supabase not configured; resolve skipped." });
   }
 
-  const supabase = createSupabaseServerClient({ useServiceRole: true });
+  const supabase = await createSupabaseServerClient({ useServiceRole: true });
   const reports = (supabase as any).from("article_reports");
   const { error } = await reports
     .update({ resolved: true, resolved_by: user?.id ?? null })

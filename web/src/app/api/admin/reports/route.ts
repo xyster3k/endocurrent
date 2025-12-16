@@ -12,7 +12,7 @@ export async function GET() {
     return NextResponse.json({ data: [], meta: { total: 0 } });
   }
 
-  const supabase = createSupabaseServerClient({ useServiceRole: true });
+  const supabase = await createSupabaseServerClient({ useServiceRole: true });
   const { data, error } = await supabase
     .from("article_reports")
     .select("*")
