@@ -13,7 +13,6 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "images.unsplash.com" },
     ],
   },
-  serverExternalPackages: ["@clerk/nextjs"],
   experimental: {
     optimizePackageImports: ["lucide-react"],
     serverActions: {

@@ -7,9 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit",
-    "cf:build": "npx @cloudflare/next-on-pages",
-    "cf:preview": "wrangler pages dev .vercel/output/static --compatibility-date=2024-09-02"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.36.2",
@@ -23,7 +21,6 @@
     "zod": "^4.1.13"
   },
   "devDependencies": {
-    "@cloudflare/next-on-pages": "^1.13.16",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -31,7 +28,6 @@
     "eslint": "^9",
     "eslint-config-next": "15.5.2",
     "tailwindcss": "^4",
-    "typescript": "^5",
-    "wrangler": "^4.54.0"
+    "typescript": "^5"
   }
 }
