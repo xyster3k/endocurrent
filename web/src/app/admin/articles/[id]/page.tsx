@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 
+export const runtime = "edge";
+
 export default function EditArticlePage() {
   const params = useParams();
   const router = useRouter();

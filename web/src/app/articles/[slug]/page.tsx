@@ -9,6 +9,7 @@ import { shouldShowAds } from "@/lib/ads";
 import { getArticleBySlug } from "@/lib/data/articles";
 import { buildArticleJsonLd } from "@/lib/seo";
 
+export const runtime = "edge";
 export const revalidate = 300;
 
 type Params = Promise<{ slug: string }>;

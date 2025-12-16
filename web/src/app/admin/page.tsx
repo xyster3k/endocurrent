@@ -8,6 +8,8 @@ import {
   UserRound,
   Wand2,
 } from "lucide-react";
+
+export const runtime = "edge";
 import { getSessionUser, requireRole } from "@/lib/auth";
 import { getArticles } from "@/lib/data/articles";
 
