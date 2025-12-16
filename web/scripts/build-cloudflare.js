@@ -13,19 +13,36 @@ execSync('npx opennextjs-cloudflare build --skipWranglerConfigCheck', { stdio: '
 const distDir = path.join(__dirname, '..', '.cloudflare', 'dist');
 fs.mkdirSync(distDir, { recursive: true });
 
-// Copy worker.js as _worker.js
 console.log('\nPreparing Cloudflare Pages output...');
+
+// Copy worker.js as _worker.js
 const workerSrc = path.join(__dirname, '..', '.open-next', 'worker.js');
 const workerDest = path.join(distDir, '_worker.js');
 fs.copyFileSync(workerSrc, workerDest);
 console.log('✓ Copied worker.js to _worker.js');
 
-// Copy static assets
-const assetsSrc = path.join(__dirname, '..', '.open-next', 'assets');
-const assetsDest = distDir;
+// Copy all worker dependencies
+const openNextDir = path.join(__dirname, '..', '.open-next');
+const dependenciesToCopy = [
+  'cloudflare',
+  'middleware',
+  '.build',
+  'server-functions'
+];
 
+dependenciesToCopy.forEach(dep => {
+  const srcPath = path.join(openNextDir, dep);
+  const destPath = path.join(distDir, dep);
+  if (fs.existsSync(srcPath)) {
+    copyRecursiveSync(srcPath, destPath);
+    console.log(`✓ Copied ${dep}/`);
+  }
+});
+
+// Copy static assets to root
+const assetsSrc = path.join(openNextDir, 'assets');
 if (fs.existsSync(assetsSrc)) {
-  copyRecursiveSync(assetsSrc, assetsDest);
+  copyRecursiveSync(assetsSrc, distDir);
   console.log('✓ Copied static assets');
 }
 

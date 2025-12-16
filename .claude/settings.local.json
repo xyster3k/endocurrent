@@ -13,7 +13,8 @@
       "Bash(npx opennextjs-cloudflare build:*)",
       "Bash(npm uninstall:*)",
       "Bash(npm view:*)",
-      "Bash(npm run build:cloudflare:*)"
+      "Bash(npm run build:cloudflare:*)",
+      "Bash(ls:*)"
     ]
   }
 }
