@@ -1,0 +1,805 @@
+{
+  "node": {
+    "7fedceb7ef89bd13c816fcf5d8a462b5a871972d18": {
+      "workers": {
+        "app/_not-found/page": {
+          "moduleId": 38487,
+          "async": false,
+          "exportedName": "detectKeylessEnvDriftAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/about/page": {
+          "moduleId": 96319,
+          "async": false,
+          "exportedName": "detectKeylessEnvDriftAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/admin/articles/new/page": {
+          "moduleId": 7264,
+          "async": false,
+          "exportedName": "detectKeylessEnvDriftAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/contact/page": {
+          "moduleId": 74346,
+          "async": false,
+          "exportedName": "detectKeylessEnvDriftAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/policies/privacy/page": {
+          "moduleId": 77437,
+          "async": false,
+          "exportedName": "detectKeylessEnvDriftAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/policies/terms/page": {
+          "moduleId": 28365,
+          "async": false,
+          "exportedName": "detectKeylessEnvDriftAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "layer": {
+        "app/_not-found/page": "rsc",
+        "app/about/page": "rsc",
+        "app/admin/articles/new/page": "rsc",
+        "app/contact/page": "rsc",
+        "app/policies/privacy/page": "rsc",
+        "app/policies/terms/page": "rsc"
+      },
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js",
+      "exportedName": "detectKeylessEnvDriftAction"
+    },
+    "7f0c944e232b75f85a9150240943abff2dd97c51a3": {
+      "workers": {
+        "app/_not-found/page": {
+          "moduleId": 38487,
+          "async": false,
+          "exportedName": "invalidateCacheAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
+        },
+        "app/about/page": {
+          "moduleId": 96319,
+          "async": false,
+          "exportedName": "invalidateCacheAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
+        },
+        "app/admin/articles/new/page": {
+          "moduleId": 7264,
+          "async": false,
+          "exportedName": "invalidateCacheAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
+        },
+        "app/contact/page": {
+          "moduleId": 74346,
+          "async": false,
+          "exportedName": "invalidateCacheAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
+        },
+        "app/policies/privacy/page": {
+          "moduleId": 77437,
+          "async": false,
+          "exportedName": "invalidateCacheAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
+        },
+        "app/policies/terms/page": {
+          "moduleId": 28365,
+          "async": false,
+          "exportedName": "invalidateCacheAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
+        }
+      },
+      "layer": {
+        "app/_not-found/page": "action-browser",
+        "app/about/page": "action-browser",
+        "app/admin/articles/new/page": "action-browser",
+        "app/contact/page": "action-browser",
+        "app/policies/privacy/page": "action-browser",
+        "app/policies/terms/page": "action-browser"
+      },
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js",
+      "exportedName": "invalidateCacheAction"
+    },
+    "7f3363814830bff1c7f3e36836892198eb168a2f52": {
+      "workers": {
+        "app/_not-found/page": {
+          "moduleId": 38487,
+          "async": false,
+          "exportedName": "createOrReadKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/about/page": {
+          "moduleId": 96319,
+          "async": false,
+          "exportedName": "createOrReadKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/admin/articles/new/page": {
+          "moduleId": 7264,
+          "async": false,
+          "exportedName": "createOrReadKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/contact/page": {
+          "moduleId": 74346,
+          "async": false,
+          "exportedName": "createOrReadKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/policies/privacy/page": {
+          "moduleId": 77437,
+          "async": false,
+          "exportedName": "createOrReadKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/policies/terms/page": {
+          "moduleId": 28365,
+          "async": false,
+          "exportedName": "createOrReadKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "layer": {
+        "app/_not-found/page": "rsc",
+        "app/about/page": "rsc",
+        "app/admin/articles/new/page": "rsc",
+        "app/contact/page": "rsc",
+        "app/policies/privacy/page": "rsc",
+        "app/policies/terms/page": "rsc"
+      },
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js",
+      "exportedName": "createOrReadKeylessAction"
+    },
+    "7f35bd7da3107d20cabae6c5b68be5b10b53a26932": {
+      "workers": {
+        "app/_not-found/page": {
+          "moduleId": 38487,
+          "async": false,
+          "exportedName": "collectKeylessMetadata",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/server/keyless-custom-headers.js"
+        },
+        "app/about/page": {
+          "moduleId": 96319,
+          "async": false,
+          "exportedName": "collectKeylessMetadata",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/server/keyless-custom-headers.js"
+        },
+        "app/admin/articles/new/page": {
+          "moduleId": 7264,
+          "async": false,
+          "exportedName": "collectKeylessMetadata",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/server/keyless-custom-headers.js"
+        },
+        "app/contact/page": {
+          "moduleId": 74346,
+          "async": false,
+          "exportedName": "collectKeylessMetadata",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/server/keyless-custom-headers.js"
+        },
+        "app/policies/privacy/page": {
+          "moduleId": 77437,
+          "async": false,
+          "exportedName": "collectKeylessMetadata",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/server/keyless-custom-headers.js"
+        },
+        "app/policies/terms/page": {
+          "moduleId": 28365,
+          "async": false,
+          "exportedName": "collectKeylessMetadata",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/server/keyless-custom-headers.js"
+        }
+      },
+      "layer": {
+        "app/_not-found/page": "rsc",
+        "app/about/page": "rsc",
+        "app/admin/articles/new/page": "rsc",
+        "app/contact/page": "rsc",
+        "app/policies/privacy/page": "rsc",
+        "app/policies/terms/page": "rsc"
+      },
+      "filename": "node_modules/@clerk/nextjs/dist/esm/server/keyless-custom-headers.js",
+      "exportedName": "collectKeylessMetadata"
+    },
+    "7ff41f87b8991af093ab0300bd857ab4bc9beb4428": {
+      "workers": {
+        "app/_not-found/page": {
+          "moduleId": 38487,
+          "async": false,
+          "exportedName": "formatMetadataHeaders",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/server/keyless-custom-headers.js"
+        },
+        "app/about/page": {
+          "moduleId": 96319,
+          "async": false,
+          "exportedName": "formatMetadataHeaders",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/server/keyless-custom-headers.js"
+        },
+        "app/admin/articles/new/page": {
+          "moduleId": 7264,
+          "async": false,
+          "exportedName": "formatMetadataHeaders",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/server/keyless-custom-headers.js"
+        },
+        "app/contact/page": {
+          "moduleId": 74346,
+          "async": false,
+          "exportedName": "formatMetadataHeaders",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/server/keyless-custom-headers.js"
+        },
+        "app/policies/privacy/page": {
+          "moduleId": 77437,
+          "async": false,
+          "exportedName": "formatMetadataHeaders",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/server/keyless-custom-headers.js"
+        },
+        "app/policies/terms/page": {
+          "moduleId": 28365,
+          "async": false,
+          "exportedName": "formatMetadataHeaders",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/server/keyless-custom-headers.js"
+        }
+      },
+      "layer": {
+        "app/_not-found/page": "rsc",
+        "app/about/page": "rsc",
+        "app/admin/articles/new/page": "rsc",
+        "app/contact/page": "rsc",
+        "app/policies/privacy/page": "rsc",
+        "app/policies/terms/page": "rsc"
+      },
+      "filename": "node_modules/@clerk/nextjs/dist/esm/server/keyless-custom-headers.js",
+      "exportedName": "formatMetadataHeaders"
+    },
+    "7f277e6832d6ca68a2e6ddd86f2dca90631b716728": {
+      "workers": {
+        "app/_not-found/page": {
+          "moduleId": 38487,
+          "async": false,
+          "exportedName": "deleteKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/about/page": {
+          "moduleId": 96319,
+          "async": false,
+          "exportedName": "deleteKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/admin/articles/new/page": {
+          "moduleId": 7264,
+          "async": false,
+          "exportedName": "deleteKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/contact/page": {
+          "moduleId": 74346,
+          "async": false,
+          "exportedName": "deleteKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/policies/privacy/page": {
+          "moduleId": 77437,
+          "async": false,
+          "exportedName": "deleteKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/policies/terms/page": {
+          "moduleId": 28365,
+          "async": false,
+          "exportedName": "deleteKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "layer": {
+        "app/_not-found/page": "action-browser",
+        "app/about/page": "action-browser",
+        "app/admin/articles/new/page": "action-browser",
+        "app/contact/page": "action-browser",
+        "app/policies/privacy/page": "action-browser",
+        "app/policies/terms/page": "action-browser"
+      },
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js",
+      "exportedName": "deleteKeylessAction"
+    },
+    "7fabcbaf091d91974051eeb821c2df3b48aa795c7c": {
+      "workers": {
+        "app/_not-found/page": {
+          "moduleId": 38487,
+          "async": false,
+          "exportedName": "syncKeylessConfigAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/about/page": {
+          "moduleId": 96319,
+          "async": false,
+          "exportedName": "syncKeylessConfigAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/admin/articles/new/page": {
+          "moduleId": 7264,
+          "async": false,
+          "exportedName": "syncKeylessConfigAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/contact/page": {
+          "moduleId": 74346,
+          "async": false,
+          "exportedName": "syncKeylessConfigAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/policies/privacy/page": {
+          "moduleId": 77437,
+          "async": false,
+          "exportedName": "syncKeylessConfigAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/policies/terms/page": {
+          "moduleId": 28365,
+          "async": false,
+          "exportedName": "syncKeylessConfigAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "layer": {
+        "app/_not-found/page": "action-browser",
+        "app/about/page": "action-browser",
+        "app/admin/articles/new/page": "action-browser",
+        "app/contact/page": "action-browser",
+        "app/policies/privacy/page": "action-browser",
+        "app/policies/terms/page": "action-browser"
+      },
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js",
+      "exportedName": "syncKeylessConfigAction"
+    }
+  },
+  "edge": {
+    "7fedceb7ef89bd13c816fcf5d8a462b5a871972d18": {
+      "workers": {
+        "app/admin/ai/page": {
+          "moduleId": 36735,
+          "async": false,
+          "exportedName": "detectKeylessEnvDriftAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/admin/articles/[id]/page": {
+          "moduleId": 91268,
+          "async": false,
+          "exportedName": "detectKeylessEnvDriftAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/admin/articles/page": {
+          "moduleId": 28424,
+          "async": false,
+          "exportedName": "detectKeylessEnvDriftAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/admin/menus/page": {
+          "moduleId": 23101,
+          "async": false,
+          "exportedName": "detectKeylessEnvDriftAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/admin/page": {
+          "moduleId": 70569,
+          "async": false,
+          "exportedName": "detectKeylessEnvDriftAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/articles/[slug]/page": {
+          "moduleId": 44694,
+          "async": false,
+          "exportedName": "detectKeylessEnvDriftAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/category/[slug]/page": {
+          "moduleId": 11756,
+          "async": false,
+          "exportedName": "detectKeylessEnvDriftAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/page": {
+          "moduleId": 29648,
+          "async": false,
+          "exportedName": "detectKeylessEnvDriftAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "layer": {
+        "app/admin/ai/page": "rsc",
+        "app/admin/articles/[id]/page": "rsc",
+        "app/admin/articles/page": "rsc",
+        "app/admin/menus/page": "rsc",
+        "app/admin/page": "rsc",
+        "app/articles/[slug]/page": "rsc",
+        "app/category/[slug]/page": "rsc",
+        "app/page": "rsc"
+      },
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js",
+      "exportedName": "detectKeylessEnvDriftAction"
+    },
+    "7f0c944e232b75f85a9150240943abff2dd97c51a3": {
+      "workers": {
+        "app/admin/ai/page": {
+          "moduleId": 36735,
+          "async": false,
+          "exportedName": "invalidateCacheAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
+        },
+        "app/admin/articles/[id]/page": {
+          "moduleId": 91268,
+          "async": false,
+          "exportedName": "invalidateCacheAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
+        },
+        "app/admin/articles/page": {
+          "moduleId": 28424,
+          "async": false,
+          "exportedName": "invalidateCacheAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
+        },
+        "app/admin/menus/page": {
+          "moduleId": 23101,
+          "async": false,
+          "exportedName": "invalidateCacheAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
+        },
+        "app/admin/page": {
+          "moduleId": 70569,
+          "async": false,
+          "exportedName": "invalidateCacheAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
+        },
+        "app/articles/[slug]/page": {
+          "moduleId": 44694,
+          "async": false,
+          "exportedName": "invalidateCacheAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
+        },
+        "app/category/[slug]/page": {
+          "moduleId": 11756,
+          "async": false,
+          "exportedName": "invalidateCacheAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
+        },
+        "app/page": {
+          "moduleId": 29648,
+          "async": false,
+          "exportedName": "invalidateCacheAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
+        }
+      },
+      "layer": {
+        "app/admin/ai/page": "action-browser",
+        "app/admin/articles/[id]/page": "action-browser",
+        "app/admin/articles/page": "action-browser",
+        "app/admin/menus/page": "action-browser",
+        "app/admin/page": "action-browser",
+        "app/articles/[slug]/page": "action-browser",
+        "app/category/[slug]/page": "action-browser",
+        "app/page": "action-browser"
+      },
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js",
+      "exportedName": "invalidateCacheAction"
+    },
+    "7f3363814830bff1c7f3e36836892198eb168a2f52": {
+      "workers": {
+        "app/admin/ai/page": {
+          "moduleId": 36735,
+          "async": false,
+          "exportedName": "createOrReadKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/admin/articles/[id]/page": {
+          "moduleId": 91268,
+          "async": false,
+          "exportedName": "createOrReadKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/admin/articles/page": {
+          "moduleId": 28424,
+          "async": false,
+          "exportedName": "createOrReadKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/admin/menus/page": {
+          "moduleId": 23101,
+          "async": false,
+          "exportedName": "createOrReadKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/admin/page": {
+          "moduleId": 70569,
+          "async": false,
+          "exportedName": "createOrReadKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/articles/[slug]/page": {
+          "moduleId": 44694,
+          "async": false,
+          "exportedName": "createOrReadKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/category/[slug]/page": {
+          "moduleId": 11756,
+          "async": false,
+          "exportedName": "createOrReadKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/page": {
+          "moduleId": 29648,
+          "async": false,
+          "exportedName": "createOrReadKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "layer": {
+        "app/admin/ai/page": "rsc",
+        "app/admin/articles/[id]/page": "rsc",
+        "app/admin/articles/page": "rsc",
+        "app/admin/menus/page": "rsc",
+        "app/admin/page": "rsc",
+        "app/articles/[slug]/page": "rsc",
+        "app/category/[slug]/page": "rsc",
+        "app/page": "rsc"
+      },
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js",
+      "exportedName": "createOrReadKeylessAction"
+    },
+    "7f35bd7da3107d20cabae6c5b68be5b10b53a26932": {
+      "workers": {
+        "app/admin/ai/page": {
+          "moduleId": 36735,
+          "async": false,
+          "exportedName": "collectKeylessMetadata",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/server/keyless-custom-headers.js"
+        },
+        "app/admin/articles/[id]/page": {
+          "moduleId": 91268,
+          "async": false,
+          "exportedName": "collectKeylessMetadata",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/server/keyless-custom-headers.js"
+        },
+        "app/admin/articles/page": {
+          "moduleId": 28424,
+          "async": false,
+          "exportedName": "collectKeylessMetadata",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/server/keyless-custom-headers.js"
+        },
+        "app/admin/menus/page": {
+          "moduleId": 23101,
+          "async": false,
+          "exportedName": "collectKeylessMetadata",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/server/keyless-custom-headers.js"
+        },
+        "app/admin/page": {
+          "moduleId": 70569,
+          "async": false,
+          "exportedName": "collectKeylessMetadata",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/server/keyless-custom-headers.js"
+        },
+        "app/articles/[slug]/page": {
+          "moduleId": 44694,
+          "async": false,
+          "exportedName": "collectKeylessMetadata",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/server/keyless-custom-headers.js"
+        },
+        "app/category/[slug]/page": {
+          "moduleId": 11756,
+          "async": false,
+          "exportedName": "collectKeylessMetadata",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/server/keyless-custom-headers.js"
+        },
+        "app/page": {
+          "moduleId": 29648,
+          "async": false,
+          "exportedName": "collectKeylessMetadata",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/server/keyless-custom-headers.js"
+        }
+      },
+      "layer": {
+        "app/admin/ai/page": "rsc",
+        "app/admin/articles/[id]/page": "rsc",
+        "app/admin/articles/page": "rsc",
+        "app/admin/menus/page": "rsc",
+        "app/admin/page": "rsc",
+        "app/articles/[slug]/page": "rsc",
+        "app/category/[slug]/page": "rsc",
+        "app/page": "rsc"
+      },
+      "filename": "node_modules/@clerk/nextjs/dist/esm/server/keyless-custom-headers.js",
+      "exportedName": "collectKeylessMetadata"
+    },
+    "7ff41f87b8991af093ab0300bd857ab4bc9beb4428": {
+      "workers": {
+        "app/admin/ai/page": {
+          "moduleId": 36735,
+          "async": false,
+          "exportedName": "formatMetadataHeaders",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/server/keyless-custom-headers.js"
+        },
+        "app/admin/articles/[id]/page": {
+          "moduleId": 91268,
+          "async": false,
+          "exportedName": "formatMetadataHeaders",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/server/keyless-custom-headers.js"
+        },
+        "app/admin/articles/page": {
+          "moduleId": 28424,
+          "async": false,
+          "exportedName": "formatMetadataHeaders",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/server/keyless-custom-headers.js"
+        },
+        "app/admin/menus/page": {
+          "moduleId": 23101,
+          "async": false,
+          "exportedName": "formatMetadataHeaders",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/server/keyless-custom-headers.js"
+        },
+        "app/admin/page": {
+          "moduleId": 70569,
+          "async": false,
+          "exportedName": "formatMetadataHeaders",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/server/keyless-custom-headers.js"
+        },
+        "app/articles/[slug]/page": {
+          "moduleId": 44694,
+          "async": false,
+          "exportedName": "formatMetadataHeaders",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/server/keyless-custom-headers.js"
+        },
+        "app/category/[slug]/page": {
+          "moduleId": 11756,
+          "async": false,
+          "exportedName": "formatMetadataHeaders",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/server/keyless-custom-headers.js"
+        },
+        "app/page": {
+          "moduleId": 29648,
+          "async": false,
+          "exportedName": "formatMetadataHeaders",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/server/keyless-custom-headers.js"
+        }
+      },
+      "layer": {
+        "app/admin/ai/page": "rsc",
+        "app/admin/articles/[id]/page": "rsc",
+        "app/admin/articles/page": "rsc",
+        "app/admin/menus/page": "rsc",
+        "app/admin/page": "rsc",
+        "app/articles/[slug]/page": "rsc",
+        "app/category/[slug]/page": "rsc",
+        "app/page": "rsc"
+      },
+      "filename": "node_modules/@clerk/nextjs/dist/esm/server/keyless-custom-headers.js",
+      "exportedName": "formatMetadataHeaders"
+    },
+    "7f277e6832d6ca68a2e6ddd86f2dca90631b716728": {
+      "workers": {
+        "app/admin/ai/page": {
+          "moduleId": 36735,
+          "async": false,
+          "exportedName": "deleteKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/admin/articles/[id]/page": {
+          "moduleId": 91268,
+          "async": false,
+          "exportedName": "deleteKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/admin/articles/page": {
+          "moduleId": 28424,
+          "async": false,
+          "exportedName": "deleteKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/admin/menus/page": {
+          "moduleId": 23101,
+          "async": false,
+          "exportedName": "deleteKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/admin/page": {
+          "moduleId": 70569,
+          "async": false,
+          "exportedName": "deleteKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/articles/[slug]/page": {
+          "moduleId": 44694,
+          "async": false,
+          "exportedName": "deleteKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/category/[slug]/page": {
+          "moduleId": 11756,
+          "async": false,
+          "exportedName": "deleteKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/page": {
+          "moduleId": 29648,
+          "async": false,
+          "exportedName": "deleteKeylessAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "layer": {
+        "app/admin/ai/page": "action-browser",
+        "app/admin/articles/[id]/page": "action-browser",
+        "app/admin/articles/page": "action-browser",
+        "app/admin/menus/page": "action-browser",
+        "app/admin/page": "action-browser",
+        "app/articles/[slug]/page": "action-browser",
+        "app/category/[slug]/page": "action-browser",
+        "app/page": "action-browser"
+      },
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js",
+      "exportedName": "deleteKeylessAction"
+    },
+    "7fabcbaf091d91974051eeb821c2df3b48aa795c7c": {
+      "workers": {
+        "app/admin/ai/page": {
+          "moduleId": 36735,
+          "async": false,
+          "exportedName": "syncKeylessConfigAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/admin/articles/[id]/page": {
+          "moduleId": 91268,
+          "async": false,
+          "exportedName": "syncKeylessConfigAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/admin/articles/page": {
+          "moduleId": 28424,
+          "async": false,
+          "exportedName": "syncKeylessConfigAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/admin/menus/page": {
+          "moduleId": 23101,
+          "async": false,
+          "exportedName": "syncKeylessConfigAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/admin/page": {
+          "moduleId": 70569,
+          "async": false,
+          "exportedName": "syncKeylessConfigAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/articles/[slug]/page": {
+          "moduleId": 44694,
+          "async": false,
+          "exportedName": "syncKeylessConfigAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/category/[slug]/page": {
+          "moduleId": 11756,
+          "async": false,
+          "exportedName": "syncKeylessConfigAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        },
+        "app/page": {
+          "moduleId": 29648,
+          "async": false,
+          "exportedName": "syncKeylessConfigAction",
+          "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "layer": {
+        "app/admin/ai/page": "action-browser",
+        "app/admin/articles/[id]/page": "action-browser",
+        "app/admin/articles/page": "action-browser",
+        "app/admin/menus/page": "action-browser",
+        "app/admin/page": "action-browser",
+        "app/articles/[slug]/page": "action-browser",
+        "app/category/[slug]/page": "action-browser",
+        "app/page": "action-browser"
+      },
+      "filename": "node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js",
+      "exportedName": "syncKeylessConfigAction"
+    }
+  },
+  "encryptionKey": "qAokPxQOKgrZCzTZeTZFba6Du4VqSLdgj7qcASzYDyI="
+}

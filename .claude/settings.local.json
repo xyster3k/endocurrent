@@ -9,7 +9,11 @@
       "Bash(cat:*)",
       "Bash(npm install)",
       "Bash(npm install:*)",
-      "Bash(git reset:*)"
+      "Bash(git reset:*)",
+      "Bash(npx opennextjs-cloudflare build:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(npm view:*)",
+      "Bash(npm run build:cloudflare:*)"
     ]
   }
 }

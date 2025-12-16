@@ -1,119 +1,227 @@
 # Cloudflare Pages Deployment Setup
 
-## Step 1: Update Cloudflare Pages Build Settings
+## IMPORTANT: Project is Now Configured for Cloudflare Pages
+
+This project uses **Next.js 16.0.10** (secure version, fixes CVE-2025-66478) with **@opennextjs/cloudflare adapter**.
+
+The adapter converts Next.js output to Cloudflare Pages Advanced Mode format using `_worker.js`. This enables:
+- ✅ Full Next.js App Router support
+- ✅ Server-side rendering (SSR)
+- ✅ Edge runtime
+- ✅ Middleware (Clerk authentication)
+- ✅ Server Actions
+- ✅ NO WRANGLER needed!
+
+## Step 1: Cloudflare Pages Build Settings
 
 1. Go to https://dash.cloudflare.com
 2. Click **Workers & Pages** → Select your **endocurrent** project
 3. Go to **Settings** → **Builds & deployments**
-4. Set the following:
+4. Click **Edit configuration** and set:
 
 **Framework preset:** `Next.js`
 
+**Root directory (Build directory):** `web`
+⚠️ IMPORTANT: This must be set to `web` not `/`
+
 **Build command:**
 ```
-cd web && npm install && npm run build
+npm install && npm run build:cloudflare
 ```
+⚠️ IMPORTANT: Use `npm run build:cloudflare` which builds with OpenNext and structures output for Cloudflare Pages
 
 **Build output directory:**
 ```
-web/.next/standalone
+.cloudflare/dist
 ```
-
-**Root directory:**
-```
-/
-```
+⚠️ IMPORTANT: This is `.cloudflare/dist` (contains `_worker.js` and static assets)
 
 **Node.js version:** `22` (or leave as Auto)
 
-## Step 2: Add Environment Variables (Including PUBLIC ones!)
+## Step 2: Add Environment Variables - CRITICAL!
 
-Go to **Settings** → **Environment variables**
+⚠️ **This is the most important step!** Missing variables cause 500 errors and "0 of 0 articles" issues.
 
-### How to Add PUBLIC Variables (NEXT_PUBLIC_*)
+1. Go to **Settings** → **Environment variables**
+2. Make sure you're on the **Production** tab
+3. Add each variable below by clicking **Add variable**
 
-Cloudflare Pages lets you add ALL variables the same way. There's **no separate section for public vs secret**:
+### How Variables Work in Cloudflare
 
-1. Click **Add variable**
-2. Enter the **Variable name** (e.g., `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`)
-3. Enter the **Value**
-4. **IMPORTANT**: For public variables (`NEXT_PUBLIC_*`), you can leave "Encrypt" UNCHECKED
-5. For secret variables (API keys, secrets), CHECK the "Encrypt" box
-6. Click **Save**
+- **All variables are added the same way** - there's no separate UI for "public" vs "secret"
+- The **"Encrypt"** checkbox just hides the value in Cloudflare's UI (optional for all variables)
+- `NEXT_PUBLIC_*` variables are automatically available in browser code (that's how Next.js works)
+- Other variables are server-only and never exposed to the browser
 
-### Production Environment Variables to Add:
+### ✅ Variables to Add (Copy-paste these exactly):
 
-**Public Variables** (uncheck "Encrypt"):
+**Variable 1:**
 ```
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY = pk_test_cXVhbGl0eS1zbHVnLTIzLmNsZXJrLmFjY291bnRzLmRldiQ
-NEXT_PUBLIC_SUPABASE_URL = https://nrirqijyayrwhckmjltn.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY = sb_publishable_HA_FSzUR5bprPwmTgbXTaA_W5xumBWD
-NEXT_PUBLIC_ADSENSE_CLIENT = pub-4712145302121710
-NEXT_PUBLIC_SITE_URL = https://endocurrent.pages.dev
+Name: NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+Value: pk_test_cXVhbGl0eS1zbHVnLTIzLmNsZXJrLmFjY291bnRzLmRldiQ
 ```
 
-**Secret Variables** (check "Encrypt"):
+**Variable 2:**
 ```
-CLERK_SECRET_KEY = sk_test_FURqEu3pOkqP3Ut5BKr8zIMSFu68PnYtIR3rEQtrXd
-SUPABASE_SERVICE_ROLE_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5yaXJxaWp5YXlyd2hja21qbHRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2NDM1OTQsImV4cCI6MjA4MTIxOTU5NH0.qZMatidbHAbDcIPEX8EC86WtmZLdlQyBrCAEpXUjcrY
-```
-
-### Preview Environment (Optional)
-
-Repeat the same variables for **Preview** environment if you want preview deployments to work.
-
-## Step 3: Install Dependencies Locally
-
-```bash
-cd web
-npm install
+Name: NEXT_PUBLIC_SUPABASE_URL
+Value: https://nrirqijyayrwhckmjltn.supabase.co
 ```
 
-This will install the new OpenNext adapter and remove the old wrangler stuff.
-
-## Step 4: Test Build Locally (Optional)
-
-```bash
-npm run build
+**Variable 3:**
+```
+Name: NEXT_PUBLIC_SUPABASE_ANON_KEY
+Value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5yaXJxaWp5YXlyd2hja21qbHRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2NDM1OTQsImV4cCI6MjA4MTIxOTU5NH0.qZMatidbHAbDcIPEX8EC86WtmZLdlQyBrCAEpXUjcrY
 ```
 
-This should build successfully now.
+**Variable 4:**
+```
+Name: NEXT_PUBLIC_ADSENSE_CLIENT
+Value: pub-4712145302121710
+```
 
-## Step 5: Deploy
+**Variable 5:**
+```
+Name: NEXT_PUBLIC_SITE_URL
+Value: https://endocurrent.pages.dev
+```
+(⚠️ Change this to your actual Cloudflare Pages URL if different!)
 
-Option 1: **Trigger deployment from dashboard**
-- Go to **Deployments** tab
-- Click **Create deployment**
+**Variable 6:**
+```
+Name: CLERK_SECRET_KEY
+Value: sk_test_FURqEu3pOkqP3Ut5BKr8zIMSFu68PnYtIR3rEQtrXd
+```
+(✅ Check "Encrypt" box for this one to hide it)
 
-Option 2: **Push code to trigger auto-deploy**
+**Variable 7:**
+```
+Name: SUPABASE_SERVICE_ROLE_KEY
+Value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5yaXJxaWp5YXlyd2hja21qbHRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2NDM1OTQsImV4cCI6MjA4MTIxOTU5NH0.qZMatidbHAbDcIPEX8EC86WtmZLdlQyBrCAEpXUjcrY
+```
+(✅ Check "Encrypt" box for this one to hide it)
+
+### ✅ Verify All Variables Added
+
+After adding, you should see 7 variables in the list:
+1. NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+2. NEXT_PUBLIC_SUPABASE_URL
+3. NEXT_PUBLIC_SUPABASE_ANON_KEY
+4. NEXT_PUBLIC_ADSENSE_CLIENT
+5. NEXT_PUBLIC_SITE_URL
+6. CLERK_SECRET_KEY (encrypted)
+7. SUPABASE_SERVICE_ROLE_KEY (encrypted)
+
+## Step 3: Add Compatibility Flags for Node.js Features
+
+Clerk authentication requires Node.js APIs. Add these compatibility flags:
+
+1. Go to **Settings** → **Functions**
+2. Scroll to **Compatibility flags**
+3. Click **Add flag** and add these one by one:
+   - `nodejs_compat`
+   - `nodejs_als`
+
+These flags enable Node.js async_hooks and other APIs that Clerk needs.
+
+## Step 4: Deploy
+
+**Option 1: Push code to trigger auto-deploy (Recommended)**
 ```bash
 git add -A
-git commit -m "Switch to OpenNext for Cloudflare Pages"
+git commit -m "Configure for Cloudflare Pages"
 git push
 ```
 
+Cloudflare will automatically detect the push and start a new deployment.
+
+**Option 2: Manual deployment from dashboard**
+- Go to **Deployments** tab in Cloudflare
+- Click **Create deployment**
+- Select your branch and deploy
+
+## Step 5: Verify Deployment
+
+After deployment completes:
+
+1. Click **View deployment** to open your site
+2. Check that the homepage loads without errors
+3. Try creating an article at `/admin/articles/new`
+4. Verify your published articles appear on the homepage
+
+### Expected Results:
+- ✅ Homepage shows your published articles from Supabase
+- ✅ Admin panel works with Clerk authentication
+- ✅ No 500 errors
+- ✅ No "0 of 0 articles" message
+
 ## Troubleshooting
 
-### "I can't add public variables!"
+### Build Fails
 
-In Cloudflare Pages, there's no distinction in the UI between public and secret variables. They're all added the same way:
-- The **"Encrypt"** checkbox is optional and just hides the value in the UI
-- For `NEXT_PUBLIC_*` variables, you can leave "Encrypt" unchecked (they'll be public in the browser anyway)
-- For secret keys, check "Encrypt" to hide them in the UI
+**Check these settings:**
+- Root directory must be set to `web`
+- Build command: `npm install && npm run build`
+- Build output directory: `.cloudflare/dist` (NOT `.next`)
+- All 7 environment variables are added
+- Node.js version is 22 or Auto
 
-### Build fails
+**Common errors:**
+- `cd: can't cd to web` → Root directory is wrong, change it to `web`
+- `Module not found` → Run `npm install` locally first, then push again
+- Build succeeds but 404 error → Build output directory is wrong, must be `.cloudflare/dist`
 
-- Make sure **Build command** is: `cd web && npm install && npm run build`
-- Make sure **Build output directory** is: `web/.next`
-- Check that all environment variables are added
+**Expected warnings (these are OK):**
+- "Next.js 16 is not fully supported yet!" - OpenNext warning, app will still work
+- "The 'middleware' file convention is deprecated" - Next.js warning, doesn't affect functionality
+- "OpenNext is not fully compatible with Windows" - Only for local builds, Cloudflare uses Linux
 
-### Site shows 500 error
+### Site Shows 500 Error or "async_hooks" Error
 
-- Check that ALL environment variables are added (especially Clerk keys)
-- Make sure `NEXT_PUBLIC_SITE_URL` matches your actual Cloudflare Pages URL
+**This means compatibility flags are missing:**
+1. Go to **Settings** → **Functions**
+2. Add compatibility flags: `nodejs_compat` and `nodejs_als`
+3. Redeploy
 
-## What Changed
+### Shows "0 of 0 articles" or Articles Not Loading
 
-- ❌ **Removed**: wrangler, @cloudflare/next-on-pages (deprecated), all special adapters
-- ✅ **Using**: Native Next.js 15 + Cloudflare Pages integration
-- ✅ **Cleaner**: Standard Next.js build, no build adapters needed
+**This means environment variables are missing:**
+1. Go to **Settings** → **Environment variables**
+2. Verify all 7 variables are present (especially `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`)
+3. If variables were added after deployment, trigger a new deployment
+
+### Clerk Authentication Not Working
+
+**Check:**
+1. `CLERK_SECRET_KEY` and `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` are added
+2. Add your Cloudflare Pages domain to Clerk dashboard:
+   - Go to https://dashboard.clerk.com
+   - Select your application
+   - Go to **Settings** → **Domains**
+   - Add `*.pages.dev` or your specific domain
+
+### "TypeError: C.get is not a function"
+
+This is a Supabase connection error. Check:
+1. All Supabase environment variables are correctly added
+2. Variable names match exactly (including `NEXT_PUBLIC_` prefix)
+3. No extra spaces in variable values
+
+## What This Setup Uses
+
+✅ **Next.js 16.0.10** - Secure version (fixes CVE-2025-66478)
+✅ **@opennextjs/cloudflare v1.14.6** - Adapter for Cloudflare Pages
+✅ **Cloudflare Pages Advanced Mode** - Using `_worker.js` pattern
+✅ **Node.js compatibility flags** (`nodejs_compat`, `nodejs_als`) - For Clerk authentication
+✅ **Custom build script** - Structures output correctly for Pages
+❌ **No wrangler** - Not needed for Pages deployment
+❌ **No @cloudflare/next-on-pages** - Doesn't support Next.js 16 yet
+
+### How It Works:
+1. `npm run build:cloudflare` runs the build process
+2. Next.js builds your app with Turbopack
+3. `@opennextjs/cloudflare` converts the build to Cloudflare Workers format
+4. Custom script (`scripts/build-cloudflare.js`) structures output for Pages:
+   - Creates `.cloudflare/dist` directory
+   - Copies `worker.js` as `_worker.js` (Pages Advanced Mode)
+   - Copies all static assets
+5. Cloudflare Pages deploys the `_worker.js` with full Next.js support
