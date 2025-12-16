@@ -7,7 +7,7 @@ console.log('Building for Cloudflare Pages...\n');
 
 // Run OpenNext build
 console.log('Running OpenNext build...');
-execSync('npx opennextjs-cloudflare build --skipWranglerConfigCheck', { stdio: 'inherit' });
+execSync('npx opennextjs-cloudflare build', { stdio: 'inherit' });
 
 // Create output directory for Cloudflare Pages
 const distDir = path.join(__dirname, '..', '.cloudflare', 'dist');

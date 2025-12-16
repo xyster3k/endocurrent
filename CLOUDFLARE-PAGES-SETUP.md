@@ -111,19 +111,9 @@ After adding, you should see 7 variables in the list:
 6. CLERK_SECRET_KEY (encrypted)
 7. SUPABASE_SERVICE_ROLE_KEY (encrypted)
 
-## Step 3: Add Compatibility Flags for Node.js Features
+## Step 3: Deploy
 
-Clerk authentication requires Node.js APIs. Add these compatibility flags:
-
-1. Go to **Settings** → **Functions**
-2. Scroll to **Compatibility flags**
-3. Click **Add flag** and add these one by one:
-   - `nodejs_compat`
-   - `nodejs_als`
-
-These flags enable Node.js async_hooks and other APIs that Clerk needs.
-
-## Step 4: Deploy
+**Note:** Compatibility flags (`nodejs_compat`, `nodejs_als`) are automatically configured in `wrangler.toml` - no manual setup needed!
 
 **Option 1: Push code to trigger auto-deploy (Recommended)**
 ```bash
@@ -139,7 +129,7 @@ Cloudflare will automatically detect the push and start a new deployment.
 - Click **Create deployment**
 - Select your branch and deploy
 
-## Step 5: Verify Deployment
+## Step 4: Verify Deployment
 
 After deployment completes:
 
@@ -169,18 +159,27 @@ After deployment completes:
 - `cd: can't cd to web` → Root directory is wrong, change it to `web`
 - `Module not found` → Run `npm install` locally first, then push again
 - Build succeeds but 404 error → Build output directory is wrong, must be `.cloudflare/dist`
+- `Could not resolve "async_hooks"` or other Node.js modules → Missing or incorrect `wrangler.toml` file. Verify it exists in `web/` directory with `compatibility_date = "2024-09-23"` and compatibility flags
 
 **Expected warnings (these are OK):**
 - "Next.js 16 is not fully supported yet!" - OpenNext warning, app will still work
 - "The 'middleware' file convention is deprecated" - Next.js warning, doesn't affect functionality
 - "OpenNext is not fully compatible with Windows" - Only for local builds, Cloudflare uses Linux
 
-### Site Shows 500 Error or "async_hooks" Error
+### Build Errors: "Could not resolve" Node.js Modules
 
-**This means compatibility flags are missing:**
-1. Go to **Settings** → **Functions**
-2. Add compatibility flags: `nodejs_compat` and `nodejs_als`
-3. Redeploy
+If you see errors like `Could not resolve "async_hooks"`, `Could not resolve "fs"`, etc:
+
+**Cause:** Missing or incorrect `wrangler.toml` configuration
+
+**Fix:**
+1. Verify `web/wrangler.toml` exists with this content:
+   ```toml
+   name = "endocurrent"
+   compatibility_date = "2024-09-23"
+   compatibility_flags = ["nodejs_compat", "nodejs_als"]
+   ```
+2. Push the changes and redeploy
 
 ### Shows "0 of 0 articles" or Articles Not Loading
 
@@ -211,9 +210,10 @@ This is a Supabase connection error. Check:
 ✅ **Next.js 16.0.10** - Secure version (fixes CVE-2025-66478)
 ✅ **@opennextjs/cloudflare v1.14.6** - Adapter for Cloudflare Pages
 ✅ **Cloudflare Pages Advanced Mode** - Using `_worker.js` pattern
-✅ **Node.js compatibility flags** (`nodejs_compat`, `nodejs_als`) - For Clerk authentication
+✅ **wrangler.toml** - ONLY for build configuration (compatibility settings), NOT for deployment or managing environment variables
+✅ **Node.js compatibility flags** (`nodejs_compat`, `nodejs_als`) - Set in wrangler.toml for Cloudflare to process Node.js modules
 ✅ **Custom build script** - Structures output correctly for Pages
-❌ **No wrangler** - Not needed for Pages deployment
+❌ **No wrangler CLI for deployment** - Cloudflare Pages handles deployment automatically
 ❌ **No @cloudflare/next-on-pages** - Doesn't support Next.js 16 yet
 
 ### How It Works:
