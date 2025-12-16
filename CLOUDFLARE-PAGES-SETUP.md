@@ -111,9 +111,22 @@ After adding, you should see 7 variables in the list:
 6. CLERK_SECRET_KEY (encrypted)
 7. SUPABASE_SERVICE_ROLE_KEY (encrypted)
 
-## Step 3: Deploy
+## Step 3: Configure Compatibility Settings - REQUIRED!
 
-**Note:** Compatibility flags (`nodejs_compat`, `nodejs_als`) are automatically configured in `wrangler.toml` - no manual setup needed!
+⚠️ **CRITICAL:** You MUST configure compatibility settings for Node.js modules to work.
+
+1. Go to **Settings** → **Functions**
+2. Scroll down to **Compatibility Date**
+3. Set compatibility date to: `2024-09-23` (or any date after 2024-09-23)
+4. Scroll to **Compatibility flags**
+5. Click **Configure Production compatibility flag** and add:
+   - `nodejs_compat`
+   - `nodejs_als`
+6. Click **Save**
+
+These settings enable Cloudflare to resolve Node.js built-in modules like `async_hooks`, `fs`, `crypto`, etc.
+
+## Step 4: Deploy
 
 **Option 1: Push code to trigger auto-deploy (Recommended)**
 ```bash
