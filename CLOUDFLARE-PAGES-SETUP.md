@@ -40,46 +40,80 @@ npm install && npm run build:cloudflare
 
 ## Step 2: Add Environment Variables - CRITICAL!
 
-⚠️ **Public variables are managed in `web/wrangler.toml`** (already configured).
+⚠️ **ALL environment variables must be added in the Cloudflare Pages dashboard.**
 
-You ONLY need to add **SECRET keys** in the Cloudflare Pages dashboard:
+**IMPORTANT:** Add these to **BOTH Production AND Preview** environments!
 
 1. Go to **Settings** → **Environment variables**
-2. Make sure you're on the **Production** tab
-3. Add only these 2 secret variables:
+2. For EACH variable below:
+   - Click **Add variable**
+   - Add to **Production** environment
+   - Click **Add variable** again
+   - Add the SAME variable to **Preview** environment
 
-### ✅ Secret Variables to Add:
+### ✅ Variables to Add (All 7):
 
-**Variable 1 - CLERK_SECRET_KEY:**
+**Variable 1:**
+```
+Name: NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+Value: pk_test_cXVhbGl0eS1zbHVnLTIzLmNsZXJrLmFjY291bnRzLmRldiQ
+Environment: Production AND Preview
+```
+
+**Variable 2:**
 ```
 Name: CLERK_SECRET_KEY
 Value: sk_test_FURqEu3pOkqP3Ut5BKr8zIMSFu68PnYtIR3rEQtrXd
+Environment: Production AND Preview
 ```
-✅ Check **"Encrypt"** box to hide this value
+✅ Check **"Encrypt"** box
 
-**Variable 2 - SUPABASE_SERVICE_ROLE_KEY:**
+**Variable 3:**
+```
+Name: NEXT_PUBLIC_SUPABASE_URL
+Value: https://nrirqijyayrwhckmjltn.supabase.co
+Environment: Production AND Preview
+```
+
+**Variable 4:**
+```
+Name: NEXT_PUBLIC_SUPABASE_ANON_KEY
+Value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5yaXJxaWp5YXlyd2hja21qbHRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2NDM1OTQsImV4cCI6MjA4MTIxOTU5NH0.qZMatidbHAbDcIPEX8EC86WtmZLdlQyBrCAEpXUjcrY
+Environment: Production AND Preview
+```
+
+**Variable 5:**
 ```
 Name: SUPABASE_SERVICE_ROLE_KEY
 Value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5yaXJxaWp5YXlyd2hja21qbHRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU2NDM1OTQsImV4cCI6MjA4MTIxOTU5NH0.qZMatidbHAbDcIPEX8EC86WtmZLdlQyBrCAEpXUjcrY
+Environment: Production AND Preview
 ```
-✅ Check **"Encrypt"** box to hide this value
+✅ Check **"Encrypt"** box
 
-### ✅ Verify Secret Variables Added
+**Variable 6:**
+```
+Name: NEXT_PUBLIC_ADSENSE_CLIENT
+Value: pub-4712145302121710
+Environment: Production AND Preview
+```
 
-After adding, you should see 2 encrypted variables in the dashboard:
-1. CLERK_SECRET_KEY (encrypted)
-2. SUPABASE_SERVICE_ROLE_KEY (encrypted)
+**Variable 7:**
+```
+Name: NEXT_PUBLIC_SITE_URL
+Value: https://endocurrent.pages.dev
+Environment: Production AND Preview
+```
 
-### 📝 Public Variables (Managed in Code)
+### ✅ Verify All Variables Added
 
-These are already configured in `web/wrangler.toml` and **should NOT be added to the dashboard**:
-- NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
-- NEXT_PUBLIC_SUPABASE_URL
-- NEXT_PUBLIC_SUPABASE_ANON_KEY
-- NEXT_PUBLIC_ADSENSE_CLIENT
-- NEXT_PUBLIC_SITE_URL
-
-⚠️ **Do NOT add these to the dashboard** - wrangler will delete them if you try!
+After adding, you should see **7 variables for Production** and **7 variables for Preview**:
+1. NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+2. CLERK_SECRET_KEY (encrypted)
+3. NEXT_PUBLIC_SUPABASE_URL
+4. NEXT_PUBLIC_SUPABASE_ANON_KEY
+5. SUPABASE_SERVICE_ROLE_KEY (encrypted)
+6. NEXT_PUBLIC_ADSENSE_CLIENT
+7. NEXT_PUBLIC_SITE_URL
 
 ## Step 3: Configure Compatibility Settings - REQUIRED!
 
