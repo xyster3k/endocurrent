@@ -2,3 +2,10 @@ name = "endocurrent"
 compatibility_date = "2024-09-23"
 compatibility_flags = ["nodejs_compat", "nodejs_als"]
 pages_build_output_dir = ".cloudflare/dist"
+
+[vars]
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY = "pk_test_cXVhbGl0eS1zbHVnLTIzLmNsZXJrLmFjY291bnRzLmRldiQ"
+NEXT_PUBLIC_SUPABASE_URL = "https://nrirqijyayrwhckmjltn.supabase.co"
+NEXT_PUBLIC_SUPABASE_ANON_KEY = "sb_publishable_HA_FSzUR5bprPwmTgbXTaA_W5xumBWD"
+NEXT_PUBLIC_ADSENSE_CLIENT = "pub-4712145302121710"
+NEXT_PUBLIC_SITE_URL = "https://endocurrent.pages.dev"
