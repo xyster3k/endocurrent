@@ -223,11 +223,19 @@ This is a Supabase connection error. Check:
 ✅ **Next.js 16.0.10** - Secure version (fixes CVE-2025-66478)
 ✅ **@opennextjs/cloudflare v1.14.6** - Adapter for Cloudflare Pages
 ✅ **Cloudflare Pages Advanced Mode** - Using `_worker.js` pattern
-✅ **wrangler.toml** - ONLY for build configuration (compatibility settings), NOT for deployment or managing environment variables
-✅ **Node.js compatibility flags** (`nodejs_compat`, `nodejs_als`) - Set in wrangler.toml for Cloudflare to process Node.js modules
+✅ **wrangler.toml** - Required for OpenNext build process AND must match dashboard settings
+✅ **Node.js compatibility flags** (`nodejs_compat`, `nodejs_als`) - Set in BOTH wrangler.toml (for build) AND Cloudflare dashboard (for runtime)
 ✅ **Custom build script** - Structures output correctly for Pages
 ❌ **No wrangler CLI for deployment** - Cloudflare Pages handles deployment automatically
 ❌ **No @cloudflare/next-on-pages** - Doesn't support Next.js 16 yet
+
+### Important: wrangler.toml vs Dashboard Settings
+
+**Both are required:**
+- `web/wrangler.toml` - Used by OpenNext during build to generate worker code correctly
+- **Cloudflare Dashboard Settings** (Step 3) - Used at runtime when your site runs on Cloudflare
+
+If either is missing, you'll get "Could not resolve" errors or runtime failures.
 
 ### How It Works:
 1. `npm run build:cloudflare` runs the build process
