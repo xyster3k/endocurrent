@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "build:cloudflare": "node scripts/build-cloudflare.js",
+    "preview:cloudflare": "npm run build:cloudflare && npx wrangler pages dev .cloudflare/dist --compatibility-date=2024-09-23 --compatibility-flags=nodejs_compat --compatibility-flags=nodejs_als",
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit"
