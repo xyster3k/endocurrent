@@ -29,6 +29,7 @@ export type ArticleSummary = {
   cover_image_url?: string | null;
   author?: ArticleAuthor | null;
   status?: "draft" | "draft_ai" | "published" | "archived";
+  featured?: boolean;
 };
 
 export type ArticleDetail = ArticleSummary & {

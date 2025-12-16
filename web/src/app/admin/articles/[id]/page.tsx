@@ -18,6 +18,7 @@ export default function EditArticlePage() {
     body_markdown: "",
     category: "",
     status: "draft" as "draft" | "draft_ai" | "published" | "archived",
+    featured: false,
   });
 
   useEffect(() => {
@@ -44,6 +45,7 @@ export default function EditArticlePage() {
           body_markdown: article.body_markdown || "",
           category: article.category || "",
           status: article.status || "draft",
+          featured: article.featured || false,
         });
       } catch (err) {
         setError(String(err));
@@ -215,6 +217,22 @@ export default function EditArticlePage() {
             </select>
           </Field>
         </div>
+        <label className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800">
+          <input
+            type="checkbox"
+            checked={formData.featured}
+            onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
+            className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+          />
+          <div className="flex flex-col">
+            <span className="text-sm font-medium text-slate-800 dark:text-slate-200">
+              Pin as featured article
+            </span>
+            <span className="text-xs text-slate-600 dark:text-slate-400">
+              This article will appear on the homepage hero section (only one article can be featured at a time)
+            </span>
+          </div>
+        </label>
         <Field label="Summary">
           <textarea
             value={formData.summary}

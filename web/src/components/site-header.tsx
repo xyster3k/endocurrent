@@ -50,7 +50,7 @@ export function SiteHeader() {
             <Link href="/" className="text-lg font-semibold tracking-tight">
               EndoCurrent
             </Link>
-            <p className="text-sm text-slate-500">Weekly endocrine intelligence</p>
+            <p className="text-sm text-slate-500">Medical intelligence digest</p>
           </div>
         </div>
         <nav className="hidden items-center gap-6 text-sm font-medium md:flex">

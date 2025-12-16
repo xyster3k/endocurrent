@@ -3,7 +3,7 @@ import { ArrowRight, Compass } from "lucide-react";
 import { ArticleCard } from "@/components/article-card";
 import { AdSlot } from "@/components/ad-slot";
 import { shouldShowAds } from "@/lib/ads";
-import { getArticles } from "@/lib/data/articles";
+import { getArticles, getFeaturedArticle } from "@/lib/data/articles";
 
 export const revalidate = 300;
 
@@ -18,28 +18,34 @@ export default async function Home(props: { searchParams: SearchParams }) {
   });
   const showAds = shouldShowAds("FREE");
 
+  // Get featured article or fallback to latest
+  const featuredArticle = await getFeaturedArticle();
+  const heroArticle = featuredArticle || (articles.length > 0 ? articles[0] : null);
+
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-10 px-6 pb-16 pt-10">
       <section className="relative overflow-hidden rounded-3xl border border-white/40 bg-gradient-to-br from-sky-50 via-white to-indigo-50 p-8 shadow-xl dark:border-slate-800 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
         <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <div className="flex max-w-2xl flex-col gap-4">
             <p className="inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-blue-700 shadow-sm ring-1 ring-white/40 backdrop-blur dark:bg-slate-900/60 dark:text-blue-200">
-              Weekly endocrine digest
+              Medical Intelligence
             </p>
             <h1 className="text-4xl font-semibold leading-tight tracking-tight text-slate-900 dark:text-white">
-              Clear, clinician-led news for endocrine teams. Ads off when premium. AI drafts stay behind review.
+              Clear, clinician-led medical news. Ads off when premium. AI drafts stay behind review.
             </h1>
             <p className="text-lg text-slate-600 dark:text-slate-300">
               Built for fast skimming on call, with full-length articles, structured references, likes/reports, and an editorial backend.
             </p>
             <div className="flex flex-wrap gap-3">
-              <Link
-                href="/articles/weekly-endocrine-digest"
-                className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-3 text-sm font-semibold text-white shadow-md transition hover:-translate-y-0.5 hover:shadow-lg dark:bg-white dark:text-black"
-              >
-                Read the sample article
-                <ArrowRight className="h-4 w-4" />
-              </Link>
+              {heroArticle && heroArticle.slug && (
+                <Link
+                  href={`/articles/${heroArticle.slug}`}
+                  className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-3 text-sm font-semibold text-white shadow-md transition hover:-translate-y-0.5 hover:shadow-lg dark:bg-white dark:text-black"
+                >
+                  {heroArticle.featured ? "Read featured article" : "Read latest article"}
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              )}
               <Link
                 href="/admin"
                 className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-800 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg dark:border-slate-700 dark:bg-slate-900 dark:text-slate-50"

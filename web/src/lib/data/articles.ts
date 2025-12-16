@@ -61,6 +61,7 @@ export async function getArticles(
         cover_image_url: null,
         author: null,
         status: (row as any).status as ArticleSummary["status"],
+        featured: (row as any).featured ?? false,
       })),
       meta: { page, pageSize, total: count ?? data.length },
     };
@@ -104,9 +105,47 @@ export async function getArticleBySlug(slug: string): Promise<ArticleDetail | nu
       like_count: 0,
       dislike_count: 0,
       status: (data as any).status as ArticleSummary["status"],
+      featured: (data as any).featured ?? false,
     };
   } catch (error) {
     console.error("Falling back to mock article", error);
     return mockArticles.find((a) => a.slug === slug) ?? null;
+  }
+}
+
+export async function getFeaturedArticle(): Promise<ArticleSummary | null> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    return null;
+  }
+
+  try {
+    const supabase = createSupabaseServerClient();
+    const { data, error } = await supabase
+      .from("articles")
+      .select("*")
+      .eq("status", "published")
+      .eq("featured", true)
+      .maybeSingle();
+
+    if (error) throw error;
+    if (!data) return null;
+
+    return {
+      id: (data as any).id,
+      slug: (data as any).slug,
+      title: (data as any).title,
+      summary: (data as any).summary ?? "",
+      category: (data as any).category,
+      tags: [],
+      reading_time_minutes: (data as any).reading_time_minutes ?? 0,
+      published_at: (data as any).published_at,
+      cover_image_url: null,
+      author: null,
+      status: (data as any).status as ArticleSummary["status"],
+      featured: true,
+    };
+  } catch (error) {
+    console.error("Error fetching featured article", error);
+    return null;
   }
 }

@@ -13,6 +13,7 @@ const bodySchema = z.object({
   body_markdown: z.string().optional(),
   category: z.string().optional().nullable(),
   status: z.enum(["draft", "draft_ai", "published", "archived"]).optional(),
+  featured: z.boolean().optional(),
 });
 
 type Params = Promise<{ id: string }>;
