@@ -119,6 +119,8 @@ After adding, you should see **7 variables for Production** and **7 variables fo
 
 ⚠️ **CRITICAL:** You MUST configure compatibility settings for Node.js modules to work.
 
+This MUST be done in the dashboard (not in a file):
+
 1. Go to **Settings** → **Functions**
 2. Scroll down to **Compatibility Date**
 3. Set compatibility date to: `2024-09-23` (or any date after 2024-09-23)
@@ -129,6 +131,8 @@ After adding, you should see **7 variables for Production** and **7 variables fo
 6. Click **Save**
 
 These settings enable Cloudflare to resolve Node.js built-in modules like `async_hooks`, `fs`, `crypto`, etc.
+
+⚠️ **Do NOT create a wrangler.toml file** - it will block you from adding public environment variables in the dashboard!
 
 ## Step 4: Deploy
 
@@ -176,7 +180,7 @@ After deployment completes:
 - `cd: can't cd to web` → Root directory is wrong, change it to `web`
 - `Module not found` → Run `npm install` locally first, then push again
 - Build succeeds but 404 error → Build output directory is wrong, must be `.cloudflare/dist`
-- `Could not resolve "async_hooks"` or other Node.js modules → Missing or incorrect `wrangler.toml` file. Verify it exists in `web/` directory with `compatibility_date = "2024-09-23"` and compatibility flags
+- `Could not resolve "async_hooks"` or other Node.js modules → Compatibility settings not configured in dashboard (see Step 3)
 
 **Expected warnings (these are OK):**
 - "Next.js 16 is not fully supported yet!" - OpenNext warning, app will still work
@@ -187,16 +191,14 @@ After deployment completes:
 
 If you see errors like `Could not resolve "async_hooks"`, `Could not resolve "fs"`, etc:
 
-**Cause:** Missing or incorrect `wrangler.toml` configuration
+**Cause:** Compatibility settings not configured in Cloudflare dashboard
 
 **Fix:**
-1. Verify `web/wrangler.toml` exists with this content:
-   ```toml
-   name = "endocurrent"
-   compatibility_date = "2024-09-23"
-   compatibility_flags = ["nodejs_compat", "nodejs_als"]
-   ```
-2. Push the changes and redeploy
+1. Go to **Settings** → **Functions** in Cloudflare Pages dashboard
+2. Set **Compatibility Date** to `2024-09-23` or later
+3. Add **Compatibility flags**: `nodejs_compat` and `nodejs_als`
+4. Click **Save**
+5. Redeploy
 
 ### Shows "0 of 0 articles" or Articles Not Loading
 
@@ -227,19 +229,19 @@ This is a Supabase connection error. Check:
 ✅ **Next.js 16.0.10** - Secure version (fixes CVE-2025-66478)
 ✅ **@opennextjs/cloudflare v1.14.6** - Adapter for Cloudflare Pages
 ✅ **Cloudflare Pages Advanced Mode** - Using `_worker.js` pattern
-✅ **wrangler.toml** - Required for OpenNext build process AND must match dashboard settings
-✅ **Node.js compatibility flags** (`nodejs_compat`, `nodejs_als`) - Set in BOTH wrangler.toml (for build) AND Cloudflare dashboard (for runtime)
+✅ **Dashboard-only configuration** - All settings managed in Cloudflare Pages dashboard
+✅ **Node.js compatibility flags** (`nodejs_compat`, `nodejs_als`) - Configured in Settings → Functions
 ✅ **Custom build script** - Structures output correctly for Pages
+❌ **No wrangler.toml** - Would block non-encrypted variables from dashboard
 ❌ **No wrangler CLI for deployment** - Cloudflare Pages handles deployment automatically
 ❌ **No @cloudflare/next-on-pages** - Doesn't support Next.js 16 yet
 
-### Important: wrangler.toml vs Dashboard Settings
+### Important: No wrangler.toml File
 
-**Both are required:**
-- `web/wrangler.toml` - Used by OpenNext during build to generate worker code correctly
-- **Cloudflare Dashboard Settings** (Step 3) - Used at runtime when your site runs on Cloudflare
-
-If either is missing, you'll get "Could not resolve" errors or runtime failures.
+**This project does NOT use wrangler.toml** because:
+- wrangler.toml blocks non-encrypted variables from being added in the dashboard
+- All configuration is done through the Cloudflare Pages dashboard
+- Compatibility settings are configured in Settings → Functions (not in a file)
 
 ### How It Works:
 1. `npm run build:cloudflare` runs the build process
