@@ -5,9 +5,12 @@ const { execSync } = require('child_process');
 
 console.log('Building for Cloudflare Pages...\n');
 
-// Run OpenNext build
+// Run OpenNext build (answer 'n' to wrangler.toml prompt)
 console.log('Running OpenNext build...');
-execSync('npx opennextjs-cloudflare build', { stdio: 'inherit' });
+execSync('npx opennextjs-cloudflare build', {
+  input: 'n\n',
+  stdio: ['pipe', 'inherit', 'inherit']
+});
 
 // Create output directory for Cloudflare Pages
 const distDir = path.join(__dirname, '..', '.cloudflare', 'dist');
