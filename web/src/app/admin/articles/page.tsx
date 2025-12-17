@@ -2,8 +2,6 @@ import Link from "next/link";
 import { getSessionUser, requireRole } from "@/lib/auth";
 import { getArticles } from "@/lib/data/articles";
 
-export const runtime = "edge";
-
 export default async function AdminArticlesPage() {
   const user = await getSessionUser();
   requireRole(user, ["editor", "admin"]);

@@ -6,7 +6,6 @@ import Link from "next/link";
 import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import { ShieldCheck, Sparkles } from "lucide-react";
 
-export const runtime = "edge";
 type Menu = { id: string; name: string };
 type MenuItem = {
   id: string;

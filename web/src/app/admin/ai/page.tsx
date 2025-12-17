@@ -1,8 +1,6 @@
 import React from "react";
 import { getSessionUser, requireRole } from "@/lib/auth";
 
-export const runtime = "edge";
-
 export default async function AiDraftPage() {
   const user = await getSessionUser();
   requireRole(user, ["editor", "admin"]);

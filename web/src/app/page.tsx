@@ -24,6 +24,30 @@ export default async function Home(props: { searchParams: SearchParams }) {
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-10 px-6 pb-16 pt-10">
+      {heroArticle && (
+        <section className="rounded-2xl border border-slate-200 bg-gradient-to-br from-blue-50 to-white p-8 shadow-lg dark:border-slate-800 dark:from-slate-900 dark:to-slate-800">
+          <div className="flex items-center gap-2 mb-4">
+            <span className="rounded-full bg-blue-600 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white">
+              Featured
+            </span>
+            <span className="text-sm text-slate-500 dark:text-slate-400">
+              {heroArticle.published_at ? new Date(heroArticle.published_at).toLocaleDateString() : ""}
+            </span>
+          </div>
+          <Link href={`/articles/${heroArticle.slug}`} className="group">
+            <h2 className="text-3xl font-bold leading-tight tracking-tight text-slate-900 transition group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400">
+              {heroArticle.title}
+            </h2>
+            <p className="mt-3 text-lg leading-relaxed text-slate-600 dark:text-slate-300">
+              {heroArticle.summary}
+            </p>
+            <span className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-blue-600 dark:text-blue-400">
+              Read article
+              <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+            </span>
+          </Link>
+        </section>
+      )}
       <section className="space-y-4">
         <div className="flex items-end justify-between">
           <div>

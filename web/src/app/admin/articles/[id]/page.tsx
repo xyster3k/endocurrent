@@ -4,8 +4,6 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 
-export const runtime = "edge";
-
 export default function EditArticlePage() {
   const params = useParams();
   const router = useRouter();
@@ -34,11 +32,11 @@ export default function EditArticlePage() {
     const fetchArticle = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`/api/admin/articles?pageSize=1000`);
-        if (!res.ok) throw new Error("Failed to fetch articles");
-        const data = await res.json();
-        const article = data.data?.find((a: any) => a.id === articleId);
-        if (!article) throw new Error("Article not found");
+        const res = await fetch(`/api/admin/articles/${articleId}`);
+        if (!res.ok) throw new Error("Failed to fetch article");
+        const result = await res.json();
+        if (!result.data) throw new Error("Article not found");
+        const article = result.data;
 
         setFormData({
           title: article.title || "",

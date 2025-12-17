@@ -30,11 +30,13 @@ export async function getArticles(
   }
 
   try {
-    const supabase = await createSupabaseServerClient();
+    // Use service role when fetching drafts (admin context)
+    const useServiceRole = filters.includeDrafts || filters.status === "draft" || filters.status === "draft_ai";
+    const supabase = await createSupabaseServerClient({ useServiceRole });
     let query = supabase
       .from("articles")
       .select("*", { count: "exact" })
-      .order("published_at", { ascending: false })
+      .order("created_at", { ascending: false })
       .range((page - 1) * pageSize, page * pageSize - 1);
 
     if (!filters.includeDrafts) {

@@ -17,6 +17,28 @@ const bodySchema = z.object({
 
 type Params = Promise<{ id: string }>;
 
+export async function GET(_req: NextRequest, props: { params: Params }) {
+  const user = await getSessionUser();
+  requireRole(user, ["editor", "admin"]);
+  const params = await props.params;
+
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    return NextResponse.json({ error: "Supabase not configured" }, { status: 500 });
+  }
+
+  const supabase = await createSupabaseServerClient({ useServiceRole: true });
+  const { data, error } = await supabase
+    .from("articles")
+    .select("*")
+    .eq("id", params.id)
+    .maybeSingle();
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (!data) return NextResponse.json({ error: "Article not found" }, { status: 404 });
+
+  return NextResponse.json({ ok: true, data });
+}
+
 export async function PUT(req: NextRequest, props: { params: Params }) {
   const user = await getSessionUser();
   requireRole(user, ["editor", "admin"]);

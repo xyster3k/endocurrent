@@ -15,7 +15,11 @@
       "Bash(npm view:*)",
       "Bash(npm run build:cloudflare:*)",
       "Bash(ls:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(while read file)",
+      "Bash(do sed -i '/^export const runtime = \"\"edge\"\";$/d' \"$file\")",
+      "Bash(echo:*)",
+      "Bash(done)"
     ]
   }
 }

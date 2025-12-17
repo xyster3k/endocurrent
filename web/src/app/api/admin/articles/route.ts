@@ -80,7 +80,7 @@ export async function POST(req: NextRequest) {
       status,
       reading_time_minutes: reading.minutes,
       word_count: reading.words,
-      author_id: /^[0-9a-fA-F-]{36}$/.test(user?.id ?? "") ? user?.id : null,
+      author_id: user?.id ?? null,
     })
     .select()
     .maybeSingle();
