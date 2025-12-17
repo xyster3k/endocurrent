@@ -5,7 +5,17 @@ const { execSync } = require('child_process');
 
 console.log('Building for Cloudflare Pages...\n');
 
-// Run OpenNext build (answer 'n' to wrangler.toml prompt)
+// Generate minimal wrangler.toml for build compatibility
+// This is NOT committed to git and only used during build
+const wranglerConfig = `# Auto-generated during build - DO NOT COMMIT
+# All environment variables MUST be set in Cloudflare Pages UI
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat", "nodejs_als"]
+`;
+fs.writeFileSync(path.join(__dirname, '..', 'wrangler.toml'), wranglerConfig);
+console.log('Generated wrangler.toml for build compatibility\n');
+
+// Run OpenNext build (answer 'n' to wrangler.toml prompt since we created it)
 console.log('Running OpenNext build...');
 execSync('npx opennextjs-cloudflare build', {
   input: 'n\n',
