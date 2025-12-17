@@ -56,14 +56,34 @@ if (!workerCode.includes('compatibility_date')) {
 
 console.log('✓ Copied worker.js to _worker.js');
 
-// Create a _routes.json to ensure worker handles all routes
+// Create a _routes.json to properly route requests
+// Static assets should be served directly, not through the worker
 const routes = {
   version: 1,
   include: ["/*"],
-  exclude: []
+  exclude: [
+    "/_next/static/*",     // Next.js static assets (CSS, JS)
+    "/_next/image/*",      // Next.js image optimization
+    "/favicon.ico",        // Favicon
+    "/robots.txt",         // Robots
+    "/sitemap.xml",        // Sitemap
+    "/*.css",              // CSS files
+    "/*.js",               // JS files
+    "/*.png",              // Images
+    "/*.jpg",
+    "/*.jpeg",
+    "/*.gif",
+    "/*.svg",
+    "/*.ico",
+    "/*.webp",
+    "/*.woff",             // Fonts
+    "/*.woff2",
+    "/*.ttf",
+    "/*.eot"
+  ]
 };
 fs.writeFileSync(path.join(distDir, '_routes.json'), JSON.stringify(routes, null, 2));
-console.log('✓ Created _routes.json');
+console.log('✓ Created _routes.json with static asset exclusions');
 
 // Copy all worker dependencies
 const openNextDir = path.join(__dirname, '..', '.open-next');
