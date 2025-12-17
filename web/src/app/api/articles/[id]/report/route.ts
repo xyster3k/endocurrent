@@ -2,7 +2,6 @@ import { NextResponse, type NextRequest } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-export const runtime = "edge";
 
 type Params = Promise<{ id: string }>;
 
@@ -24,8 +23,10 @@ export async function POST(req: NextRequest, props: { params: Params }) {
     });
   }
 
-  const supabase = createSupabaseServerClient();
-  const { error } = await supabase.from("article_reports").insert({
+  // Use service role so reports are recorded even with RLS enabled
+  const supabase = await createSupabaseServerClient({ useServiceRole: true });
+  const reports = (supabase as any).from("article_reports");
+  const { error } = await reports.insert({
     article_id: params.id,
     user_id: userId ?? null,
     reason_code,

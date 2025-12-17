@@ -1,6 +1,14 @@
 import React from "react";
 import Link from "next/link";
-import { ShieldCheck, SquarePen, Table2, Wand2 } from "lucide-react";
+import {
+  LayoutTemplate,
+  ShieldCheck,
+  SquarePen,
+  Table2,
+  UserRound,
+  Wand2,
+} from "lucide-react";
+
 import { getSessionUser, requireRole } from "@/lib/auth";
 import { getArticles } from "@/lib/data/articles";
 
@@ -56,8 +64,8 @@ export default async function AdminHome() {
           </span>
         </div>
         <p className="max-w-3xl text-slate-600 dark:text-slate-300">
-          Draft, publish, and monitor complaints. Supabase + RLS backs all actions; Clerk governs auth. AI drafts live
-          in a separate queue until human review.
+          Draft, publish, and monitor complaints. Supabase + RLS backs all actions; Clerk governs
+          auth. AI drafts live in a separate queue until human review.
         </p>
         <div className="flex flex-wrap gap-3">
           <StatPill label="Published" value={published.length} />
@@ -84,6 +92,18 @@ export default async function AdminHome() {
           title="AI drafts"
           body="Send a topic + sources to LLM, store as draft_ai for review."
           href="/admin/ai"
+        />
+        <AdminCard
+          icon={<UserRound className="h-5 w-5" />}
+          title="Profile display name"
+          body="Set the display name used for published posts."
+          href="/admin/profile"
+        />
+        <AdminCard
+          icon={<LayoutTemplate className="h-5 w-5" />}
+          title="Menu management"
+          body="Build header menu tree and map categories or links."
+          href="/admin/menus"
         />
       </div>
 
@@ -141,3 +161,4 @@ function StatPill({ label, value }: { label: string; value: number }) {
     </span>
   );
 }
+

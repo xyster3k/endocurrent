@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { HandThumbDown, HandThumbUp } from "lucide-react";
+import { ThumbsDown, ThumbsUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -28,6 +28,9 @@ export function LikeToggle({
       try {
         await fetch(`/api/articles/${articleId}/like`, {
           method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify({ value }),
         });
       } catch (error) {
@@ -48,7 +51,7 @@ export function LikeToggle({
         disabled={pending}
         onClick={() => submit(1)}
       >
-        <HandThumbUp className="h-4 w-4" />
+        <ThumbsUp className="h-4 w-4" />
         {likes}
       </button>
       <button
@@ -61,7 +64,7 @@ export function LikeToggle({
         disabled={pending}
         onClick={() => submit(-1)}
       >
-        <HandThumbDown className="h-4 w-4" />
+        <ThumbsDown className="h-4 w-4" />
         {dislikes}
       </button>
     </div>

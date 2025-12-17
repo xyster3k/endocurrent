@@ -2,7 +2,6 @@ import { NextResponse, type NextRequest } from "next/server";
 import { getSessionUser, requireRole } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-export const runtime = "edge";
 
 type Params = Promise<{ id: string }>;
 
@@ -15,10 +14,13 @@ export async function POST(_req: NextRequest, props: { params: Params }) {
     return NextResponse.json({ ok: true, message: "Supabase not configured; unpublish skipped." });
   }
 
-  const supabase = createSupabaseServerClient({ useServiceRole: true });
-  const { error } = await supabase
-    .from("articles")
-    .update({ status: "draft", published_at: null })
+  const supabase = await createSupabaseServerClient({ useServiceRole: true });
+  const articles = (supabase as any).from("articles");
+  const { error } = await articles
+    .update({
+      status: "draft",
+      published_at: null,
+    })
     .eq("id", params.id);
 
   if (error) {

@@ -29,10 +29,12 @@ export type ArticleSummary = {
   cover_image_url?: string | null;
   author?: ArticleAuthor | null;
   status?: "draft" | "draft_ai" | "published" | "archived";
+  featured?: boolean;
 };
 
 export type ArticleDetail = ArticleSummary & {
   body_markdown: string;
+  word_count?: number;
   references?: ArticleReference[];
   images?: ArticleImage[];
   like_count?: number;

@@ -2,7 +2,6 @@ import { NextResponse, type NextRequest } from "next/server";
 import { getSessionUser, requireRole } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-export const runtime = "edge";
 
 type Params = Promise<{ id: string }>;
 
@@ -15,9 +14,9 @@ export async function POST(_req: NextRequest, props: { params: Params }) {
     return NextResponse.json({ ok: true, message: "Supabase not configured; resolve skipped." });
   }
 
-  const supabase = createSupabaseServerClient({ useServiceRole: true });
-  const { error } = await supabase
-    .from("article_reports")
+  const supabase = await createSupabaseServerClient({ useServiceRole: true });
+  const reports = (supabase as any).from("article_reports");
+  const { error } = await reports
     .update({ resolved: true, resolved_by: user?.id ?? null })
     .eq("id", params.id);
 

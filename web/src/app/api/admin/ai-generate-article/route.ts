@@ -6,7 +6,6 @@ import { estimateReadingTime } from "@/lib/reading-time";
 import { env } from "@/lib/env";
 import type { Database } from "@/db/types";
 
-export const runtime = "edge";
 
 const schema = z.object({
   topic: z.string(),
@@ -74,23 +73,25 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  const supabase = createSupabaseServerClient({ useServiceRole: true });
-  const insertPayload: Database["public"]["Tables"]["articles"]["Insert"] = {
+  const supabase = await createSupabaseServerClient({ useServiceRole: true });
+  const slug = title
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  const draftPayload = {
     title,
-    slug: title.toLowerCase().replace(/\s+/g, "-"),
+    slug,
     summary,
     body_markdown,
     status: "draft_ai",
     reading_time_minutes: reading.minutes,
     word_count: reading.words,
-    author_id: user?.id ?? null,
+    author_id: /^[0-9a-fA-F-]{36}$/.test(user?.id ?? "") ? user?.id : null,
   };
-  const supabaseUnsafe = supabase as any;
-  const { data, error } = await supabaseUnsafe
-    .from("articles")
-    .insert(insertPayload)
-    .select()
-    .maybeSingle();
+
+  const { data, error } = await supabase.from("articles").insert([draftPayload] as any).select().maybeSingle();
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });

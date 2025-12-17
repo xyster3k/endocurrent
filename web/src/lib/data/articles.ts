@@ -30,11 +30,12 @@ export async function getArticles(
   }
 
   try {
-    const supabase = createSupabaseServerClient();
+    // Use service role when fetching drafts (admin context)
+    const useServiceRole = filters.includeDrafts || filters.status === "draft" || filters.status === "draft_ai";
+    const supabase = await createSupabaseServerClient({ useServiceRole });
     let query = supabase
       .from("articles")
       .select("*", { count: "exact" })
-      .order("published_at", { ascending: false, nullsLast: true })
       .order("created_at", { ascending: false })
       .range((page - 1) * pageSize, page * pageSize - 1);
 
@@ -50,18 +51,19 @@ export async function getArticles(
     if (error || !data) throw error;
 
     return {
-      data: data.map((row) => ({
-        id: row.id,
-        slug: row.slug,
-        title: row.title,
-        summary: row.summary ?? "",
-        category: row.category,
+      data: (data as any[]).map((row) => ({
+        id: (row as any).id,
+        slug: (row as any).slug,
+        title: (row as any).title,
+        summary: (row as any).summary ?? "",
+        category: (row as any).category,
         tags: [],
-        reading_time_minutes: row.reading_time_minutes ?? 0,
-        published_at: row.published_at,
+        reading_time_minutes: (row as any).reading_time_minutes ?? 0,
+        published_at: (row as any).published_at,
         cover_image_url: null,
         author: null,
-        status: row.status as ArticleSummary["status"],
+        status: (row as any).status as ArticleSummary["status"],
+        featured: (row as any).featured ?? false,
       })),
       meta: { page, pageSize, total: count ?? data.length },
     };
@@ -83,35 +85,69 @@ export async function getArticleBySlug(slug: string): Promise<ArticleDetail | nu
   }
 
   try {
-    const supabase = createSupabaseServerClient();
-    const { data, error } = await supabase
-      .from("articles")
-      .select("*")
-      .eq("slug", slug)
-      .maybeSingle();
+    const supabase = await createSupabaseServerClient();
+    const { data, error } = await supabase.from("articles").select("*").eq("slug", slug).maybeSingle();
     if (error) throw error;
     if (!data) return null;
     return {
-      id: data.id,
-      slug: data.slug,
-      title: data.title,
-      summary: data.summary ?? "",
-      body_markdown: data.body_markdown ?? "",
-      category: data.category,
+      id: (data as any).id,
+      slug: (data as any).slug,
+      title: (data as any).title,
+      summary: (data as any).summary ?? "",
+      body_markdown: (data as any).body_markdown ?? "",
+      category: (data as any).category,
       tags: [],
-      reading_time_minutes: data.reading_time_minutes ?? 0,
-      word_count: data.word_count ?? 0,
-      published_at: data.published_at,
+      reading_time_minutes: (data as any).reading_time_minutes ?? 0,
+      word_count: (data as any).word_count ?? 0,
+      published_at: (data as any).published_at,
       cover_image_url: null,
       author: null,
       references: [],
       images: [],
       like_count: 0,
       dislike_count: 0,
-      status: data.status as ArticleSummary["status"],
+      status: (data as any).status as ArticleSummary["status"],
+      featured: (data as any).featured ?? false,
     };
   } catch (error) {
     console.error("Falling back to mock article", error);
     return mockArticles.find((a) => a.slug === slug) ?? null;
+  }
+}
+
+export async function getFeaturedArticle(): Promise<ArticleSummary | null> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    return null;
+  }
+
+  try {
+    const supabase = await createSupabaseServerClient();
+    const { data, error } = await supabase
+      .from("articles")
+      .select("*")
+      .eq("status", "published")
+      .eq("featured", true)
+      .maybeSingle();
+
+    if (error) throw error;
+    if (!data) return null;
+
+    return {
+      id: (data as any).id,
+      slug: (data as any).slug,
+      title: (data as any).title,
+      summary: (data as any).summary ?? "",
+      category: (data as any).category,
+      tags: [],
+      reading_time_minutes: (data as any).reading_time_minutes ?? 0,
+      published_at: (data as any).published_at,
+      cover_image_url: null,
+      author: null,
+      status: (data as any).status as ArticleSummary["status"],
+      featured: true,
+    };
+  } catch (error) {
+    console.error("Error fetching featured article", error);
+    return null;
   }
 }

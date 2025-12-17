@@ -1,7 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-export const runtime = "edge";
 
 export async function POST(req: NextRequest) {
   // In production, validate signature with Svix + CLERK_WEBHOOK_SECRET.
@@ -23,8 +22,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true, message: "Supabase not configured; webhook logged." });
   }
 
-  const supabase = createSupabaseServerClient({ useServiceRole: true });
-  const { error } = await supabase.from("user_subscriptions").upsert(
+  const supabase = await createSupabaseServerClient({ useServiceRole: true });
+  const subs = (supabase as any).from("user_subscriptions");
+  const { error } = await subs.upsert(
     {
       user_id: userId,
       plan: data.plan || "PREMIUM",

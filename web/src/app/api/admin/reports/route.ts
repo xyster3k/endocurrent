@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { getSessionUser, requireRole } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-export const runtime = "edge";
 
 export async function GET() {
   const user = await getSessionUser();
@@ -12,7 +11,7 @@ export async function GET() {
     return NextResponse.json({ data: [], meta: { total: 0 } });
   }
 
-  const supabase = createSupabaseServerClient({ useServiceRole: true });
+  const supabase = await createSupabaseServerClient({ useServiceRole: true });
   const { data, error } = await supabase
     .from("article_reports")
     .select("*")

@@ -3,7 +3,7 @@ import { ArrowRight, Compass } from "lucide-react";
 import { ArticleCard } from "@/components/article-card";
 import { AdSlotClient } from "@/components/ad-slot-client";
 import { shouldShowAds } from "@/lib/ads";
-import { getArticles } from "@/lib/data/articles";
+import { getArticles, getFeaturedArticle } from "@/lib/data/articles";
 
 export const revalidate = 300;
 export const runtime = "edge";
@@ -28,65 +28,36 @@ export default async function Home(props: { searchParams: SearchParams }) {
   }
   const showAds = shouldShowAds("FREE");
 
+  // Get featured article or fallback to latest
+  const featuredArticle = await getFeaturedArticle();
+  const heroArticle = featuredArticle || (articles.length > 0 ? articles[0] : null);
+
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-10 px-6 pb-16 pt-10">
-      <section className="relative overflow-hidden rounded-3xl border border-white/40 bg-gradient-to-br from-sky-50 via-white to-indigo-50 p-8 shadow-xl dark:border-slate-800 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
-        <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-          <div className="flex max-w-2xl flex-col gap-4">
-            <p className="inline-flex items-center gap-2 rounded-full bg-white/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-blue-700 shadow-sm ring-1 ring-white/40 backdrop-blur dark:bg-slate-900/60 dark:text-blue-200">
-              Weekly endocrine digest
-            </p>
-            <h1 className="text-4xl font-semibold leading-tight tracking-tight text-slate-900 dark:text-white">
-              Clear, clinician-led news for endocrine teams. Ads off when premium. AI drafts stay behind review.
-            </h1>
-            <p className="text-lg text-slate-600 dark:text-slate-300">
-              Built for fast skimming on call, with full-length articles, structured references, likes/reports, and an editorial backend.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Link
-                href="/articles/weekly-endocrine-digest"
-                className="btn-primary inline-flex items-center gap-2 rounded-full px-4 py-3 text-sm font-semibold"
-              >
-                Read the sample article
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link
-                href="/admin/posts"
-                className="btn-primary inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-3 text-sm font-semibold"
-              >
-                Go to editor tools
-                <Compass className="h-4 w-4" />
-              </Link>
-            </div>
-            <div className="flex flex-wrap gap-4 text-sm text-slate-500 dark:text-slate-300">
-              <span className="rounded-full bg-white/70 px-3 py-1 shadow-sm ring-1 ring-white/60 dark:bg-slate-900/60 dark:ring-slate-800">
-                Supabase + Clerk + Stripe
-              </span>
-              <span className="rounded-full bg-white/70 px-3 py-1 shadow-sm ring-1 ring-white/60 dark:bg-slate-900/60 dark:ring-slate-800">
-                Cloudflare Pages deploy
-              </span>
-              <span className="rounded-full bg-white/70 px-3 py-1 shadow-sm ring-1 ring-white/60 dark:bg-slate-900/60 dark:ring-slate-800">
-                AdSense gated by subscription
-              </span>
-            </div>
+      {heroArticle && (
+        <section className="rounded-2xl border border-slate-200 bg-gradient-to-br from-blue-50 to-white p-8 shadow-lg dark:border-slate-800 dark:from-slate-900 dark:to-slate-800">
+          <div className="flex items-center gap-2 mb-4">
+            <span className="rounded-full bg-blue-600 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white">
+              Featured
+            </span>
+            <span className="text-sm text-slate-500 dark:text-slate-400">
+              {heroArticle.published_at ? new Date(heroArticle.published_at).toLocaleDateString() : ""}
+            </span>
           </div>
-          <div className="hidden h-full min-w-[260px] flex-1 rounded-2xl border border-white/50 bg-white/70 p-5 text-sm shadow-md ring-1 ring-slate-100 backdrop-blur md:flex md:max-w-sm dark:border-slate-800 dark:bg-slate-900/60 dark:ring-slate-800">
-            <div className="flex flex-col gap-2">
-              <p className="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
-                Stack
-              </p>
-              <ul className="space-y-1 text-slate-700 dark:text-slate-200">
-                <li>Next.js 15 (App Router) on Cloudflare Pages</li>
-                <li>Supabase Postgres + Storage with RLS</li>
-                <li>Clerk auth & billing (Stripe under the hood)</li>
-                <li>AdSense toggled off for premium users</li>
-                <li>Optional AI draft generation endpoint</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
+          <Link href={`/articles/${heroArticle.slug}`} className="group">
+            <h2 className="text-3xl font-bold leading-tight tracking-tight text-slate-900 transition group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400">
+              {heroArticle.title}
+            </h2>
+            <p className="mt-3 text-lg leading-relaxed text-slate-600 dark:text-slate-300">
+              {heroArticle.summary}
+            </p>
+            <span className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-blue-600 dark:text-blue-400">
+              Read article
+              <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+            </span>
+          </Link>
+        </section>
+      )}
       <section className="space-y-4">
         <div className="flex items-end justify-between">
           <div>
@@ -106,14 +77,30 @@ export default async function Home(props: { searchParams: SearchParams }) {
           </Link>
         </div>
         <div className="grid gap-4">
-          {articles.map((article, idx) => (
-            <div key={article.id} className="space-y-3">
-              <ArticleCard article={article} />
-              {showAds && idx % 2 === 1 ? (
-                <AdSlotClient slotId={`feed-${idx}`} show={showAds} />
-              ) : null}
+          {articles.length === 0 ? (
+            <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center dark:border-slate-800 dark:bg-slate-900">
+              <h3 className="text-xl font-semibold text-slate-900 dark:text-white">No articles yet</h3>
+              <p className="mt-2 text-slate-600 dark:text-slate-400">
+                Publish your first article from the admin panel to see it here.
+              </p>
+              <Link
+                href="/admin/articles/new"
+                className="mt-4 inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5 dark:bg-white dark:text-black"
+              >
+                Create Article
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
-          ))}
+          ) : (
+            articles.map((article, idx) => (
+              <div key={article.id} className="space-y-3">
+                <ArticleCard article={article} />
+                {showAds && idx % 2 === 1 ? (
+                  <AdSlot slotId={`feed-${idx}`} show={showAds} />
+                ) : null}
+              </div>
+            ))
+          )}
         </div>
       </section>
     </div>

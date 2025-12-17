@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ExternalLink, Sparkles } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { LikeToggle } from "@/components/like-toggle";
 import { ReportDialog } from "@/components/report-dialog";
 import { AdSlotClient } from "@/components/ad-slot-client";
@@ -92,9 +94,11 @@ export default async function ArticlePage(props: { params: Params }) {
         </div>
       ) : null}
 
-      <div className="grid gap-6">
-        {renderMarkdown(article.body_markdown)}
-      </div>
+      <article className="prose prose-slate prose-lg max-w-none dark:prose-invert">
+        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+          {article.body_markdown}
+        </ReactMarkdown>
+      </article>
 
       {showAds ? <AdSlotClient slotId="article-top" show={showAds} /> : null}
 
@@ -142,36 +146,4 @@ export default async function ArticlePage(props: { params: Params }) {
       ) : null}
     </div>
   );
-}
-
-function renderMarkdown(body: string) {
-  if (!body) return null;
-  const lines = body.split("\n").filter(Boolean);
-  return lines.map((line, idx) => {
-    if (line.startsWith("###")) {
-      return (
-        <h3
-          key={idx}
-          className="text-xl font-semibold text-slate-900 dark:text-white"
-        >
-          {line.replace(/^###\s*/, "")}
-        </h3>
-      );
-    }
-    if (line.startsWith("##")) {
-      return (
-        <h2
-          key={idx}
-          className="text-2xl font-semibold text-slate-900 dark:text-white"
-        >
-          {line.replace(/^##\s*/, "")}
-        </h2>
-      );
-    }
-    return (
-      <p key={idx} className="text-lg leading-7 text-slate-700 dark:text-slate-200">
-        {line}
-      </p>
-    );
-  });
 }
