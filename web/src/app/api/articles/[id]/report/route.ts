@@ -24,7 +24,8 @@ export async function POST(req: NextRequest, props: { params: Params }) {
     });
   }
 
-  const supabase = await createSupabaseServerClient();
+  // Use service role so reports are recorded even with RLS enabled
+  const supabase = await createSupabaseServerClient({ useServiceRole: true });
   const reports = (supabase as any).from("article_reports");
   const { error } = await reports.insert({
     article_id: params.id,

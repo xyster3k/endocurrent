@@ -19,7 +19,8 @@ export async function POST(req: NextRequest, props: { params: Params }) {
     return NextResponse.json({ ok: true, message: "Supabase not configured; like skipped." });
   }
 
-  const supabase = await createSupabaseServerClient();
+  // Use service role so RLS policies do not block likes (auth is enforced via Clerk above)
+  const supabase = await createSupabaseServerClient({ useServiceRole: true });
   const likes = (supabase as any).from("article_likes");
   const { error } = await likes.upsert({ article_id: params.id, user_id: userId, value }, { onConflict: "article_id,user_id" });
   if (error) {
