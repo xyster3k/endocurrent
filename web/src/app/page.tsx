@@ -95,7 +95,7 @@ export default async function Home(props: { searchParams: SearchParams }) {
               <div key={article.id} className="space-y-3">
                 <ArticleCard article={article} />
                 {showAds && idx % 2 === 1 ? (
-                  <AdSlot slotId={`feed-${idx}`} show={showAds} />
+                  <AdSlotClient slotId={`feed-${idx}`} show={showAds} />
                 ) : null}
               </div>
             ))
