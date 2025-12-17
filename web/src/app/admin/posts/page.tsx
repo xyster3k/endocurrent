@@ -3,8 +3,6 @@ import { redirect } from "next/navigation";
 import { getSessionUser, requireRole } from "@/lib/auth";
 import { getArticles } from "@/lib/data/articles";
 
-export const runtime = "edge";
-
 export default async function AdminPostsPage() {
   const user = await getSessionUser();
   if (!user) {

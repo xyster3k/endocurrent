@@ -2,8 +2,6 @@ import React from "react";
 import { redirect } from "next/navigation";
 import { getSessionUser, requireRole } from "@/lib/auth";
 
-export const runtime = "edge";
-
 export default async function AiDraftPage() {
   const user = await getSessionUser();
   if (!user) {

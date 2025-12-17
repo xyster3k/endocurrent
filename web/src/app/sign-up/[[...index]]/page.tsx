@@ -3,8 +3,6 @@
 import { useSearchParams } from "next/navigation";
 import { SignUp } from "@clerk/nextjs";
 
-export const runtime = "edge";
-
 export default function SignUpPage() {
   const search = useSearchParams();
   const redirectUrl = search?.get("redirect_url") || "/admin";

@@ -3,8 +3,6 @@ import { z } from "zod";
 import { getSessionUser, requireRole } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-export const runtime = "edge";
-
 const updateSchema = z.object({
   name: z.string().optional(),
   items: z
