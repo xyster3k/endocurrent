@@ -5,7 +5,6 @@ import { estimateReadingTime } from "@/lib/reading-time";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getArticles } from "@/lib/data/articles";
 
-export const runtime = "edge";
 
 const bodySchema = z.object({
   title: z.string(),

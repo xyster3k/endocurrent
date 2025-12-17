@@ -1,7 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { getArticles } from "@/lib/data/articles";
 
-export const runtime = "edge";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);

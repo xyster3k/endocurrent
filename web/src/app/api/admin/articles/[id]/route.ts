@@ -4,7 +4,6 @@ import { getSessionUser, requireRole } from "@/lib/auth";
 import { estimateReadingTime } from "@/lib/reading-time";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-export const runtime = "edge";
 
 const bodySchema = z.object({
   title: z.string().optional(),

@@ -3,7 +3,6 @@ import { z } from "zod";
 import { getSessionUser, requireRole } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-export const runtime = "edge";
 
 export async function GET() {
   const user = await getSessionUser();

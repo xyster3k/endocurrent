@@ -5,7 +5,6 @@ import { AdSlot } from "@/components/ad-slot";
 import { shouldShowAds } from "@/lib/ads";
 import { getArticles, getFeaturedArticle } from "@/lib/data/articles";
 
-export const runtime = "edge";
 export const revalidate = 300;
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;

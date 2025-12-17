@@ -5,7 +5,6 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { estimateReadingTime } from "@/lib/reading-time";
 import { env } from "@/lib/env";
 
-export const runtime = "edge";
 
 const schema = z.object({
   topic: z.string(),
