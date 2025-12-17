@@ -41,3 +41,5 @@ Environment variables live in `.env.example` (copy to `.env.local`). Minimum:
 - Shared components: `src/components/*`
 
 AdSense loads in `app/layout.tsx` and is disabled automatically for premium users once subscription state is wired to `shouldShowAds`.
+
+
