@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { getArticles } from "@/lib/data/articles";
 
 export const revalidate = 300;
-export const runtime = "edge";
 
 type Params = Promise<{ slug: string }>;
 
