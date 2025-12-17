@@ -5,17 +5,17 @@ const { execSync } = require('child_process');
 
 console.log('Building for Cloudflare Pages...\n');
 
-// Generate minimal wrangler.toml for build compatibility
-// This is NOT committed to git and only used during build
-const wranglerConfig = `# Auto-generated during build - DO NOT COMMIT
-# All environment variables MUST be set in Cloudflare Pages UI
+// Create wrangler.toml with proper Pages configuration
+// This tells wrangler to use Node.js compatibility during deployment
+const rootWrangler = `name = "endocurrent"
 compatibility_date = "2024-09-23"
 compatibility_flags = ["nodejs_compat", "nodejs_als"]
+pages_build_output_dir = ".cloudflare/dist"
 `;
-fs.writeFileSync(path.join(__dirname, '..', 'wrangler.toml'), wranglerConfig);
-console.log('Generated wrangler.toml for build compatibility\n');
+fs.writeFileSync(path.join(__dirname, '..', 'wrangler.toml'), rootWrangler);
+console.log('Created wrangler.toml with compatibility settings\n');
 
-// Run OpenNext build (answer 'n' to wrangler.toml prompt since we created it)
+// Run OpenNext build (answer 'n' to wrangler.toml prompt since we already created it)
 console.log('Running OpenNext build...');
 execSync('npx opennextjs-cloudflare build', {
   input: 'n\n',
@@ -40,8 +40,16 @@ if (!workerCode.includes('compatibility_date')) {
   console.log('Injected compatibility_date + flags into _worker.js');
 }
 
-
 console.log('✓ Copied worker.js to _worker.js');
+
+// Create a _routes.json to ensure worker handles all routes
+const routes = {
+  version: 1,
+  include: ["/*"],
+  exclude: []
+};
+fs.writeFileSync(path.join(distDir, '_routes.json'), JSON.stringify(routes, null, 2));
+console.log('✓ Created _routes.json');
 
 // Copy all worker dependencies
 const openNextDir = path.join(__dirname, '..', '.open-next');
