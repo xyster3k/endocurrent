@@ -4,8 +4,6 @@ import { clerkClient } from "@clerk/nextjs/server";
 import { getSessionUser, requireRole } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-export const runtime = "edge";
-
 const schema = z.object({
   display_name: z.string().min(1).max(120),
 });

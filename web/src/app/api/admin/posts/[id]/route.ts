@@ -5,8 +5,6 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { mockArticles } from "@/lib/data/mock-articles";
 import { estimateReadingTime } from "@/lib/reading-time";
 
-export const runtime = "edge";
-
 const updateSchema = z.object({
   title: z.string().optional(),
   slug: z.string().optional(),
