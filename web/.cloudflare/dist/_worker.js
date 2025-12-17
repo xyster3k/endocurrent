@@ -1,3 +1,4 @@
+export const config = { compatibility_date: "2024-09-23", compatibility_flags: ["nodejs_compat", "nodejs_als"] };
 //@ts-expect-error: Will be resolved by wrangler build
 import { handleImageRequest } from "./cloudflare/images.js";
 //@ts-expect-error: Will be resolved by wrangler build

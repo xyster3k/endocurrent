@@ -3531,13 +3531,13 @@
       "imports": [],
       "format": "cjs"
     },
-    ".open-next/server-functions/default/.next/server/app/_global-error/page_client-reference-manifest.js": {
-      "bytes": 5988,
+    ".open-next/server-functions/default/.next/server/app/_not-found/page_client-reference-manifest.js": {
+      "bytes": 13223,
       "imports": [],
       "format": "cjs"
     },
-    ".open-next/server-functions/default/.next/server/app/_not-found/page_client-reference-manifest.js": {
-      "bytes": 13223,
+    ".open-next/server-functions/default/.next/server/app/_global-error/page_client-reference-manifest.js": {
+      "bytes": 5988,
       "imports": [],
       "format": "cjs"
     },
@@ -3551,13 +3551,13 @@
       "imports": [],
       "format": "cjs"
     },
-    ".open-next/server-functions/default/.next/server/app/policies/privacy/page_client-reference-manifest.js": {
-      "bytes": 13152,
+    ".open-next/server-functions/default/.next/server/app/policies/terms/page_client-reference-manifest.js": {
+      "bytes": 13150,
       "imports": [],
       "format": "cjs"
     },
-    ".open-next/server-functions/default/.next/server/app/policies/terms/page_client-reference-manifest.js": {
-      "bytes": 13150,
+    ".open-next/server-functions/default/.next/server/app/policies/privacy/page_client-reference-manifest.js": {
+      "bytes": 13152,
       "imports": [],
       "format": "cjs"
     },
@@ -3590,14 +3590,14 @@
           "original": "../shared/lib/deep-freeze"
         },
         {
-          "path": ".open-next/server-functions/default/.next/server/app/_global-error/page_client-reference-manifest.js",
-          "kind": "require-call",
-          "original": "D:\\EndoCurrent\\web\\.open-next\\server-functions\\default\\.next\\server\\app\\_global-error\\page_client-reference-manifest.js"
-        },
-        {
           "path": ".open-next/server-functions/default/.next/server/app/_not-found/page_client-reference-manifest.js",
           "kind": "require-call",
           "original": "D:\\EndoCurrent\\web\\.open-next\\server-functions\\default\\.next\\server\\app\\_not-found\\page_client-reference-manifest.js"
+        },
+        {
+          "path": ".open-next/server-functions/default/.next/server/app/_global-error/page_client-reference-manifest.js",
+          "kind": "require-call",
+          "original": "D:\\EndoCurrent\\web\\.open-next\\server-functions\\default\\.next\\server\\app\\_global-error\\page_client-reference-manifest.js"
         },
         {
           "path": ".open-next/server-functions/default/.next/server/app/contact/page_client-reference-manifest.js",
@@ -3610,14 +3610,14 @@
           "original": "D:\\EndoCurrent\\web\\.open-next\\server-functions\\default\\.next\\server\\app\\about\\page_client-reference-manifest.js"
         },
         {
-          "path": ".open-next/server-functions/default/.next/server/app/policies/privacy/page_client-reference-manifest.js",
-          "kind": "require-call",
-          "original": "D:\\EndoCurrent\\web\\.open-next\\server-functions\\default\\.next\\server\\app\\policies\\privacy\\page_client-reference-manifest.js"
-        },
-        {
           "path": ".open-next/server-functions/default/.next/server/app/policies/terms/page_client-reference-manifest.js",
           "kind": "require-call",
           "original": "D:\\EndoCurrent\\web\\.open-next\\server-functions\\default\\.next\\server\\app\\policies\\terms\\page_client-reference-manifest.js"
+        },
+        {
+          "path": ".open-next/server-functions/default/.next/server/app/policies/privacy/page_client-reference-manifest.js",
+          "kind": "require-call",
+          "original": "D:\\EndoCurrent\\web\\.open-next\\server-functions\\default\\.next\\server\\app\\policies\\privacy\\page_client-reference-manifest.js"
         },
         {
           "path": ".open-next/server-functions/default/.next/server/app/admin/articles/new/page_client-reference-manifest.js",
@@ -4600,14 +4600,14 @@
           "original": "D:\\EndoCurrent\\web\\.open-next\\server-functions\\default\\.next\\server\\app\\about\\page_client-reference-manifest.js"
         },
         {
-          "path": ".open-next/server-functions/default/.next/server/app/policies/privacy/page_client-reference-manifest.js",
-          "kind": "require-call",
-          "original": "D:\\EndoCurrent\\web\\.open-next\\server-functions\\default\\.next\\server\\app\\policies\\privacy\\page_client-reference-manifest.js"
-        },
-        {
           "path": ".open-next/server-functions/default/.next/server/app/policies/terms/page_client-reference-manifest.js",
           "kind": "require-call",
           "original": "D:\\EndoCurrent\\web\\.open-next\\server-functions\\default\\.next\\server\\app\\policies\\terms\\page_client-reference-manifest.js"
+        },
+        {
+          "path": ".open-next/server-functions/default/.next/server/app/policies/privacy/page_client-reference-manifest.js",
+          "kind": "require-call",
+          "original": "D:\\EndoCurrent\\web\\.open-next\\server-functions\\default\\.next\\server\\app\\policies\\privacy\\page_client-reference-manifest.js"
         },
         {
           "path": ".open-next/server-functions/default/.next/server/app/admin/articles/new/page_client-reference-manifest.js",
@@ -8141,11 +8141,11 @@
         ".open-next/server-functions/default/node_modules/next/dist/shared/lib/deep-freeze.js": {
           "bytesInOutput": 589
         },
-        ".open-next/server-functions/default/.next/server/app/_global-error/page_client-reference-manifest.js": {
-          "bytesInOutput": 5753
-        },
         ".open-next/server-functions/default/.next/server/app/_not-found/page_client-reference-manifest.js": {
-          "bytesInOutput": 12547
+          "bytesInOutput": 12546
+        },
+        ".open-next/server-functions/default/.next/server/app/_global-error/page_client-reference-manifest.js": {
+          "bytesInOutput": 5754
         },
         ".open-next/server-functions/default/.next/server/app/contact/page_client-reference-manifest.js": {
           "bytesInOutput": 12464
@@ -8153,11 +8153,11 @@
         ".open-next/server-functions/default/.next/server/app/about/page_client-reference-manifest.js": {
           "bytesInOutput": 12460
         },
-        ".open-next/server-functions/default/.next/server/app/policies/privacy/page_client-reference-manifest.js": {
-          "bytesInOutput": 12482
-        },
         ".open-next/server-functions/default/.next/server/app/policies/terms/page_client-reference-manifest.js": {
           "bytesInOutput": 12478
+        },
+        ".open-next/server-functions/default/.next/server/app/policies/privacy/page_client-reference-manifest.js": {
+          "bytesInOutput": 12482
         },
         ".open-next/server-functions/default/.next/server/app/admin/articles/new/page_client-reference-manifest.js": {
           "bytesInOutput": 13582

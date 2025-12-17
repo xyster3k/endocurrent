@@ -22,6 +22,15 @@ console.log('\nPreparing Cloudflare Pages output...');
 const workerSrc = path.join(__dirname, '..', '.open-next', 'worker.js');
 const workerDest = path.join(distDir, '_worker.js');
 fs.copyFileSync(workerSrc, workerDest);
+// Inject compatibility metadata so node built-ins work without dashboard flags.
+const compatConfig = 'export const config = { compatibility_date: "2024-09-23", compatibility_flags: ["nodejs_compat", "nodejs_als"] };\n';
+const workerCode = fs.readFileSync(workerDest, 'utf8');
+if (!workerCode.includes('compatibility_date')) {
+  fs.writeFileSync(workerDest, compatConfig + workerCode, 'utf8');
+  console.log('Injected compatibility_date + flags into _worker.js');
+}
+
+
 console.log('✓ Copied worker.js to _worker.js');
 
 // Copy all worker dependencies
