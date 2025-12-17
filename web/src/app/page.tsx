@@ -1,21 +1,31 @@
 import Link from "next/link";
 import { ArrowRight, Compass } from "lucide-react";
 import { ArticleCard } from "@/components/article-card";
-import { AdSlot } from "@/components/ad-slot";
+import { AdSlotClient } from "@/components/ad-slot-client";
 import { shouldShowAds } from "@/lib/ads";
 import { getArticles, getFeaturedArticle } from "@/lib/data/articles";
 
 export const revalidate = 300;
+export const runtime = "edge";
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
 export default async function Home(props: { searchParams: SearchParams }) {
   const searchParams = await props.searchParams;
-  const { data: articles, meta } = await getArticles({
-    tag: typeof searchParams.tag === "string" ? searchParams.tag : undefined,
-    category: typeof searchParams.category === "string" ? searchParams.category : undefined,
-    search: typeof searchParams.q === "string" ? searchParams.q : undefined,
-  });
+  let articles: Awaited<ReturnType<typeof getArticles>>["data"] = [];
+  let meta: Awaited<ReturnType<typeof getArticles>>["meta"] = { page: 1, pageSize: 10, total: 0 };
+
+  try {
+    const result = await getArticles({
+      tag: typeof searchParams.tag === "string" ? searchParams.tag : undefined,
+      category: typeof searchParams.category === "string" ? searchParams.category : undefined,
+      search: typeof searchParams.q === "string" ? searchParams.q : undefined,
+    });
+    articles = result.data;
+    meta = result.meta;
+  } catch (error) {
+    console.error("Failed to load articles, falling back to empty list", error);
+  }
   const showAds = shouldShowAds("FREE");
 
   // Get featured article or fallback to latest

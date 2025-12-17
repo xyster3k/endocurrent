@@ -6,7 +6,6 @@ import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { adsenseClient } from "@/lib/ads";
-import { env } from "@/lib/env";
 import { cn } from "@/lib/utils";
 
 const geistSans = Geist({
@@ -20,8 +19,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: env.siteUrl,
-  title: "EndoCurrent — Endocrinology briefs",
+  title: "EndoCurrent | Endocrinology briefs",
   description:
     "A modern endocrinology news and insights site with weekly digests, peer-reviewed summaries, and AI-assisted drafts for editors.",
 };
@@ -31,6 +29,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+  const hasClerk =
+    typeof publishableKey === "string" &&
+    publishableKey.startsWith("pk_") &&
+    publishableKey !== "pk_test_placeholder";
+
   const shell = (
     <html lang="en" className="min-h-full">
       <body
@@ -40,7 +44,7 @@ export default function RootLayout({
           "min-h-screen bg-background text-foreground antialiased"
         )}
       >
-        {adsenseClient && !env.adsDisabled ? (
+        {adsenseClient && process.env.ADS_DISABLED !== "true" ? (
           <Script
             id="adsense-script"
             async
@@ -58,13 +62,9 @@ export default function RootLayout({
     </html>
   );
 
-  if (!env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) {
+  if (!hasClerk) {
     return shell;
   }
 
-  return (
-    <ClerkProvider publishableKey={env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
-      {shell}
-    </ClerkProvider>
-  );
+  return <ClerkProvider publishableKey={publishableKey}>{shell}</ClerkProvider>;
 }

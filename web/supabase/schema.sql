@@ -126,3 +126,20 @@ create policy "reports select editors" on public.article_reports for select
   using (exists (select 1 from public.profiles p where p.id = auth.uid() and p.role in ('editor','admin')));
 create policy "reports insert" on public.article_reports for insert
   with check (true);
+
+-- Menus
+create table if not exists public.menus (
+  id uuid primary key default uuid_generate_v4(),
+  name text not null,
+  created_at timestamptz default now()
+);
+
+create table if not exists public.menu_items (
+  id uuid primary key default uuid_generate_v4(),
+  menu_id uuid references public.menus (id) on delete cascade,
+  label text not null,
+  url text not null,
+  category text,
+  parent_id uuid references public.menu_items (id) on delete cascade,
+  order_index int
+);

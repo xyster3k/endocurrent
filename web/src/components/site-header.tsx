@@ -18,6 +18,15 @@ type MenuItem = {
   order_index?: number | null;
 };
 
+type MenuItem = {
+  id: string;
+  label: string;
+  url: string;
+  category?: string | null;
+  parent_id?: string | null;
+  order_index?: number | null;
+};
+
 export function SiteHeader() {
   const pathname = usePathname();
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
@@ -129,8 +138,8 @@ export function SiteHeader() {
               </SignedIn>
             </>
           ) : (
-            <span className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white dark:bg-white dark:text-black">
-              Auth not configured
+            <span className="rounded-full bg-slate-500 px-4 py-2 text-sm font-semibold text-white">
+              Sign in unavailable
             </span>
           )}
         </div>

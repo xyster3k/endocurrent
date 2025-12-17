@@ -1,9 +1,26 @@
 import React from "react";
+import { redirect } from "next/navigation";
 import { getSessionUser, requireRole } from "@/lib/auth";
+
+export const runtime = "edge";
 
 export default async function AiDraftPage() {
   const user = await getSessionUser();
-  requireRole(user, ["editor", "admin"]);
+  if (!user) {
+    redirect("/sign-in");
+  }
+  try {
+    requireRole(user, ["editor", "admin"]);
+  } catch {
+    return (
+      <div className="mx-auto flex max-w-4xl flex-col gap-4 px-6 py-12">
+        <h1 className="text-3xl font-semibold">AI draft generation</h1>
+        <p className="text-slate-600 dark:text-slate-300">
+          You need an editor or admin role to access this tool. Current role: {user.role}.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-6 px-6 py-10">
@@ -11,11 +28,9 @@ export default async function AiDraftPage() {
         <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Admin</p>
         <h1 className="text-3xl font-semibold">AI draft generation</h1>
         <p className="text-slate-600 dark:text-slate-300">
-          Provide a topic, scope, and references. The server route will call your LLM
-          endpoint, then store the returned JSON as an article with status
-          <code className="mx-1 rounded bg-slate-100 px-1 py-0.5 text-xs dark:bg-slate-800">
-            draft_ai
-          </code>
+          Provide a topic, scope, and references. The server route will call your LLM endpoint, then store the returned
+          JSON as an article with status
+          <code className="mx-1 rounded bg-slate-100 px-1 py-0.5 text-xs dark:bg-slate-800">draft_ai</code>
           for human review.
         </p>
       </div>

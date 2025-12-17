@@ -5,13 +5,14 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { LikeToggle } from "@/components/like-toggle";
 import { ReportDialog } from "@/components/report-dialog";
-import { AdSlot } from "@/components/ad-slot";
+import { AdSlotClient } from "@/components/ad-slot-client";
 import { ShareButton } from "@/components/share-button";
 import { shouldShowAds } from "@/lib/ads";
 import { getArticleBySlug } from "@/lib/data/articles";
 import { buildArticleJsonLd } from "@/lib/seo";
 
 export const revalidate = 300;
+export const runtime = "edge";
 
 type Params = Promise<{ slug: string }>;
 
@@ -99,7 +100,7 @@ export default async function ArticlePage(props: { params: Params }) {
         </ReactMarkdown>
       </article>
 
-      {showAds ? <AdSlot slotId="article-top" show={showAds} /> : null}
+      {showAds ? <AdSlotClient slotId="article-top" show={showAds} /> : null}
 
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
         <LikeToggle
@@ -113,7 +114,7 @@ export default async function ArticlePage(props: { params: Params }) {
         </div>
       </div>
 
-      {showAds ? <AdSlot slotId="article-bottom" show={showAds} /> : null}
+      {showAds ? <AdSlotClient slotId="article-bottom" show={showAds} /> : null}
 
       {article.references && article.references.length > 0 ? (
         <section className="rounded-2xl border border-slate-200 bg-white/70 p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">

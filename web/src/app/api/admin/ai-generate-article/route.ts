@@ -4,6 +4,7 @@ import { getSessionUser, requireRole } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { estimateReadingTime } from "@/lib/reading-time";
 import { env } from "@/lib/env";
+import type { Database } from "@/db/types";
 
 
 const schema = z.object({
