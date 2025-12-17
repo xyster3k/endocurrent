@@ -13,10 +13,40 @@ import { getSessionUser, requireRole } from "@/lib/auth";
 import { getArticles } from "@/lib/data/articles";
 
 export const dynamic = "force-dynamic";
+export const runtime = "edge";
 
 export default async function AdminHome() {
   const user = await getSessionUser();
-  requireRole(user, ["editor", "admin"]);
+  if (!user) {
+    return (
+      <div className="mx-auto flex max-w-4xl flex-col gap-4 px-6 py-12">
+        <h1 className="text-3xl font-semibold">Admin</h1>
+        <p className="text-slate-600 dark:text-slate-300">You’re not signed in. Please sign in to continue.</p>
+        <Link
+          href="/sign-in?redirect_url=/admin"
+          className="inline-flex w-fit items-center gap-2 rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg dark:bg-white dark:text-black"
+        >
+          Go to sign in
+        </Link>
+      </div>
+    );
+  }
+  let roleOk = true;
+  try {
+    requireRole(user, ["editor", "admin"]);
+  } catch {
+    roleOk = false;
+  }
+  if (!roleOk) {
+    return (
+      <div className="mx-auto flex max-w-4xl flex-col gap-4 px-6 py-12">
+        <h1 className="text-3xl font-semibold">Admin</h1>
+        <p className="text-slate-600 dark:text-slate-300">
+          You need an editor or admin role to access these tools. Current role: {user.role}.
+        </p>
+      </div>
+    );
+  }
 
   const { data } = await getArticles({ includeDrafts: true });
   const drafts = data.filter((a) => a.status === "draft" || a.status === "draft_ai");
@@ -30,7 +60,7 @@ export default async function AdminHome() {
           <h1 className="text-3xl font-semibold">Editorial control</h1>
           <span className="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100">
             <ShieldCheck className="h-4 w-4" />
-            {user?.role ?? "user"}
+            {user?.role ?? "subscriber"}
           </span>
         </div>
         <p className="max-w-3xl text-slate-600 dark:text-slate-300">
@@ -49,13 +79,13 @@ export default async function AdminHome() {
           icon={<SquarePen className="h-5 w-5" />}
           title="New article"
           body="Markdown body, tags, cover upload to Supabase Storage."
-          href="/admin/articles/new"
+          href="/admin/posts/new"
         />
         <AdminCard
           icon={<Table2 className="h-5 w-5" />}
           title="Manage articles"
           body="Filter by status/tag, publish/unpublish, soft delete."
-          href="/admin/articles"
+          href="/admin/posts"
         />
         <AdminCard
           icon={<Wand2 className="h-5 w-5" />}
@@ -73,6 +103,21 @@ export default async function AdminHome() {
           icon={<LayoutTemplate className="h-5 w-5" />}
           title="Menu management"
           body="Build header menu tree and map categories or links."
+          href="/admin/menus"
+        />
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2">
+        <AdminCard
+          icon={<ShieldCheck className="h-5 w-5" />}
+          title="Profile display name"
+          body="Set the display name used for published posts."
+          href="/admin/profile"
+        />
+        <AdminCard
+          icon={<Table2 className="h-5 w-5" />}
+          title="Menu management"
+          body="Build header menu tree and map categories."
           href="/admin/menus"
         />
       </div>

@@ -5,7 +5,7 @@ import { getArticles } from "@/lib/data/articles";
 
 export const runtime = "edge";
 
-export default async function AdminArticlesPage() {
+export default async function AdminPostsPage() {
   const user = await getSessionUser();
   if (!user) {
     redirect("/sign-in");
@@ -15,9 +15,9 @@ export default async function AdminArticlesPage() {
   } catch {
     return (
       <div className="mx-auto flex max-w-4xl flex-col gap-4 px-6 py-12">
-        <h1 className="text-3xl font-semibold">Articles</h1>
+        <h1 className="text-3xl font-semibold">Posts</h1>
         <p className="text-slate-600 dark:text-slate-300">
-          You need an editor or admin role to manage articles. Current role: {user.role}.
+          You need an editor or admin role to manage posts. Current role: {user.role}.
         </p>
       </div>
     );
@@ -30,13 +30,13 @@ export default async function AdminArticlesPage() {
       <div className="flex items-center justify-between">
         <div>
           <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Admin</p>
-          <h1 className="text-3xl font-semibold">Articles</h1>
+          <h1 className="text-3xl font-semibold">Posts</h1>
         </div>
         <Link
-          href="/admin/articles/new"
+          href="/admin/posts/new"
           className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg dark:bg-white dark:text-black"
         >
-          New draft
+          New post
         </Link>
       </div>
 
@@ -76,7 +76,7 @@ export default async function AdminArticlesPage() {
                       View
                     </Link>
                     <Link
-                      href={`/admin/articles/${article.id}`}
+                      href={`/admin/posts/${article.id}`}
                       className="rounded-full border border-slate-200 px-3 py-1 hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800"
                     >
                       Edit
