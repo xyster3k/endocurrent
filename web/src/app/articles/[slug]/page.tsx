@@ -113,15 +113,6 @@ export default async function ArticlePage(props: { params: Params }) {
             <Sparkles className="h-4 w-4" />
             {article.reading_time_minutes} min read
           </span>
-          {article.author ? (
-            <span className="rounded-full bg-slate-100 px-3 py-1 dark:bg-slate-800">
-              By {article.author.name}
-            </span>
-          ) : (
-            <span className="rounded-full bg-slate-100 px-3 py-1 text-slate-500 dark:bg-slate-800 dark:text-slate-400">
-              Editorial team
-            </span>
-          )}
         </div>
       </div>
 

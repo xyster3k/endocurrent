@@ -1,6 +1,42 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import type { ArticleDetail, ArticleSummary } from "@/lib/types";
+import type { ArticleDetail, ArticleSummary, ArticleAuthor } from "@/lib/types";
 import { mapToSummary, mockArticles } from "@/lib/data/mock-articles";
+
+async function getAuthorInfo(authorId: string | null): Promise<ArticleAuthor | null> {
+  if (!authorId) return null;
+
+  try {
+    const clerkSecretKey = process.env.CLERK_SECRET_KEY;
+    if (!clerkSecretKey) return null;
+
+    const response = await fetch(`https://api.clerk.com/v1/users/${authorId}`, {
+      headers: {
+        'Authorization': `Bearer ${clerkSecretKey}`,
+      },
+      cache: 'no-store',
+    });
+
+    if (!response.ok) return null;
+
+    const userData = await response.json();
+
+    // Try display_name from publicMetadata first, fall back to email username
+    const displayName = userData.public_metadata?.display_name;
+    const email = userData.email_addresses?.[0]?.email_address;
+    const name = displayName || (email ? email.split('@')[0] : null);
+
+    if (!name) return null;
+
+    return {
+      id: authorId,
+      name,
+      affiliation: null,
+    };
+  } catch (error) {
+    console.error('Error fetching author info:', error);
+    return null;
+  }
+}
 
 export type ArticleFilters = {
   page?: number;
@@ -50,21 +86,29 @@ export async function getArticles(
     const { data, error, count } = await query;
     if (error || !data) throw error;
 
+    // Fetch author information for all articles
+    const articlesWithAuthors = await Promise.all(
+      (data as any[]).map(async (row) => {
+        const author = await getAuthorInfo((row as any).author_id);
+        return {
+          id: (row as any).id,
+          slug: (row as any).slug,
+          title: (row as any).title,
+          summary: (row as any).summary ?? "",
+          category: (row as any).category,
+          tags: [],
+          reading_time_minutes: (row as any).reading_time_minutes ?? 0,
+          published_at: (row as any).published_at,
+          cover_image_url: null,
+          author,
+          status: (row as any).status as ArticleSummary["status"],
+          featured: (row as any).featured ?? false,
+        };
+      })
+    );
+
     return {
-      data: (data as any[]).map((row) => ({
-        id: (row as any).id,
-        slug: (row as any).slug,
-        title: (row as any).title,
-        summary: (row as any).summary ?? "",
-        category: (row as any).category,
-        tags: [],
-        reading_time_minutes: (row as any).reading_time_minutes ?? 0,
-        published_at: (row as any).published_at,
-        cover_image_url: null,
-        author: null,
-        status: (row as any).status as ArticleSummary["status"],
-        featured: (row as any).featured ?? false,
-      })),
+      data: articlesWithAuthors,
       meta: { page, pageSize, total: count ?? data.length },
     };
   } catch (error) {
@@ -133,6 +177,9 @@ export async function getFeaturedArticle(): Promise<ArticleSummary | null> {
     if (error) throw error;
     if (!data) return null;
 
+    // Fetch author information
+    const author = await getAuthorInfo((data as any).author_id);
+
     return {
       id: (data as any).id,
       slug: (data as any).slug,
@@ -143,7 +190,7 @@ export async function getFeaturedArticle(): Promise<ArticleSummary | null> {
       reading_time_minutes: (data as any).reading_time_minutes ?? 0,
       published_at: (data as any).published_at,
       cover_image_url: null,
-      author: null,
+      author,
       status: (data as any).status as ArticleSummary["status"],
       featured: true,
     };

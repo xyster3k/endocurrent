@@ -62,12 +62,17 @@ export async function PUT(req: Request, props: { params: Params }) {
   if (parsed.data.status === "published" && !("published_at" in updates)) {
     updates.published_at = new Date().toISOString();
   }
-  // Never write a non-UUID author_id (Clerk ids are not UUIDs).
-  if (updates.author_id && typeof updates.author_id === "string" && !/^[0-9a-fA-F-]{36}$/.test(updates.author_id)) {
-    delete updates.author_id;
-  }
 
   const supabase = await createSupabaseServerClient({ useServiceRole: true });
+
+  // If publishing and article doesn't have an author_id, set it to current user
+  if (parsed.data.status === "published") {
+    const { data: article } = await supabase.from("articles").select("author_id").eq("id", params.id).maybeSingle();
+    if (article && !article.author_id) {
+      updates.author_id = user?.id ?? null;
+    }
+  }
+
   const { error } = await supabase.from("articles").update(updates).eq("id", params.id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ ok: true }, { status: 200 });

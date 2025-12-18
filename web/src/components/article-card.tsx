@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, Clock3, Radio } from "lucide-react";
+import { ArrowUpRight, Clock3 } from "lucide-react";
 import type { ArticleSummary } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -34,11 +34,18 @@ export function ArticleCard({ article, variant = "featured" }: Props) {
           )}
         </div>
         <div className="flex flex-col gap-3">
-          <Link href={`/articles/${article.slug}`} className="group/link">
-            <h3 className="text-2xl font-semibold leading-tight tracking-tight group-hover/link:text-blue-700 dark:group-hover/link:text-blue-300">
-              {article.title}
-            </h3>
-          </Link>
+          <div>
+            <Link href={`/articles/${article.slug}`} className="group/link">
+              <h3 className="text-2xl font-semibold leading-tight tracking-tight group-hover/link:text-blue-700 dark:group-hover/link:text-blue-300">
+                {article.title}
+              </h3>
+            </Link>
+            {article.author ? (
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                By {article.author.name}
+              </p>
+            ) : null}
+          </div>
           <p className="text-base text-slate-600 dark:text-slate-300">
             {article.summary}
           </p>
@@ -47,12 +54,6 @@ export function ArticleCard({ article, variant = "featured" }: Props) {
               <Clock3 className="h-4 w-4" />
               {article.reading_time_minutes} min read
             </span>
-            {article.author ? (
-              <span className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-blue-700 dark:bg-blue-900/40 dark:text-blue-200">
-                <Radio className="h-4 w-4" />
-                {article.author.name}
-              </span>
-            ) : null}
             {(article.tags || []).slice(0, 3).map((tag) => (
               <span
                 key={tag}
