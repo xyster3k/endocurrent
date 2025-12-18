@@ -48,9 +48,9 @@ export function ArticleCard({ article, variant = "featured" }: Props) {
               </p>
             ) : null}
           </div>
-          <p className="text-base text-slate-600 dark:text-slate-300">
-            {article.summary}
-          </p>
+          <div className="text-base text-slate-600 dark:text-slate-300 prose prose-sm max-w-none dark:prose-invert">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{article.summary}</ReactMarkdown>
+          </div>
           <div className="flex flex-wrap items-center gap-3 text-sm text-slate-500 dark:text-slate-400">
             <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1 dark:bg-slate-800/60">
               <Clock3 className="h-4 w-4" />

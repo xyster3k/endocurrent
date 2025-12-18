@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Compass } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { ArticleCard } from "@/components/article-card";
 import { AdSlotClient } from "@/components/ad-slot-client";
 import { shouldShowAds } from "@/lib/ads";
@@ -52,9 +54,9 @@ export default async function Home(props: { searchParams: SearchParams }) {
                 By {heroArticle.author.name}
               </p>
             ) : null}
-            <p className="mt-3 text-lg leading-relaxed text-slate-600 dark:text-slate-300">
-              {heroArticle.summary}
-            </p>
+            <div className="mt-3 text-lg leading-relaxed text-slate-600 dark:text-slate-300 prose prose-lg max-w-none dark:prose-invert">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{heroArticle.summary}</ReactMarkdown>
+            </div>
             <span className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-blue-600 dark:text-blue-400">
               Read article
               <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
