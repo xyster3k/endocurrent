@@ -3,12 +3,15 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { RichTextEditor } from "@/components/rich-text-editor";
 
 export default function NewArticlePage() {
   const router = useRouter();
   const [categories, setCategories] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [summary, setSummary] = useState("");
+  const [bodyMarkdown, setBodyMarkdown] = useState("");
 
   useEffect(() => {
     fetch("/api/categories")
@@ -104,32 +107,34 @@ export default function NewArticlePage() {
               ))}
             </select>
           </Field>
-          <Field label="Tags (comma separated)">
-            <input
-              name="tags"
-              className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-blue-500 dark:border-slate-700 dark:bg-slate-950"
-              placeholder="thyroid, diabetes"
-            />
-          </Field>
         </div>
-        <Field label="Summary">
-          <textarea
-            name="summary"
-            required
-            rows={3}
+        <Field label="Tags (comma separated)">
+          <input
+            name="tags"
             className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-blue-500 dark:border-slate-700 dark:bg-slate-950"
+            placeholder="thyroid, diabetes, hormone"
+          />
+        </Field>
+        <div className="flex flex-col gap-2">
+          <span className="text-sm font-medium text-slate-800 dark:text-slate-200">Summary</span>
+          <input type="hidden" name="summary" value={summary} />
+          <RichTextEditor
+            value={summary}
+            onChange={setSummary}
             placeholder="One or two sentences that appear in the feed."
+            minHeight="120px"
           />
-        </Field>
-        <Field label="Body (Markdown)">
-          <textarea
-            name="body_markdown"
-            required
-            rows={10}
-            className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-mono outline-none focus:border-blue-500 dark:border-slate-700 dark:bg-slate-950"
-            placeholder="## Section title"
+        </div>
+        <div className="flex flex-col gap-2">
+          <span className="text-sm font-medium text-slate-800 dark:text-slate-200">Body</span>
+          <input type="hidden" name="body_markdown" value={bodyMarkdown} />
+          <RichTextEditor
+            value={bodyMarkdown}
+            onChange={setBodyMarkdown}
+            placeholder="Start writing your article..."
+            minHeight="400px"
           />
-        </Field>
+        </div>
         <Field label="References JSON">
           <textarea
             name="references"

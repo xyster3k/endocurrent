@@ -19,7 +19,8 @@
       "Bash(while read file)",
       "Bash(do sed -i '/^export const runtime = \"\"edge\"\";$/d' \"$file\")",
       "Bash(echo:*)",
-      "Bash(done)"
+      "Bash(done)",
+      "Bash(npm run dev:*)"
     ]
   }
 }

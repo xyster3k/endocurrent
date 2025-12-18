@@ -107,7 +107,9 @@ export default async function ArticlePage(props: { params: Params }) {
             By {authorName}
           </p>
         ) : null}
-        <p className="text-lg text-slate-600 dark:text-slate-300">{article.summary}</p>
+        <div className="text-lg text-slate-600 dark:text-slate-300 prose prose-lg max-w-none dark:prose-invert">
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{article.summary}</ReactMarkdown>
+        </div>
         <div className="flex flex-wrap items-center gap-3 text-sm text-slate-500 dark:text-slate-300">
           <span className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-blue-700 dark:bg-blue-900/40 dark:text-blue-200">
             <Sparkles className="h-4 w-4" />

@@ -77,14 +77,14 @@ export default async function AdminHome() {
         <AdminCard
           icon={<SquarePen className="h-5 w-5" />}
           title="New article"
-          body="Markdown body, tags, cover upload to Supabase Storage."
-          href="/admin/posts/new"
+          body="WYSIWYG editor with markdown storage, tags, and formatting."
+          href="/admin/articles/new"
         />
         <AdminCard
           icon={<Table2 className="h-5 w-5" />}
           title="Manage articles"
-          body="Filter by status/tag, publish/unpublish, soft delete."
-          href="/admin/posts"
+          body="Edit, publish/unpublish, and manage all articles."
+          href="/admin/articles"
         />
         <AdminCard
           icon={<Wand2 className="h-5 w-5" />}

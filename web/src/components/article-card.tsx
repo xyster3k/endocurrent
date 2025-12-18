@@ -2,6 +2,8 @@ import Link from "next/link";
 import { ArrowUpRight, Clock3 } from "lucide-react";
 import type { ArticleSummary } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 type Props = {
   article: ArticleSummary;
