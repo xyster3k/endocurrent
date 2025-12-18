@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import { RichTextEditor } from "@/components/rich-text-editor";
 
 export default function EditArticlePage() {
   const params = useParams();
@@ -17,6 +18,7 @@ export default function EditArticlePage() {
     summary: "",
     body_markdown: "",
     category: "",
+    tags: [] as string[],
     status: "draft" as "draft" | "draft_ai" | "published" | "archived",
     featured: false,
   });
@@ -44,6 +46,7 @@ export default function EditArticlePage() {
           summary: article.summary || "",
           body_markdown: article.body_markdown || "",
           category: article.category || "",
+          tags: article.tags || [],
           status: article.status || "draft",
           featured: article.featured || false,
         });
@@ -217,6 +220,22 @@ export default function EditArticlePage() {
             </select>
           </Field>
         </div>
+        <Field label="Tags (comma separated)">
+          <input
+            value={formData.tags.join(", ")}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                tags: e.target.value
+                  .split(",")
+                  .map((t) => t.trim())
+                  .filter(Boolean),
+              })
+            }
+            className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-blue-500 dark:border-slate-700 dark:bg-slate-950"
+            placeholder="thyroid, diabetes, hormone"
+          />
+        </Field>
         <label className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800">
           <input
             type="checkbox"
@@ -233,26 +252,24 @@ export default function EditArticlePage() {
             </span>
           </div>
         </label>
-        <Field label="Summary">
-          <textarea
+        <div className="flex flex-col gap-2">
+          <span className="text-sm font-medium text-slate-800 dark:text-slate-200">Summary</span>
+          <RichTextEditor
             value={formData.summary}
-            onChange={(e) => setFormData({ ...formData, summary: e.target.value })}
-            required
-            rows={3}
-            className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-blue-500 dark:border-slate-700 dark:bg-slate-950"
+            onChange={(markdown) => setFormData({ ...formData, summary: markdown })}
             placeholder="One or two sentences that appear in the feed."
+            minHeight="120px"
           />
-        </Field>
-        <Field label="Body (Markdown)">
-          <textarea
+        </div>
+        <div className="flex flex-col gap-2">
+          <span className="text-sm font-medium text-slate-800 dark:text-slate-200">Body</span>
+          <RichTextEditor
             value={formData.body_markdown}
-            onChange={(e) => setFormData({ ...formData, body_markdown: e.target.value })}
-            required
-            rows={10}
-            className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-mono outline-none focus:border-blue-500 dark:border-slate-700 dark:bg-slate-950"
-            placeholder="## Section title"
+            onChange={(markdown) => setFormData({ ...formData, body_markdown: markdown })}
+            placeholder="Start writing your article..."
+            minHeight="400px"
           />
-        </Field>
+        </div>
         <div className="flex flex-wrap gap-3">
           <button
             type="submit"

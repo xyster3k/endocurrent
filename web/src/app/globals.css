@@ -100,3 +100,86 @@ a {
 .bg-slate-900 {
   color: var(--btn-text) !important;
 }
+
+/* Ensure lists display bullets/numbers in prose content */
+.prose ul {
+  list-style-type: disc;
+  list-style-position: outside;
+  padding-left: 1.625em;
+}
+
+.prose ul li {
+  padding-left: 0.375em;
+}
+
+.prose ol {
+  list-style-type: decimal;
+  list-style-position: outside;
+  padding-left: 1.625em;
+}
+
+.prose ol li {
+  padding-left: 0.375em;
+}
+
+.prose ul ul {
+  list-style-type: circle;
+}
+
+.prose ul ul ul {
+  list-style-type: square;
+}
+
+/* Ensure nested lists work */
+.prose li > ul,
+.prose li > ol {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+/* TipTap editor content - ensure lists display in the editor */
+.ProseMirror ul {
+  list-style-type: disc;
+  list-style-position: outside;
+  padding-left: 1.625em;
+}
+
+.ProseMirror ul li {
+  padding-left: 0.375em;
+}
+
+.ProseMirror ol {
+  list-style-type: decimal;
+  list-style-position: outside;
+  padding-left: 1.625em;
+}
+
+.ProseMirror ol li {
+  padding-left: 0.375em;
+}
+
+.ProseMirror ul ul {
+  list-style-type: circle;
+}
+
+.ProseMirror ul ul ul {
+  list-style-type: square;
+}
+
+.ProseMirror li > ul,
+.ProseMirror li > ol {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+/* Fix list spacing in editor */
+.ProseMirror ul,
+.ProseMirror ol {
+  margin-top: 0.75em;
+  margin-bottom: 0.75em;
+}
+
+.ProseMirror li {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}

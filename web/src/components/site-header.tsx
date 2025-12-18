@@ -1,22 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
-import { ActivitySquare, ShieldCheck, Sparkles, Menu as MenuIcon, ChevronDown } from "lucide-react";
+import { ShieldCheck, Sparkles, Menu as MenuIcon, ChevronDown } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
-const navLinks = [{ href: "/", label: "Feed" }, { href: "/admin", label: "Admin" }];
-
-type MenuItem = {
-  id: string;
-  label: string;
-  url: string;
-  category?: string | null;
-  parent_id?: string | null;
-  order_index?: number | null;
-};
+const navLinks = [{ href: "/admin", label: "Admin", requiresRole: ["editor", "admin"] as string[] }];
 
 type MenuItem = {
   id: string;
@@ -29,13 +21,33 @@ type MenuItem = {
 
 export function SiteHeader() {
   const pathname = usePathname();
+  const { user } = useUser();
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+  const [isScrolled, setIsScrolled] = useState(false);
+
   useEffect(() => {
     fetch("/api/menus")
       .then((res) => res.json())
       .then((res) => res?.data?.items && setMenuItems(res.data.items as MenuItem[]))
       .catch(() => {});
   }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      // Use hysteresis: different thresholds for hiding vs showing
+      if (currentScrollY > 100 && !isScrolled) {
+        setIsScrolled(true);
+      } else if (currentScrollY < 50 && isScrolled) {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isScrolled]);
+
   const menuTree = useMemo(() => {
     const byParent: Record<string, MenuItem[]> = {};
     menuItems.forEach((item) => {
@@ -48,21 +60,52 @@ export function SiteHeader() {
   }, [menuItems]);
   const hasClerk = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
 
+  const userRole = user?.publicMetadata?.role as string | undefined;
+  const visibleNavLinks = navLinks.filter(link => {
+    if (!link.requiresRole) return true;
+    return link.requiresRole.includes(userRole ?? "");
+  });
+
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-white/10 bg-white/80 backdrop-blur-lg dark:bg-black/60">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+    <header className={cn(
+      "sticky top-0 z-40 w-full transition-all duration-300 border-b bg-white/80 backdrop-blur-lg dark:bg-black/60",
+      isScrolled ? "border-white/5" : "border-white/10"
+    )}>
+      <div className={cn(
+        "mx-auto flex items-center px-6 transition-all duration-300",
+        isScrolled ? "max-w-6xl py-2.5 justify-start" : "max-w-6xl py-4 justify-between"
+      )}>
         <div className="flex items-center gap-3">
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#1f7aed] to-[#0dc8e5] text-white shadow-lg shadow-blue-500/20">
-            <ActivitySquare className="h-5 w-5" />
-          </span>
-          <div>
-            <Link href="/" className="text-lg font-semibold tracking-tight">
-              EndoCurrent
-            </Link>
-            <p className="text-sm text-slate-500">Medical intelligence digest</p>
-          </div>
+          <Link href="/" className={cn("flex flex-col transition-all duration-300", isScrolled ? "" : "gap-1")}>
+            {isScrolled ? (
+              <Image
+                src="/icon.png"
+                alt="EndoCurrent Icon"
+                width={40}
+                height={40}
+                className="transition-all duration-300"
+              />
+            ) : (
+              <Image
+                src="/logo.png"
+                alt="EndoCurrent Logo"
+                width={150}
+                height={30}
+                className="transition-all duration-300"
+              />
+            )}
+            {!isScrolled && (
+              <div className="flex items-center gap-1.5 text-xs">
+                <ShieldCheck className="h-4 w-4 text-emerald-500" />
+                <span className="text-slate-500 whitespace-nowrap">Clinician-led, AI-assisted</span>
+              </div>
+            )}
+          </Link>
         </div>
-        <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
+        <nav className={cn(
+          "hidden items-center gap-6 text-sm font-medium md:flex transition-all duration-300",
+          isScrolled && "opacity-0 pointer-events-none"
+        )}>
           <div className="relative group">
             <button className="nav-link inline-flex items-center gap-1" aria-haspopup="true">
               <MenuIcon className="h-4 w-4" />
@@ -79,6 +122,10 @@ export function SiteHeader() {
                         <Link href={item.url} className="block font-semibold text-slate-800 hover:text-blue-600 dark:text-slate-100 dark:hover:text-blue-400">
                           {item.label}
                         </Link>
+                      ) : item.category ? (
+                        <Link href={`/category/${item.category.toLowerCase()}`} className="block font-semibold text-slate-800 hover:text-blue-600 dark:text-slate-100 dark:hover:text-blue-400">
+                          {item.label}
+                        </Link>
                       ) : (
                         <div className="font-bold text-slate-900 dark:text-slate-50">
                           {item.label}
@@ -90,6 +137,10 @@ export function SiteHeader() {
                             <div key={child.id} className="flex items-center justify-between">
                               {child.url ? (
                                 <Link href={child.url} className="text-slate-700 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400">
+                                  {child.label}
+                                </Link>
+                              ) : child.category ? (
+                                <Link href={`/category/${child.category.toLowerCase()}`} className="text-slate-700 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400">
                                   {child.label}
                                 </Link>
                               ) : (
@@ -112,17 +163,16 @@ export function SiteHeader() {
               </div>
             ) : null}
           </div>
-          {navLinks.map((link) => (
+          {visibleNavLinks.map((link) => (
             <Link key={link.href} href={link.href} className={cn("nav-link", pathname === link.href && "nav-link-active")}>
               {link.label}
             </Link>
           ))}
         </nav>
-        <div className="flex items-center gap-3">
-          <div className="hidden items-center gap-2 text-xs text-slate-500 sm:flex">
-            <ShieldCheck className="h-4 w-4 text-emerald-500" />
-            <span>Clinician-led, AI-assisted</span>
-          </div>
+        <div className={cn(
+          "flex items-center gap-3 transition-all duration-300",
+          isScrolled && "opacity-0 pointer-events-none"
+        )}>
           {hasClerk ? (
             <>
               <SignedOut>

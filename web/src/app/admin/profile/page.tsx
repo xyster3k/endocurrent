@@ -1,26 +1,65 @@
  "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useUser } from "@clerk/nextjs";
 
 function DisplayNameForm() {
+  const { user, isLoaded } = useUser();
   const [name, setName] = useState("");
   const [message, setMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (isLoaded && user) {
+      const currentDisplayName = user.publicMetadata?.display_name as string | undefined;
+      if (currentDisplayName) {
+        setName(currentDisplayName);
+      }
+    }
+  }, [isLoaded, user]);
 
   const save = async () => {
     setMessage(null);
-    const res = await fetch("/api/admin/profile", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ display_name: name }),
-    });
-    if (!res.ok) {
-      setMessage("Failed to save");
-      return;
+    setIsLoading(true);
+    try {
+      const res = await fetch("/api/admin/profile", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ display_name: name }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setMessage(`Failed to save: ${data.error || res.statusText}`);
+        return;
+      }
+      setMessage("Saved successfully!");
+      // Reload user data to reflect changes
+      await user?.reload();
+    } catch (error) {
+      setMessage(`Error: ${String(error)}`);
+    } finally {
+      setIsLoading(false);
     }
-    setMessage("Saved");
   };
+
+  const currentDisplayName = user?.publicMetadata?.display_name as string | undefined;
+  const userEmail = user?.primaryEmailAddress?.emailAddress;
 
   return (
     <div className="space-y-4 rounded-2xl border border-slate-200 bg-white/80 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
+      {currentDisplayName && (
+        <div className="rounded-xl bg-blue-50 p-4 dark:bg-blue-900/20">
+          <p className="text-sm font-medium text-blue-900 dark:text-blue-100">
+            Current display name: <span className="font-semibold">{currentDisplayName}</span>
+          </p>
+        </div>
+      )}
+      {!currentDisplayName && userEmail && (
+        <div className="rounded-xl bg-slate-50 p-4 dark:bg-slate-800/50">
+          <p className="text-sm text-slate-600 dark:text-slate-400">
+            No display name set. Articles will show: <span className="font-semibold">{userEmail.split('@')[0]}</span>
+          </p>
+        </div>
+      )}
       <label className="flex flex-col gap-2 text-sm font-medium text-slate-800 dark:text-slate-200">
         <span>Display name</span>
         <input
@@ -28,16 +67,22 @@ function DisplayNameForm() {
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="e.g., Dr. Amara Chen"
+          disabled={!isLoaded}
         />
       </label>
       <div className="flex items-center gap-3">
         <button
           onClick={save}
-          className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg dark:bg-white dark:text-black"
+          disabled={isLoading || !isLoaded || !name.trim()}
+          className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed dark:bg-white dark:text-black"
         >
-          Save
+          {isLoading ? "Saving..." : "Save"}
         </button>
-        {message ? <span className="text-sm text-slate-600 dark:text-slate-300">{message}</span> : null}
+        {message ? (
+          <span className={`text-sm ${message.includes('Failed') || message.includes('Error') ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'}`}>
+            {message}
+          </span>
+        ) : null}
       </div>
     </div>
   );

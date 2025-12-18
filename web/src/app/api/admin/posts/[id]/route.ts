@@ -13,6 +13,7 @@ const updateSchema = z.object({
   category: z.string().optional(),
   status: z.enum(["draft", "draft_ai", "published", "archived"]).optional(),
   tags: z.array(z.string()).optional(),
+  featured: z.boolean().optional(),
 });
 
 type Params = Promise<{ id: string }>;
@@ -28,7 +29,7 @@ export async function GET(_req: Request, props: { params: Params }) {
     return NextResponse.json({ data: post }, { status: 200 });
   }
 
-  const supabase = createSupabaseServerClient({ useServiceRole: true });
+  const supabase = await createSupabaseServerClient({ useServiceRole: true });
   const { data, error } = await supabase.from("articles").select("*").eq("id", params.id).maybeSingle();
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   if (!data) return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -61,12 +62,17 @@ export async function PUT(req: Request, props: { params: Params }) {
   if (parsed.data.status === "published" && !("published_at" in updates)) {
     updates.published_at = new Date().toISOString();
   }
-  // Never write a non-UUID author_id (Clerk ids are not UUIDs).
-  if (updates.author_id && typeof updates.author_id === "string" && !/^[0-9a-fA-F-]{36}$/.test(updates.author_id)) {
-    delete updates.author_id;
+
+  const supabase = await createSupabaseServerClient({ useServiceRole: true });
+
+  // If publishing and article doesn't have an author_id, set it to current user
+  if (parsed.data.status === "published") {
+    const { data: article } = await supabase.from("articles").select("author_id").eq("id", params.id).maybeSingle();
+    if (article && !article.author_id) {
+      updates.author_id = user?.id ?? null;
+    }
   }
 
-  const supabase = createSupabaseServerClient({ useServiceRole: true });
   const { error } = await supabase.from("articles").update(updates).eq("id", params.id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ ok: true }, { status: 200 });
@@ -81,7 +87,7 @@ export async function DELETE(_req: Request, props: { params: Params }) {
     return NextResponse.json({ ok: true, message: "Supabase not configured; mock delete only." });
   }
 
-  const supabase = createSupabaseServerClient({ useServiceRole: true });
+  const supabase = await createSupabaseServerClient({ useServiceRole: true });
   const { error } = await supabase.from("articles").delete().eq("id", params.id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ ok: true }, { status: 200 });

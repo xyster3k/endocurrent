@@ -35,7 +35,7 @@ export async function PUT(req: Request, props: { params: Params }) {
     return NextResponse.json({ ok: true, message: "Supabase not configured; mock update menu." });
   }
 
-  const supabase = createSupabaseServerClient({ useServiceRole: true });
+  const supabase = await createSupabaseServerClient({ useServiceRole: true });
   if (parsed.data.name) {
     const { error } = await supabase.from("menus").update({ name: parsed.data.name }).eq("id", params.id);
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
@@ -81,7 +81,7 @@ export async function DELETE(_req: Request, props: { params: Params }) {
     return NextResponse.json({ ok: true, message: "Supabase not configured; mock delete menu." });
   }
 
-  const supabase = createSupabaseServerClient({ useServiceRole: true });
+  const supabase = await createSupabaseServerClient({ useServiceRole: true });
   await supabase.from("menu_items").delete().eq("menu_id", params.id);
   const { error } = await supabase.from("menus").delete().eq("id", params.id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
