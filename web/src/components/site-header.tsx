@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
 import { ActivitySquare, ShieldCheck, Sparkles, Menu as MenuIcon, ChevronDown } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
-const navLinks = [{ href: "/", label: "Feed" }, { href: "/admin", label: "Admin" }];
+const navLinks = [{ href: "/admin", label: "Admin", requiresRole: ["editor", "admin"] as string[] }];
 
 type MenuItem = {
   id: string;
@@ -29,6 +29,7 @@ type MenuItem = {
 
 export function SiteHeader() {
   const pathname = usePathname();
+  const { user } = useUser();
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   useEffect(() => {
     fetch("/api/menus")
@@ -47,6 +48,12 @@ export function SiteHeader() {
     return byParent;
   }, [menuItems]);
   const hasClerk = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
+
+  const userRole = user?.publicMetadata?.role as string | undefined;
+  const visibleNavLinks = navLinks.filter(link => {
+    if (!link.requiresRole) return true;
+    return link.requiresRole.includes(userRole ?? "");
+  });
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-white/10 bg-white/80 backdrop-blur-lg dark:bg-black/60">
@@ -112,7 +119,7 @@ export function SiteHeader() {
               </div>
             ) : null}
           </div>
-          {navLinks.map((link) => (
+          {visibleNavLinks.map((link) => (
             <Link key={link.href} href={link.href} className={cn("nav-link", pathname === link.href && "nav-link-active")}>
               {link.label}
             </Link>

@@ -105,21 +105,6 @@ export default async function AdminHome() {
           href="/admin/menus"
         />
       </div>
-
-      <div className="grid gap-4 md:grid-cols-2">
-        <AdminCard
-          icon={<ShieldCheck className="h-5 w-5" />}
-          title="Profile display name"
-          body="Set the display name used for published posts."
-          href="/admin/profile"
-        />
-        <AdminCard
-          icon={<Table2 className="h-5 w-5" />}
-          title="Menu management"
-          body="Build header menu tree and map categories."
-          href="/admin/menus"
-        />
-      </div>
     </div>
   );
 }

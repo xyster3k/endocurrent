@@ -13,6 +13,7 @@ const postSchema = z.object({
   category: z.string().optional(),
   tags: z.array(z.string()).optional(),
   status: z.enum(["draft", "draft_ai", "published", "archived"]).default("draft"),
+  featured: z.boolean().optional().default(false),
 });
 
 export async function GET() {
@@ -23,7 +24,7 @@ export async function GET() {
     return NextResponse.json({ data: mockArticles }, { status: 200 });
   }
 
-  const supabase = createSupabaseServerClient({ useServiceRole: true });
+  const supabase = await createSupabaseServerClient({ useServiceRole: true });
   const { data, error } = await supabase.from("articles").select("*").order("created_at", { ascending: false });
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -53,7 +54,7 @@ export async function POST(req: Request) {
     });
   }
 
-  const supabase = createSupabaseServerClient({ useServiceRole: true });
+  const supabase = await createSupabaseServerClient({ useServiceRole: true });
   const { data, error } = await supabase
     .from("articles")
     .insert({
@@ -66,8 +67,9 @@ export async function POST(req: Request) {
       reading_time_minutes: reading.minutes,
       word_count: reading.words,
       published_at: publishedAt,
-      // Clerk user ids are not UUID; store author_id only if it is a valid UUID, else null.
-      author_id: /^[0-9a-fA-F-]{36}$/.test(user?.id ?? "") ? (user!.id as any) : null,
+      // Store author_id for both Clerk and Supabase users
+      author_id: user?.id ?? null,
+      featured: parsed.data.featured ?? false,
     })
     .select()
     .maybeSingle();

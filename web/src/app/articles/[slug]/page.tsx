@@ -34,6 +34,41 @@ export async function generateMetadata(props: { params: Params }): Promise<Metad
   };
 }
 
+async function getAuthorName(authorId: string | null | undefined): Promise<string | null> {
+  if (!authorId) return null;
+
+  try {
+    const clerkSecretKey = process.env.CLERK_SECRET_KEY;
+    if (!clerkSecretKey) return null;
+
+    const response = await fetch(`https://api.clerk.com/v1/users/${authorId}`, {
+      headers: {
+        'Authorization': `Bearer ${clerkSecretKey}`,
+      },
+      cache: 'no-store',
+    });
+
+    if (!response.ok) return null;
+
+    const userData = await response.json();
+
+    // Try display_name from publicMetadata first
+    const displayName = userData.public_metadata?.display_name;
+    if (displayName) return displayName;
+
+    // Fall back to email username
+    const email = userData.email_addresses?.[0]?.email_address;
+    if (email) {
+      return email.split('@')[0];
+    }
+
+    return null;
+  } catch (error) {
+    console.error('Error fetching author info:', error);
+    return null;
+  }
+}
+
 export default async function ArticlePage(props: { params: Params }) {
   const params = await props.params;
   const article = await getArticleBySlug(params.slug);
@@ -43,6 +78,9 @@ export default async function ArticlePage(props: { params: Params }) {
 
   const showAds = shouldShowAds("FREE");
   const jsonLd = buildArticleJsonLd(article);
+
+  // Fetch author name from the author_id stored in the article
+  const authorName = await getAuthorName((article as any).author_id);
 
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-6 px-6 py-10">
@@ -64,6 +102,11 @@ export default async function ArticlePage(props: { params: Params }) {
         <h1 className="text-4xl font-semibold leading-tight tracking-tight text-slate-900 dark:text-white">
           {article.title}
         </h1>
+        {authorName ? (
+          <p className="text-sm text-slate-500 dark:text-slate-400">
+            By {authorName}
+          </p>
+        ) : null}
         <p className="text-lg text-slate-600 dark:text-slate-300">{article.summary}</p>
         <div className="flex flex-wrap items-center gap-3 text-sm text-slate-500 dark:text-slate-300">
           <span className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-blue-700 dark:bg-blue-900/40 dark:text-blue-200">

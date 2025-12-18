@@ -102,13 +102,14 @@ export async function getArticleBySlug(slug: string): Promise<ArticleDetail | nu
       published_at: (data as any).published_at,
       cover_image_url: null,
       author: null,
+      author_id: (data as any).author_id ?? null,
       references: [],
       images: [],
       like_count: 0,
       dislike_count: 0,
       status: (data as any).status as ArticleSummary["status"],
       featured: (data as any).featured ?? false,
-    };
+    } as any;
   } catch (error) {
     console.error("Falling back to mock article", error);
     return mockArticles.find((a) => a.slug === slug) ?? null;
