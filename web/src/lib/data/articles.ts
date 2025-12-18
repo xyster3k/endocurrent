@@ -44,7 +44,7 @@ export async function getArticles(
     } else if (filters.status) {
       query = query.eq("status", filters.status);
     }
-    if (filters.category) query = query.eq("category", filters.category);
+    if (filters.category) query = query.ilike("category", filters.category);
     if (filters.search) query = query.textSearch("title", filters.search);
 
     const { data, error, count } = await query;

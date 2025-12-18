@@ -26,6 +26,15 @@ function EditPostClient({ id }: { id?: string }) {
   const [post, setPost] = useState<Post | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [categories, setCategories] = useState<string[]>([]);
+
+  useEffect(() => {
+    // Fetch categories from menu
+    fetch("/api/categories")
+      .then((res) => res.json())
+      .then((data) => setCategories(data.data || []))
+      .catch((err) => console.error("Failed to fetch categories:", err));
+  }, []);
 
   useEffect(() => {
     if (!id) return;
@@ -195,12 +204,18 @@ function EditPostClient({ id }: { id?: string }) {
             />
           </Field>
         <Field label="Category">
-          <input
+          <select
             className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-blue-500 dark:border-slate-700 dark:bg-slate-950"
             value={post.category ?? ""}
             onChange={(e) => setPost({ ...post, category: e.target.value })}
-            placeholder="thyroid, diabetes, oncology, general"
-          />
+          >
+            <option value="">Select a category...</option>
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
         </Field>
         <Field label="Tags (comma separated)">
           <input

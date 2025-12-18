@@ -7,7 +7,7 @@ export function SiteFooter() {
         <div>
           <h3 className="text-lg font-semibold">EndoCurrent</h3>
           <p className="text-sm text-slate-500">
-            Curated endocrine intelligence. No patient data. Evidence-first.
+            Curated medical intelligence. No patient data. Evidence-first.
           </p>
         </div>
         <div className="flex flex-wrap gap-4 text-sm text-slate-600 dark:text-slate-300">

@@ -86,6 +86,10 @@ export function SiteHeader() {
                         <Link href={item.url} className="block font-semibold text-slate-800 hover:text-blue-600 dark:text-slate-100 dark:hover:text-blue-400">
                           {item.label}
                         </Link>
+                      ) : item.category ? (
+                        <Link href={`/category/${item.category.toLowerCase()}`} className="block font-semibold text-slate-800 hover:text-blue-600 dark:text-slate-100 dark:hover:text-blue-400">
+                          {item.label}
+                        </Link>
                       ) : (
                         <div className="font-bold text-slate-900 dark:text-slate-50">
                           {item.label}
@@ -97,6 +101,10 @@ export function SiteHeader() {
                             <div key={child.id} className="flex items-center justify-between">
                               {child.url ? (
                                 <Link href={child.url} className="text-slate-700 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400">
+                                  {child.label}
+                                </Link>
+                              ) : child.category ? (
+                                <Link href={`/category/${child.category.toLowerCase()}`} className="text-slate-700 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400">
                                   {child.label}
                                 </Link>
                               ) : (

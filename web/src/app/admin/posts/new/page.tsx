@@ -1,5 +1,5 @@
  "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -14,6 +14,15 @@ function PostForm() {
   const [featured, setFeatured] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [categories, setCategories] = useState<string[]>([]);
+
+  useEffect(() => {
+    // Fetch categories from menu
+    fetch("/api/categories")
+      .then((res) => res.json())
+      .then((data) => setCategories(data.data || []))
+      .catch((err) => console.error("Failed to fetch categories:", err));
+  }, []);
 
   const submit = async (statusToSet: "draft" | "published") => {
     if (!title.trim() || !summary.trim() || !body.trim()) {
@@ -76,12 +85,18 @@ function PostForm() {
           />
         </Field>
         <Field label="Category">
-          <input
+          <select
             className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-blue-500 dark:border-slate-700 dark:bg-slate-950"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            placeholder="thyroid, diabetes, oncology, general"
-          />
+          >
+            <option value="">Select a category...</option>
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
         </Field>
         <Field label="Tags (comma separated)">
           <input
