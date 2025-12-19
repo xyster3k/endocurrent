@@ -133,6 +133,24 @@ export async function getArticleBySlug(slug: string): Promise<ArticleDetail | nu
     const { data, error } = await supabase.from("articles").select("*").eq("slug", slug).maybeSingle();
     if (error) throw error;
     if (!data) return null;
+
+    // Fetch like counts from article_likes table
+    let like_count = 0;
+    let dislike_count = 0;
+    try {
+      const { data: likesData } = await supabase
+        .from("article_likes")
+        .select("value")
+        .eq("article_id", (data as any).id);
+
+      if (likesData) {
+        like_count = likesData.filter((l: any) => l.value === 1).length;
+        dislike_count = likesData.filter((l: any) => l.value === -1).length;
+      }
+    } catch (likesError) {
+      console.error("Error fetching likes:", likesError);
+    }
+
     return {
       id: (data as any).id,
       slug: (data as any).slug,
@@ -149,8 +167,8 @@ export async function getArticleBySlug(slug: string): Promise<ArticleDetail | nu
       author_id: (data as any).author_id ?? null,
       references: [],
       images: [],
-      like_count: 0,
-      dislike_count: 0,
+      like_count,
+      dislike_count,
       status: (data as any).status as ArticleSummary["status"],
       featured: (data as any).featured ?? false,
     } as any;
