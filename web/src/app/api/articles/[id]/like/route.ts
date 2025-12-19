@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { requireAuth } from "@/lib/auth";
+import { auth } from "@clerk/nextjs/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 
@@ -7,7 +7,13 @@ type Params = Promise<{ id: string }>;
 
 export async function POST(req: NextRequest, props: { params: Params }) {
   const params = await props.params;
-  const userId = await requireAuth();
+
+  // Check authentication
+  const { userId } = await auth();
+  if (!userId) {
+    return NextResponse.json({ error: "Authentication required" }, { status: 401 });
+  }
+
   const body = await req.json();
   const value = body?.value;
   if (value !== 1 && value !== -1) {
@@ -23,6 +29,7 @@ export async function POST(req: NextRequest, props: { params: Params }) {
   const likes = (supabase as any).from("article_likes");
   const { error } = await likes.upsert({ article_id: params.id, user_id: userId, value }, { onConflict: "article_id,user_id" });
   if (error) {
+    console.error("Like error:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
   return NextResponse.json({ ok: true });

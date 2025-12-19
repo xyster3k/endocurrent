@@ -103,7 +103,7 @@ export function SiteHeader() {
           </Link>
         </div>
         <nav className={cn(
-          "hidden items-center gap-6 text-sm font-medium md:flex transition-all duration-300",
+          "ml-auto hidden items-center gap-6 text-sm font-medium md:flex transition-all duration-300",
           isScrolled && "opacity-0 pointer-events-none"
         )}>
           <div className="relative group">

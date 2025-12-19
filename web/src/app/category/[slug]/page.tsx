@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { ArticleCard } from "@/components/article-card";
 import { getArticles } from "@/lib/data/articles";
 
 export const revalidate = 300;
@@ -48,16 +48,7 @@ export default async function CategoryPage(props: { params: Params }) {
       {data.length > 0 ? (
         <div className="space-y-4">
           {data.map((a) => (
-            <div key={a.id} className="space-y-2 rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
-              <Link href={`/articles/${a.slug}`} className="text-xl font-semibold hover:text-blue-600 dark:hover:text-blue-400">
-                {a.title}
-              </Link>
-              <p className="text-sm text-slate-600 dark:text-slate-300">{a.summary}</p>
-              <div className="flex items-center gap-3 text-xs text-slate-500">
-                {a.published_at ? <span>{new Date(a.published_at).toLocaleDateString()}</span> : <span>Draft</span>}
-                {a.reading_time_minutes ? <span>{a.reading_time_minutes} min read</span> : null}
-              </div>
-            </div>
+            <ArticleCard key={a.id} article={a} />
           ))}
         </div>
       ) : (

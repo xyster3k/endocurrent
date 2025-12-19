@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { ThumbsDown, ThumbsUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -8,21 +8,28 @@ type Props = {
   articleId: string;
   initialLikeCount?: number;
   initialDislikeCount?: number;
+  userLikeValue?: number | null;
 };
 
 export function LikeToggle({
   articleId,
   initialLikeCount = 0,
   initialDislikeCount = 0,
+  userLikeValue = null,
 }: Props) {
   const [pending, startTransition] = useTransition();
   const [likes, setLikes] = useState(initialLikeCount);
   const [dislikes, setDislikes] = useState(initialDislikeCount);
-  const [active, setActive] = useState<"like" | "dislike" | null>(null);
+  const [active, setActive] = useState<"like" | "dislike" | null>(
+    userLikeValue === 1 ? "like" : userLikeValue === -1 ? "dislike" : null
+  );
 
   const submit = (value: 1 | -1) => {
+    if (active) return; // Already liked/disliked - prevent duplicate clicks
+
     startTransition(async () => {
-      setActive(value === 1 ? "like" : "dislike");
+      const newActive = value === 1 ? "like" : "dislike";
+      setActive(newActive);
       setLikes((prev) => (value === 1 ? prev + 1 : prev));
       setDislikes((prev) => (value === -1 ? prev + 1 : prev));
       try {
@@ -35,6 +42,10 @@ export function LikeToggle({
         });
       } catch (error) {
         console.error("Failed to send like", error);
+        // Revert on error
+        setActive(null);
+        setLikes((prev) => (value === 1 ? prev - 1 : prev));
+        setDislikes((prev) => (value === -1 ? prev - 1 : prev));
       }
     });
   };

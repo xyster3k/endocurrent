@@ -4,6 +4,7 @@ import Image from "next/image";
 import { ExternalLink, Sparkles } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { auth } from "@clerk/nextjs/server";
 import { LikeToggle } from "@/components/like-toggle";
 import { ReportDialog } from "@/components/report-dialog";
 import { AdSlotClient } from "@/components/ad-slot-client";
@@ -11,6 +12,7 @@ import { ShareButton } from "@/components/share-button";
 import { shouldShowAds } from "@/lib/ads";
 import { getArticleBySlug } from "@/lib/data/articles";
 import { buildArticleJsonLd } from "@/lib/seo";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export const revalidate = 300;
 
@@ -70,6 +72,30 @@ async function getAuthorName(authorId: string | null | undefined): Promise<strin
   }
 }
 
+async function getUserLikeValue(articleId: string, userId: string | null): Promise<number | null> {
+  if (!userId) return null;
+
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    return null;
+  }
+
+  try {
+    const supabase = await createSupabaseServerClient({ useServiceRole: true });
+    const likes = (supabase as any).from("article_likes");
+    const { data, error } = await likes
+      .select("value")
+      .eq("article_id", articleId)
+      .eq("user_id", userId)
+      .maybeSingle();
+
+    if (error || !data) return null;
+    return data.value;
+  } catch (error) {
+    console.error('Error fetching user like value:', error);
+    return null;
+  }
+}
+
 export default async function ArticlePage(props: { params: Params }) {
   const params = await props.params;
   const article = await getArticleBySlug(params.slug);
@@ -82,6 +108,15 @@ export default async function ArticlePage(props: { params: Params }) {
 
   // Fetch author name from the author_id stored in the article
   const authorName = await getAuthorName((article as any).author_id);
+
+  // Get current user's ID and like status
+  let userLikeValue: number | null = null;
+  try {
+    const { userId } = await auth();
+    userLikeValue = await getUserLikeValue(article.id, userId);
+  } catch {
+    // User not authenticated
+  }
 
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-6 px-6 py-10">
@@ -145,9 +180,10 @@ export default async function ArticlePage(props: { params: Params }) {
           articleId={article.id}
           initialLikeCount={article.like_count ?? 0}
           initialDislikeCount={article.dislike_count ?? 0}
+          userLikeValue={userLikeValue}
         />
         <div className="flex items-center gap-3">
-          <ShareButton />
+          <ShareButton articleId={article.id} />
           <ReportDialog articleId={article.id} />
         </div>
       </div>

@@ -5,6 +5,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { GoogleAnalytics } from "@/components/google-analytics";
 import { adsenseClient } from "@/lib/ads";
 import { cn } from "@/lib/utils";
 
@@ -44,6 +45,7 @@ export default function RootLayout({
           "min-h-screen bg-background text-foreground antialiased"
         )}
       >
+        <GoogleAnalytics />
         {adsenseClient && process.env.ADS_DISABLED !== "true" ? (
           <Script
             id="adsense-script"
