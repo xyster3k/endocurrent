@@ -1,8 +1,23 @@
 "use client";
 
-export function ShareButton() {
+type Props = {
+  articleId: string;
+};
+
+export function ShareButton({ articleId }: Props) {
   const handleShare = async () => {
     const url = window.location.href;
+
+    // Track the share
+    try {
+      await fetch(`/api/articles/${articleId}/share`, {
+        method: "POST",
+      });
+    } catch (error) {
+      console.error("Failed to track share", error);
+    }
+
+    // Perform the share
     if (navigator.share) {
       await navigator.share({ url, title: document.title });
       return;
