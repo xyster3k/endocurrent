@@ -22,8 +22,11 @@ export async function generateMetadata(props: { params: Params }): Promise<Metad
   const params = await props.params;
   const article = await getArticleBySlug(params.slug);
   if (!article) return {};
+
+  const images = article.cover_image_url ? [article.cover_image_url] : undefined;
+
   return {
-    title: `${article.title} | EndoCurrent`,
+    title: article.title,
     description: article.summary,
     alternates: {
       canonical: `/articles/${article.slug}`,
@@ -31,8 +34,16 @@ export async function generateMetadata(props: { params: Params }): Promise<Metad
     openGraph: {
       title: article.title,
       description: article.summary,
-      images: article.cover_image_url ? [article.cover_image_url] : undefined,
+      images,
       type: "article",
+      publishedTime: article.published_at || undefined,
+      authors: ["EndoCurrent"],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: article.title,
+      description: article.summary,
+      images,
     },
   };
 }

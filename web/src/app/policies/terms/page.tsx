@@ -1,3 +1,14 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Terms of Use",
+  description: "EndoCurrent terms of use and conditions.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
+
 export default function TermsPage() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-10">

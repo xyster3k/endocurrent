@@ -1,3 +1,16 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About",
+  description:
+    "EndoCurrent is a clinician-led, AI-assisted endocrinology news hub. We surface weekly briefs, structured references, and moderated AI drafts.",
+  openGraph: {
+    title: "About EndoCurrent",
+    description:
+      "EndoCurrent is a clinician-led, AI-assisted endocrinology news hub.",
+  },
+};
+
 export default function AboutPage() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-10">

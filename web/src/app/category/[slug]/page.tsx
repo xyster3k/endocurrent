@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArticleCard } from "@/components/article-card";
 import { getArticles } from "@/lib/data/articles";
@@ -5,6 +6,21 @@ import { getArticles } from "@/lib/data/articles";
 export const revalidate = 300;
 
 type Params = Promise<{ slug: string }>;
+
+export async function generateMetadata(props: { params: Params }): Promise<Metadata> {
+  const params = await props.params;
+  const categoryName = params.slug.replace(/-/g, " ");
+  const formattedName = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
+
+  return {
+    title: formattedName,
+    description: `Browse all ${formattedName.toLowerCase()} articles on EndoCurrent. Stay updated with the latest endocrinology news and research.`,
+    openGraph: {
+      title: `${formattedName} Articles | EndoCurrent`,
+      description: `Browse all ${formattedName.toLowerCase()} articles on EndoCurrent.`,
+    },
+  };
+}
 
 async function getCategoryName(slug: string): Promise<string> {
   try {

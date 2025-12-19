@@ -1,3 +1,14 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Privacy & Cookies",
+  description: "EndoCurrent privacy policy and cookie information.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
+
 export default function PrivacyPage() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-10">
