@@ -12,7 +12,8 @@ const bodySchema = z.object({
   summary: z.string().optional(),
   body_markdown: z.string().default(""),
   category: z.string().optional(),
-  tags: z.union([z.string(), z.array(z.string())]).optional(),
+  cover_image_url: z.string().nullable().optional(),
+  tags: z.array(z.string()).optional(),
   status: z.enum(["draft", "draft_ai", "published", "archived"]).optional(),
 });
 
@@ -77,6 +78,8 @@ export async function POST(req: NextRequest) {
       summary: parsed.data.summary ?? "",
       body_markdown: body,
       category: parsed.data.category ?? null,
+      cover_image_url: parsed.data.cover_image_url ?? null,
+      tags: parsed.data.tags ?? [],
       status,
       reading_time_minutes: reading.minutes,
       word_count: reading.words,

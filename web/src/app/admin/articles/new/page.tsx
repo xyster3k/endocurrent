@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { RichTextEditor } from "@/components/rich-text-editor";
+import { ImageUpload } from "@/components/image-upload";
 
 export default function NewArticlePage() {
   const router = useRouter();
@@ -12,6 +13,7 @@ export default function NewArticlePage() {
   const [error, setError] = useState<string | null>(null);
   const [summary, setSummary] = useState("");
   const [bodyMarkdown, setBodyMarkdown] = useState("");
+  const [coverImageUrl, setCoverImageUrl] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/categories")
@@ -27,6 +29,13 @@ export default function NewArticlePage() {
 
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData);
+
+    // Convert tags from comma-separated string to array
+    if (typeof data.tags === 'string' && data.tags) {
+      (data as any).tags = data.tags.split(',').map((t: string) => t.trim()).filter(Boolean);
+    } else {
+      (data as any).tags = [];
+    }
 
     try {
       const res = await fetch("/api/admin/articles", {
@@ -115,6 +124,13 @@ export default function NewArticlePage() {
             placeholder="thyroid, diabetes, hormone"
           />
         </Field>
+        <input type="hidden" name="cover_image_url" value={coverImageUrl || ""} />
+        <ImageUpload
+          value={coverImageUrl}
+          onChange={setCoverImageUrl}
+          label="Cover Image"
+          description="Recommended: 400x400px square, WebP/PNG format, under 100KB. Displayed as thumbnail in article cards."
+        />
         <div className="flex flex-col gap-2">
           <span className="text-sm font-medium text-slate-800 dark:text-slate-200">Summary</span>
           <input type="hidden" name="summary" value={summary} />

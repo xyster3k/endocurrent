@@ -9,15 +9,12 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
+    unoptimized: true, // Required for Cloudflare Pages deployment
     remotePatterns: [
       { protocol: "https", hostname: "**.supabase.co" },
       { protocol: "https", hostname: "imagedelivery.net" }, // Cloudflare Images
       { protocol: "https", hostname: "images.unsplash.com" },
     ],
-  },
-  eslint: {
-    // Skip lint errors during build to avoid blocking deploys
-    ignoreDuringBuilds: true,
   },
   webpack: (config) => {
     // Force supabase-js to use the module build we patched so createClient is available

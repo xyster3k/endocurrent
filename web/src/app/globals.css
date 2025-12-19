@@ -183,3 +183,22 @@ a {
   margin-top: 0.25em;
   margin-bottom: 0.25em;
 }
+
+/* Inline images in prose content */
+.prose img {
+  border-radius: 0.5rem;
+  max-width: 100%;
+  height: auto;
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+
+/* Inline images in TipTap editor */
+.ProseMirror img {
+  border-radius: 0.5rem;
+  max-width: 100%;
+  height: auto;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  cursor: pointer;
+}

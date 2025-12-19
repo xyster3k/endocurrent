@@ -11,6 +11,8 @@ const bodySchema = z.object({
   summary: z.string().optional(),
   body_markdown: z.string().optional(),
   category: z.string().optional().nullable(),
+  cover_image_url: z.string().nullable().optional(),
+  tags: z.array(z.string()).optional(),
   status: z.enum(["draft", "draft_ai", "published", "archived"]).optional(),
   featured: z.boolean().optional(),
 });
@@ -62,6 +64,7 @@ export async function PUT(req: NextRequest, props: { params: Params }) {
 
   const supabase = await createSupabaseServerClient({ useServiceRole: true });
   const articles = (supabase as any).from("articles");
+
   const { data, error } = await articles
     .update({
       ...parsed.data,

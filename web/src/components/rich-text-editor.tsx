@@ -3,12 +3,12 @@
 import { useEditor, EditorContent, Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
-import TextStyle from "@tiptap/extension-text-style";
+import Image from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
 import { Markdown } from "tiptap-markdown";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
-import { Bold, Link as LinkIcon, List, ListOrdered } from "lucide-react";
+import { Bold, Link as LinkIcon, List, ListOrdered, ImageIcon, Loader2 } from "lucide-react";
 
 interface RichTextEditorProps {
   value: string; // Markdown string
@@ -30,12 +30,6 @@ export function RichTextEditor({
     extensions: [
       StarterKit.configure({
         heading: { levels: [1, 2, 3] }, // Only H1, H2, H3
-        paragraph: true,
-        bold: true,
-        hardBreak: true,
-        bulletList: true,
-        orderedList: true,
-        listItem: true,
       }),
       Link.configure({
         openOnClick: false,
@@ -43,7 +37,13 @@ export function RichTextEditor({
           class: "text-blue-600 underline dark:text-blue-400",
         },
       }),
-      TextStyle,
+      Image.configure({
+        inline: true,
+        allowBase64: false,
+        HTMLAttributes: {
+          class: "rounded-lg max-w-full h-auto",
+        },
+      }),
       Placeholder.configure({
         placeholder,
       }),
@@ -58,7 +58,7 @@ export function RichTextEditor({
     ],
     content: value,
     onUpdate: ({ editor }) => {
-      const markdown = editor.storage.markdown.getMarkdown();
+      const markdown = (editor.storage.markdown as any).getMarkdown();
       onChange(markdown);
     },
     editorProps: {
@@ -70,7 +70,7 @@ export function RichTextEditor({
 
   // Update editor content when value prop changes (for controlled component behavior)
   useEffect(() => {
-    if (editor && value !== editor.storage.markdown.getMarkdown()) {
+    if (editor && value !== (editor.storage.markdown as any).getMarkdown()) {
       editor.commands.setContent(value);
     }
   }, [value, editor]);
@@ -102,6 +102,9 @@ interface EditorToolbarProps {
 function EditorToolbar({ editor }: EditorToolbarProps) {
   if (!editor) return null;
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+
   const addLink = () => {
     const url = window.prompt("Enter URL:");
     if (url) {
@@ -111,6 +114,53 @@ function EditorToolbar({ editor }: EditorToolbarProps) {
 
   const removeLink = () => {
     editor.chain().focus().unsetLink().run();
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+      alert("Please select an image file");
+      return;
+    }
+
+    // Validate file size (5MB max)
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Image must be less than 5MB");
+      return;
+    }
+
+    setUploading(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("/api/upload/image", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || "Upload failed");
+      }
+
+      const data = await res.json();
+
+      // Insert image at current position
+      editor.chain().focus().setImage({ src: data.url }).run();
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Upload failed");
+    } finally {
+      setUploading(false);
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
   };
 
   const getCurrentHeadingLevel = () => {
@@ -195,6 +245,31 @@ function EditorToolbar({ editor }: EditorToolbarProps) {
         title={editor.isActive("link") ? "Remove link" : "Add link"}
       >
         <LinkIcon className="h-4 w-4" />
+      </button>
+
+      {/* Image Button */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={handleImageUpload}
+      />
+      <button
+        type="button"
+        onClick={() => fileInputRef.current?.click()}
+        disabled={uploading}
+        className={cn(
+          "rounded-lg p-2 hover:bg-slate-200 dark:hover:bg-slate-700 transition",
+          uploading && "opacity-50 cursor-not-allowed"
+        )}
+        title="Insert image"
+      >
+        {uploading ? (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        ) : (
+          <ImageIcon className="h-4 w-4" />
+        )}
       </button>
 
       {/* Divider */}

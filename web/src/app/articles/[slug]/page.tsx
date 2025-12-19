@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import { ExternalLink, Sparkles } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -119,12 +120,14 @@ export default async function ArticlePage(props: { params: Params }) {
       </div>
 
       {article.cover_image_url ? (
-        <div className="overflow-hidden rounded-2xl">
-          <img
+        <div className="relative aspect-[1200/630] w-full overflow-hidden rounded-2xl">
+          <Image
             src={article.cover_image_url}
             alt={article.title}
-            className="h-72 w-full rounded-2xl object-cover"
-            loading="lazy"
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 896px"
+            priority
           />
         </div>
       ) : null}
