@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowUpRight, Clock3 } from "lucide-react";
 import type { ArticleSummary } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -19,7 +20,19 @@ export function ArticleCard({ article, variant = "featured" }: Props) {
         variant === "compact" && "border-none bg-transparent shadow-none hover:translate-y-0"
       )}
     >
-      <div className="flex flex-col gap-3 p-5">
+      <div className="flex flex-row gap-5 p-5">
+        {article.cover_image_url && (
+          <div className="relative h-40 w-40 flex-shrink-0 overflow-hidden rounded-xl">
+            <Image
+              src={article.cover_image_url}
+              alt={article.title}
+              fill
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              sizes="160px"
+            />
+          </div>
+        )}
+        <div className="flex flex-1 flex-col gap-3">
         <div className="flex items-center gap-3 text-xs uppercase tracking-wide text-slate-500">
           <span className="rounded-full bg-slate-100 px-2 py-1 text-slate-700 dark:bg-slate-800 dark:text-slate-200">
             {article.category || "Endocrinology"}
@@ -65,6 +78,7 @@ export function ArticleCard({ article, variant = "featured" }: Props) {
               </span>
             ))}
           </div>
+        </div>
         </div>
       </div>
       <Link

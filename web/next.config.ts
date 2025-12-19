@@ -15,10 +15,6 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "images.unsplash.com" },
     ],
   },
-  eslint: {
-    // Skip lint errors during build to avoid blocking deploys
-    ignoreDuringBuilds: true,
-  },
   webpack: (config) => {
     // Force supabase-js to use the module build we patched so createClient is available
     config.resolve.alias["@supabase/supabase-js"] =

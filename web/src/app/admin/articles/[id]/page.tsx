@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { RichTextEditor } from "@/components/rich-text-editor";
+import { ImageUpload } from "@/components/image-upload";
 
 export default function EditArticlePage() {
   const params = useParams();
@@ -19,9 +20,11 @@ export default function EditArticlePage() {
     body_markdown: "",
     category: "",
     tags: [] as string[],
+    cover_image_url: null as string | null,
     status: "draft" as "draft" | "draft_ai" | "published" | "archived",
     featured: false,
   });
+  const [tagsInput, setTagsInput] = useState("");
 
   useEffect(() => {
     // Fetch categories
@@ -47,9 +50,11 @@ export default function EditArticlePage() {
           body_markdown: article.body_markdown || "",
           category: article.category || "",
           tags: article.tags || [],
+          cover_image_url: article.cover_image_url || null,
           status: article.status || "draft",
           featured: article.featured || false,
         });
+        setTagsInput((article.tags || []).join(", "));
       } catch (err) {
         setError(String(err));
       } finally {
@@ -64,10 +69,17 @@ export default function EditArticlePage() {
     try {
       setLoading(true);
       setError(null);
+
+      // Convert tagsInput string to array
+      const tags = tagsInput
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean);
+
       const res = await fetch(`/api/admin/articles/${articleId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, tags }),
       });
       if (!res.ok) {
         const errorData = await res.json();
@@ -222,20 +234,18 @@ export default function EditArticlePage() {
         </div>
         <Field label="Tags (comma separated)">
           <input
-            value={formData.tags.join(", ")}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                tags: e.target.value
-                  .split(",")
-                  .map((t) => t.trim())
-                  .filter(Boolean),
-              })
-            }
+            value={tagsInput}
+            onChange={(e) => setTagsInput(e.target.value)}
             className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-blue-500 dark:border-slate-700 dark:bg-slate-950"
             placeholder="thyroid, diabetes, hormone"
           />
         </Field>
+        <ImageUpload
+          value={formData.cover_image_url}
+          onChange={(url) => setFormData({ ...formData, cover_image_url: url })}
+          label="Cover Image"
+          description="Recommended: 400x400px square, WebP/PNG format, under 100KB. Displayed as thumbnail in article cards."
+        />
         <label className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800">
           <input
             type="checkbox"
