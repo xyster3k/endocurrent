@@ -79,7 +79,7 @@ export function SiteHeader() {
           <Link href="/" className={cn("flex flex-col transition-all duration-300", isScrolled ? "" : "gap-1")}>
             {isScrolled ? (
               <Image
-                src="/icon.png"
+                src="https://nrirqijyayrwhckmjltn.supabase.co/storage/v1/object/public/site-assets/endocurrent%20icon.png"
                 alt="EndoCurrent Icon"
                 width={40}
                 height={40}
@@ -87,7 +87,7 @@ export function SiteHeader() {
               />
             ) : (
               <Image
-                src="/logo.png"
+                src="https://nrirqijyayrwhckmjltn.supabase.co/storage/v1/object/public/site-assets/endocurrent%20logo.png"
                 alt="EndoCurrent Logo"
                 width={150}
                 height={30}

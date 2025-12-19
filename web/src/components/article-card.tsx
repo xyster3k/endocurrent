@@ -64,15 +64,15 @@ export function ArticleCard({ article, variant = "featured" }: Props) {
           <div className="text-base text-slate-600 dark:text-slate-300 prose prose-sm max-w-none dark:prose-invert">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>{article.summary}</ReactMarkdown>
           </div>
-          <div className="flex flex-wrap items-center gap-3 text-sm text-slate-500 dark:text-slate-400">
-            <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1 dark:bg-slate-800/60">
+          <div className="flex flex-wrap items-center gap-2 text-sm">
+            <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1 text-slate-700 dark:bg-slate-800/60 dark:text-slate-300">
               <Clock3 className="h-4 w-4" />
               {article.reading_time_minutes} min read
             </span>
             {(article.tags || []).slice(0, 3).map((tag) => (
               <span
                 key={tag}
-                className="inline-flex items-center rounded-full bg-slate-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:bg-slate-800/70 dark:text-slate-200"
+                className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-700 dark:bg-blue-900/40 dark:text-blue-300"
               >
                 {tag}
               </span>
