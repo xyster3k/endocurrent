@@ -20,7 +20,7 @@ export function ArticleCard({ article, variant = "featured" }: Props) {
         variant === "compact" && "border-none bg-transparent shadow-none hover:translate-y-0"
       )}
     >
-      <div className="flex flex-row gap-5 p-5">
+      <div className="flex flex-row items-center gap-5 p-5">
         {article.cover_image_url && (
           <div className="relative h-40 w-40 flex-shrink-0 overflow-hidden rounded-xl">
             <Image
