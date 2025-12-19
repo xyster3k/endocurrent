@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import {
   LayoutTemplate,
+  Settings,
   ShieldCheck,
   SquarePen,
   Table2,
@@ -103,6 +104,12 @@ export default async function AdminHome() {
           title="Menu management"
           body="Build header menu tree and map categories or links."
           href="/admin/menus"
+        />
+        <AdminCard
+          icon={<Settings className="h-5 w-5" />}
+          title="Settings"
+          body="Configure Google Analytics, Tag Manager, and site settings."
+          href="/admin/settings"
         />
       </div>
     </div>
