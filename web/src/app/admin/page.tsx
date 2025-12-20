@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import {
+  FileText,
   LayoutTemplate,
   Settings,
   ShieldCheck,
@@ -110,6 +111,12 @@ export default async function AdminHome() {
           title="Settings"
           body="Configure Google Analytics, Tag Manager, and site settings."
           href="/admin/settings"
+        />
+        <AdminCard
+          icon={<FileText className="h-5 w-5" />}
+          title="Static pages"
+          body="Edit About, Privacy, and Terms pages content."
+          href="/admin/pages"
         />
       </div>
     </div>

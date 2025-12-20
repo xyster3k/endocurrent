@@ -966,11 +966,34 @@ ON CONFLICT (id) DO UPDATE SET role = 'admin';
 Initialize common settings:
 
 ```sql
+-- Analytics settings
 INSERT INTO public.site_settings (key, value) VALUES
   ('ga_measurement_id', ''),
   ('gtm_container_id', '')
 ON CONFLICT (key) DO NOTHING;
+
+-- Static page content (About, Privacy, Terms)
+INSERT INTO public.site_settings (key, value) VALUES
+  ('page_about_title', 'About Us'),
+  ('page_about_content', 'Welcome to our site. Edit this content in the admin panel.'),
+  ('page_privacy_title', 'Privacy & Cookies'),
+  ('page_privacy_content', 'Your privacy policy content here.'),
+  ('page_terms_title', 'Terms of Use'),
+  ('page_terms_content', 'Your terms of service content here.')
+ON CONFLICT (key) DO NOTHING;
 ```
+
+**Site Settings Keys:**
+| Key | Purpose |
+|-----|---------|
+| `ga_measurement_id` | Google Analytics 4 Measurement ID (G-XXXXXXX) |
+| `gtm_container_id` | Google Tag Manager Container ID (GTM-XXXXXXX) |
+| `page_about_title` | About page title |
+| `page_about_content` | About page content (Markdown) |
+| `page_privacy_title` | Privacy page title |
+| `page_privacy_content` | Privacy page content (Markdown) |
+| `page_terms_title` | Terms page title |
+| `page_terms_content` | Terms page content (Markdown) |
 
 ---
 
@@ -1014,6 +1037,14 @@ Create buckets in Supabase Dashboard > Storage > New Bucket:
 ## Changelog
 
 Keep this section updated when database schema changes are made.
+
+### 2024-12-20 - Dynamic Static Pages
+- Added site_settings keys for static page content:
+  - `page_about_title`, `page_about_content`
+  - `page_privacy_title`, `page_privacy_content`
+  - `page_terms_title`, `page_terms_content`
+- About, Privacy, and Terms pages now load from database
+- Added admin UI for editing static page content
 
 ### 2024-12-20 - Initial Documentation
 - Documented all 14 tables:
