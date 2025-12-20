@@ -20,7 +20,8 @@
       "Bash(do sed -i '/^export const runtime = \"\"edge\"\";$/d' \"$file\")",
       "Bash(echo:*)",
       "Bash(done)",
-      "Bash(npm run dev:*)"
+      "Bash(npm run dev:*)",
+      "Bash(npx tsc:*)"
     ]
   }
 }
