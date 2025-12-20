@@ -1,6 +1,6 @@
 # Content Platform Template
 
-A modern, full-featured content publishing platform built with Next.js 15, designed for blogs, news sites, and content-driven applications. Includes authentication, CMS, SEO optimization, GDPR compliance, and monetization support out of the box.
+A modern, full-featured content publishing platform built with Next.js 15, designed for blogs, news sites, and content-driven applications. Includes authentication, CMS, SEO optimization and GDPR compliance out of the box.
 
 ## Features
 
