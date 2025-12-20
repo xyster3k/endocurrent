@@ -170,7 +170,7 @@ export function SiteHeader() {
           ))}
         </nav>
         <div className={cn(
-          "flex items-center gap-3 transition-all duration-300",
+          "ml-2.5 flex items-center gap-3 transition-all duration-300",
           isScrolled && "opacity-0 pointer-events-none"
         )}>
           {hasClerk ? (

@@ -2,6 +2,7 @@
 
 import Script from "next/script";
 import { useEffect, useState } from "react";
+import { getConsentStatus } from "./cookie-consent";
 
 type AnalyticsConfig = {
   measurementId: string | null;
@@ -10,8 +11,20 @@ type AnalyticsConfig = {
 
 export function GoogleAnalytics() {
   const [config, setConfig] = useState<AnalyticsConfig | null>(null);
+  const [hasConsent, setHasConsent] = useState(false);
 
   useEffect(() => {
+    // Check consent status
+    const consent = getConsentStatus();
+    setHasConsent(consent?.analytics ?? false);
+
+    // Listen for consent updates
+    const handleConsentUpdate = (e: CustomEvent) => {
+      setHasConsent(e.detail?.analytics ?? false);
+    };
+    window.addEventListener("cookieConsentUpdate", handleConsentUpdate as EventListener);
+
+    // Fetch analytics config
     fetch("/api/settings/analytics")
       .then((res) => res.json())
       .then((data) => {
@@ -20,7 +33,16 @@ export function GoogleAnalytics() {
         }
       })
       .catch(() => {});
+
+    return () => {
+      window.removeEventListener("cookieConsentUpdate", handleConsentUpdate as EventListener);
+    };
   }, []);
+
+  // Don't load analytics without consent
+  if (!hasConsent) {
+    return null;
+  }
 
   if (!config) {
     return null;

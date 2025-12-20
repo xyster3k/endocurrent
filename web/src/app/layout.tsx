@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { GoogleAnalytics } from "@/components/google-analytics";
+import { AdsenseScript } from "@/components/adsense-script";
+import { CookieConsent } from "@/components/cookie-consent";
 import { adsenseClient } from "@/lib/ads";
 import { cn } from "@/lib/utils";
 
@@ -104,14 +105,9 @@ export default function RootLayout({
       >
         <GoogleAnalytics />
         {adsenseClient && process.env.ADS_DISABLED !== "true" ? (
-          <Script
-            id="adsense-script"
-            async
-            strategy="afterInteractive"
-            crossOrigin="anonymous"
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
-          />
+          <AdsenseScript adsenseClient={adsenseClient} />
         ) : null}
+        <CookieConsent />
         <div className="flex min-h-screen flex-col">
           <SiteHeader />
           <main className="flex-1">{children}</main>

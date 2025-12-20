@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { openCookieSettings } from "./cookie-consent";
 
 export function SiteFooter() {
   return (
@@ -15,6 +18,13 @@ export function SiteFooter() {
           <Link href="/policies/privacy">Privacy</Link>
           <Link href="/policies/terms">Terms</Link>
           <Link href="/contact">Contact</Link>
+          <Link href="/account">Account</Link>
+          <button
+            onClick={openCookieSettings}
+            className="hover:text-slate-900 dark:hover:text-white transition-colors"
+          >
+            Cookie Settings
+          </button>
         </div>
       </div>
     </footer>
