@@ -41,14 +41,15 @@ export async function POST(req: NextRequest) {
     const extension = file.name.split(".").pop();
     const filename = `${timestamp}-${randomString}.${extension}`;
 
-    // Convert file to buffer
-    const buffer = Buffer.from(await file.arrayBuffer());
+    // Convert file to Uint8Array (works on both Node.js and Edge/Cloudflare)
+    const arrayBuffer = await file.arrayBuffer();
+    const uint8Array = new Uint8Array(arrayBuffer);
 
     // Upload to Supabase Storage
     const supabase = await createSupabaseServerClient({ useServiceRole: true });
     const { data, error } = await supabase.storage
       .from("article-images")
-      .upload(filename, buffer, {
+      .upload(filename, uint8Array, {
         contentType: file.type,
         cacheControl: "3600",
         upsert: false,

@@ -64,8 +64,7 @@ export default function NewArticlePage() {
           <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Admin</p>
           <h1 className="text-3xl font-semibold">Create article</h1>
           <p className="text-slate-600 dark:text-slate-300">
-            Markdown body with live preview is recommended. Images go to Supabase Storage;
-            references stay structured for downstream rendering.
+            Markdown body with live preview. Images are uploaded to Supabase Storage.
           </p>
         </div>
         <Link
@@ -151,14 +150,6 @@ export default function NewArticlePage() {
             minHeight="400px"
           />
         </div>
-        <Field label="References JSON">
-          <textarea
-            name="references"
-            rows={4}
-            className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-mono outline-none focus:border-blue-500 dark:border-slate-700 dark:bg-slate-950"
-            placeholder='[{"label":"[1]","citation_text":"Title / Journal / Year","url":"https://doi.org/..."}]'
-          />
-        </Field>
         <button
           type="submit"
           disabled={loading}
