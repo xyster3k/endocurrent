@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { BarChart3, Tag, Save, CheckCircle, AlertCircle } from "lucide-react";
+import { BarChart3, Tag, Save, CheckCircle, AlertCircle, Globe } from "lucide-react";
+import { ImageUpload } from "@/components/image-upload";
 
 export default function SettingsPage() {
   const [measurementId, setMeasurementId] = useState("");
   const [gtmId, setGtmId] = useState("");
+  const [siteIconUrl, setSiteIconUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
@@ -19,6 +21,9 @@ export default function SettingsPage() {
         }
         if (data.data?.gtm_container_id) {
           setGtmId(data.data.gtm_container_id);
+        }
+        if (data.data?.site_icon_url) {
+          setSiteIconUrl(data.data.site_icon_url);
         }
       })
       .catch(console.error)
@@ -46,6 +51,7 @@ export default function SettingsPage() {
       await Promise.all([
         saveSetting("ga_measurement_id", measurementId),
         saveSetting("gtm_container_id", gtmId),
+        saveSetting("site_icon_url", siteIconUrl || ""),
       ]);
 
       setMessage({ type: "success", text: "Settings saved successfully!" });
@@ -65,6 +71,35 @@ export default function SettingsPage() {
       </div>
 
       <div className="space-y-6">
+        {/* Site Icon */}
+        <div className="rounded-2xl border border-slate-200 bg-white/80 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-100 dark:bg-purple-900/30">
+              <Globe className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Site Icon (Favicon)</h2>
+              <p className="text-sm text-slate-500 dark:text-slate-400">The icon shown in browser tabs</p>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div className="rounded-xl bg-slate-50 p-4 dark:bg-slate-800/50">
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                Upload a square image (recommended 180x180px or larger). PNG or ICO format works best.
+                This will be displayed in browser tabs, bookmarks, and mobile home screens.
+              </p>
+            </div>
+
+            <ImageUpload
+              value={siteIconUrl}
+              onChange={setSiteIconUrl}
+              label="Site Icon"
+              description="Square image, 180x180px recommended"
+            />
+          </div>
+        </div>
+
         {/* Google Tag Manager */}
         <div className="rounded-2xl border border-slate-200 bg-white/80 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
           <div className="flex items-center gap-3 mb-4">

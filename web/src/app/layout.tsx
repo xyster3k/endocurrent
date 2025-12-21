@@ -81,6 +81,10 @@ export const metadata: Metadata = {
   alternates: {
     canonical: BASE_URL,
   },
+  icons: {
+    icon: "/icon",
+    apple: "/icon",
+  },
 };
 
 export default function RootLayout({
