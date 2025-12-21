@@ -1,29 +1,4 @@
 {
   "version": 1,
-  "functions": {
-    "/api/admin/ai-generate-article": {},
-    "/api/admin/articles/[id]/publish": {},
-    "/api/admin/articles/[id]": {},
-    "/api/admin/articles/[id]/unpublish": {},
-    "/api/admin/articles": {},
-    "/api/admin/menus/items/[id]": {},
-    "/api/admin/reports/[id]/resolve": {},
-    "/api/admin/menus/items": {},
-    "/api/admin/menus": {},
-    "/api/admin/reports": {},
-    "/api/articles": {},
-    "/api/articles/[id]/report": {},
-    "/api/articles/[id]/like": {},
-    "/api/categories": {},
-    "/api/menus": {},
-    "/api/webhooks/clerk-billing": {},
-    "/admin/articles": {},
-    "/admin/articles/[id]": {},
-    "/admin": {},
-    "/admin/ai": {},
-    "/category/[slug]": {},
-    "/": {},
-    "/articles/[slug]": {},
-    "/admin/menus": {}
-  }
+  "functions": {}
 }
