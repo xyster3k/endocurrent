@@ -10,7 +10,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://nexusmednews.com";
 // Ping Google to re-crawl sitemap when new content is published
 async function pingGoogleSitemap() {
   try {
-    const sitemapUrl = encodeURIComponent(`${SITE_URL}/sitemap.xml`);
+    const sitemapUrl = encodeURIComponent(`${SITE_URL}/sitemap`);
     await fetch(`https://www.google.com/ping?sitemap=${sitemapUrl}`, {
       method: "GET",
     });
