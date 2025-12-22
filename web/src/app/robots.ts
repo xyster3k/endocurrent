@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/admin/", "/api/", "/sign-in", "/sign-up"],
       },
     ],
-    sitemap: "https://endocurrent.com/sitemap.xml",
+    sitemap: "https://nexusmednews.com/sitemap.xml",
   };
 }

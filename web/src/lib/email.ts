@@ -34,12 +34,12 @@ export async function sendReportEmail(params: ReportEmailParams): Promise<boolea
 
   try {
     await resend.emails.send({
-      from: 'EndoCurrent Reports <reports@endocurrent.com>',
-      to: 'reports@endocurrent.com',
+      from: 'Nexus Med News Reports <reports@nexusmednews.com>',
+      to: 'reports@nexusmednews.com',
       subject: `Article Report: ${reasonCode} - ${articleTitle}`,
       html: `
         <h2>Article Report Received</h2>
-        <p>A user has reported an article on EndoCurrent.</p>
+        <p>A user has reported an article on Nexus Med News.</p>
 
         <h3>Article Details</h3>
         <ul>
@@ -59,7 +59,7 @@ export async function sendReportEmail(params: ReportEmailParams): Promise<boolea
         </ul>
 
         <p style="margin-top: 20px; color: #666; font-size: 14px;">
-          This is an automated notification from EndoCurrent.
+          This is an automated notification from Nexus Med News.
         </p>
       `,
     });
@@ -88,8 +88,8 @@ export async function sendContactEmail(params: ContactEmailParams): Promise<bool
 
   try {
     await resend.emails.send({
-      from: 'EndoCurrent Contact <info@endocurrent.com>',
-      to: 'info@endocurrent.com',
+      from: 'Nexus Med News Contact <info@nexusmednews.com>',
+      to: 'info@nexusmednews.com',
       replyTo: email,
       subject: `Contact Form: ${subject}`,
       html: `
@@ -108,7 +108,7 @@ export async function sendContactEmail(params: ContactEmailParams): Promise<bool
         </div>
 
         <p style="margin-top: 20px; color: #666; font-size: 14px;">
-          This message was sent via the EndoCurrent contact form.
+          This message was sent via the Nexus Med News contact form.
         </p>
       `,
     });

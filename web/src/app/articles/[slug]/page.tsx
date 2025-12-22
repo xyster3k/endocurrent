@@ -37,7 +37,7 @@ export async function generateMetadata(props: { params: Params }): Promise<Metad
       images,
       type: "article",
       publishedTime: article.published_at || undefined,
-      authors: ["EndoCurrent"],
+      authors: ["Nexus Med News"],
     },
     twitter: {
       card: "summary_large_image",
