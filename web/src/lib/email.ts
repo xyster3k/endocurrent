@@ -34,7 +34,7 @@ export async function sendReportEmail(params: ReportEmailParams): Promise<boolea
 
   try {
     await resend.emails.send({
-      from: 'Nexus Med News Reports <reports@nexusmednews.com>',
+      from: 'Nexus Med News <noreply@coghorizon.com>',
       to: 'here@coghorizon.com',
       subject: `Article Report: ${reasonCode} - ${articleTitle}`,
       html: `
@@ -87,8 +87,8 @@ export async function sendContactEmail(params: ContactEmailParams): Promise<bool
   const { name, email, subject, message } = params;
 
   try {
-    await resend.emails.send({
-      from: 'Nexus Med News Contact <info@nexusmednews.com>',
+    const result = await resend.emails.send({
+      from: 'Nexus Med News <noreply@coghorizon.com>',
       to: 'here@coghorizon.com',
       replyTo: email,
       subject: `Contact Form: ${subject}`,
@@ -113,6 +113,12 @@ export async function sendContactEmail(params: ContactEmailParams): Promise<bool
       `,
     });
 
+    if (result.error) {
+      console.error('Resend API error:', result.error);
+      return false;
+    }
+
+    console.log('Contact email sent successfully:', result.data?.id);
     return true;
   } catch (error) {
     console.error('Error sending contact email:', error);
