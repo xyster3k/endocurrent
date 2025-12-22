@@ -190,7 +190,9 @@ export async function getFeaturedArticle(): Promise<ArticleSummary | null> {
       .select("*")
       .eq("status", "published")
       .eq("featured", true)
-      .maybeSingle();
+      .order("updated_at", { ascending: false })
+      .limit(1)
+      .single();
 
     if (error) throw error;
     if (!data) return null;
@@ -212,8 +214,8 @@ export async function getFeaturedArticle(): Promise<ArticleSummary | null> {
       status: (data as any).status as ArticleSummary["status"],
       featured: true,
     };
-  } catch (error) {
-    console.error("Error fetching featured article", error);
+  } catch {
+    // Featured article is optional - silently return null if not available
     return null;
   }
 }

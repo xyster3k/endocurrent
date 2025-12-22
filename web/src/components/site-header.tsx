@@ -76,26 +76,35 @@ export function SiteHeader() {
         isScrolled ? "max-w-6xl py-2.5 justify-start" : "max-w-6xl py-4 justify-between"
       )}>
         <div className="flex items-center gap-3">
-          <Link href="/" className={cn("flex flex-col transition-all duration-300", isScrolled ? "" : "gap-1")}>
-            {isScrolled ? (
-              <Image
-                src="https://nrirqijyayrwhckmjltn.supabase.co/storage/v1/object/public/site-assets/endocurrent%20icon.png"
-                alt="EndoCurrent Icon"
-                width={40}
-                height={40}
-                className="transition-all duration-300"
-              />
-            ) : (
-              <Image
-                src="https://nrirqijyayrwhckmjltn.supabase.co/storage/v1/object/public/site-assets/endocurrent%20logo.png"
-                alt="EndoCurrent Logo"
-                width={150}
-                height={30}
-                className="transition-all duration-300"
-              />
-            )}
+          <Link href="/" className="flex flex-col transition-all duration-300">
+            <div className={cn("flex items-center transition-all duration-300", isScrolled ? "gap-2" : "gap-3")}>
+              {isScrolled ? (
+                <Image
+                  src="/site-icon.png"
+                  alt="Nexus Med News Icon"
+                  width={36}
+                  height={36}
+                  className="transition-all duration-300"
+                />
+              ) : (
+                <>
+                  <Image
+                    src="/logo.png"
+                    alt="Nexus Med News Logo"
+                    width={78}
+                    height={78}
+                    className="transition-all duration-300"
+                  />
+                  <div className="flex flex-col items-start leading-tight">
+                    <span className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">Nexus</span>
+                    <span className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">Med</span>
+                    <span className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">News</span>
+                  </div>
+                </>
+              )}
+            </div>
             {!isScrolled && (
-              <div className="flex items-center gap-1.5 text-xs">
+              <div className="flex items-center gap-1.5 text-xs mt-1">
                 <ShieldCheck className="h-4 w-4 text-emerald-500" />
                 <span className="text-slate-500 whitespace-nowrap">Clinician-led, AI-assisted</span>
               </div>

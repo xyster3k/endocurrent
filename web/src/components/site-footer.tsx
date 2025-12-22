@@ -8,7 +8,7 @@ export function SiteFooter() {
     <footer className="border-t border-white/10 bg-white/60 py-10 backdrop-blur dark:bg-black/60">
       <div className="mx-auto flex max-w-6xl flex-col justify-between gap-6 px-6 md:flex-row md:items-center">
         <div>
-          <h3 className="text-lg font-semibold">EndoCurrent</h3>
+          <h3 className="text-lg font-semibold">Nexus Med News</h3>
           <p className="text-sm text-slate-500">
             Curated medical intelligence. No patient data. Evidence-first.
           </p>

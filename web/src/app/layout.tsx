@@ -20,51 +20,51 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const BASE_URL = "https://endocurrent.com";
+const BASE_URL = "https://nexusmednews.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: "EndoCurrent | Endocrinology News & Insights",
-    template: "%s | EndoCurrent",
+    default: "Nexus Med News | Medical News & Insights",
+    template: "%s | Nexus Med News",
   },
   description:
-    "Stay current with endocrinology news, peer-reviewed research summaries, and expert insights. Your trusted source for thyroid, diabetes, and hormone health updates.",
+    "Stay current with medical news, peer-reviewed research summaries, and expert insights. Your trusted source for healthcare updates.",
   keywords: [
-    "endocrinology",
-    "thyroid",
-    "diabetes",
-    "hormones",
     "medical news",
-    "endocrine disorders",
-    "metabolism",
     "healthcare",
+    "health news",
+    "medical research",
+    "clinical updates",
+    "healthcare news",
+    "medicine",
+    "health",
   ],
-  authors: [{ name: "EndoCurrent" }],
-  creator: "EndoCurrent",
-  publisher: "EndoCurrent",
+  authors: [{ name: "Nexus Med News" }],
+  creator: "Nexus Med News",
+  publisher: "Nexus Med News",
   openGraph: {
     type: "website",
     locale: "en_US",
     url: BASE_URL,
-    siteName: "EndoCurrent",
-    title: "EndoCurrent | Endocrinology News & Insights",
+    siteName: "Nexus Med News",
+    title: "Nexus Med News | Medical News & Insights",
     description:
-      "Stay current with endocrinology news, peer-reviewed research summaries, and expert insights.",
+      "Stay current with medical news, peer-reviewed research summaries, and expert insights.",
     images: [
       {
         url: "/logo.png",
         width: 1200,
         height: 630,
-        alt: "EndoCurrent - Endocrinology News & Insights",
+        alt: "Nexus Med News - Medical News & Insights",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "EndoCurrent | Endocrinology News & Insights",
+    title: "Nexus Med News | Medical News & Insights",
     description:
-      "Stay current with endocrinology news, peer-reviewed research summaries, and expert insights.",
+      "Stay current with medical news, peer-reviewed research summaries, and expert insights.",
     images: ["/logo.png"],
   },
   robots: {
@@ -83,7 +83,8 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: "/icon",
-    apple: "/icon",
+    shortcut: "/icon",
+    apple: "/site-icon.png",
   },
 };
 

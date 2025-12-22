@@ -65,6 +65,14 @@ export async function PUT(req: Request, props: { params: Params }) {
 
   const supabase = await createSupabaseServerClient({ useServiceRole: true });
 
+  // If setting featured to true, unflag all other articles first
+  if (parsed.data.featured === true) {
+    await supabase
+      .from("articles")
+      .update({ featured: false })
+      .neq("id", params.id);
+  }
+
   // If publishing and article doesn't have an author_id, set it to current user
   if (parsed.data.status === "published") {
     const { data: article } = await supabase.from("articles").select("author_id").eq("id", params.id).maybeSingle();

@@ -14,10 +14,10 @@ export async function generateMetadata(props: { params: Params }): Promise<Metad
 
   return {
     title: formattedName,
-    description: `Browse all ${formattedName.toLowerCase()} articles on EndoCurrent. Stay updated with the latest endocrinology news and research.`,
+    description: `Browse all ${formattedName.toLowerCase()} articles on Nexus Med News. Stay updated with the latest medical news and research.`,
     openGraph: {
-      title: `${formattedName} Articles | EndoCurrent`,
-      description: `Browse all ${formattedName.toLowerCase()} articles on EndoCurrent.`,
+      title: `${formattedName} Articles | Nexus Med News`,
+      description: `Browse all ${formattedName.toLowerCase()} articles on Nexus Med News.`,
     },
   };
 }
