@@ -5,6 +5,20 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { mockArticles } from "@/lib/data/mock-articles";
 import { estimateReadingTime } from "@/lib/reading-time";
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://nexusmednews.com";
+
+// Ping Google to re-crawl sitemap when new content is published
+async function pingGoogleSitemap() {
+  try {
+    const sitemapUrl = encodeURIComponent(`${SITE_URL}/sitemap.xml`);
+    await fetch(`https://www.google.com/ping?sitemap=${sitemapUrl}`, {
+      method: "GET",
+    });
+  } catch {
+    // Silently fail - this is a nice-to-have, not critical
+  }
+}
+
 const updateSchema = z.object({
   title: z.string().optional(),
   slug: z.string().optional(),
@@ -83,6 +97,12 @@ export async function PUT(req: Request, props: { params: Params }) {
 
   const { error } = await supabase.from("articles").update(updates).eq("id", params.id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  // Ping Google when article is published to trigger sitemap re-crawl
+  if (parsed.data.status === "published") {
+    pingGoogleSitemap();
+  }
+
   return NextResponse.json({ ok: true }, { status: 200 });
 }
 
