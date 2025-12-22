@@ -35,7 +35,7 @@ export async function sendReportEmail(params: ReportEmailParams): Promise<boolea
   try {
     await resend.emails.send({
       from: 'Nexus Med News Reports <reports@nexusmednews.com>',
-      to: 'reports@nexusmednews.com',
+      to: 'here@coghorizon.com',
       subject: `Article Report: ${reasonCode} - ${articleTitle}`,
       html: `
         <h2>Article Report Received</h2>
@@ -89,7 +89,7 @@ export async function sendContactEmail(params: ContactEmailParams): Promise<bool
   try {
     await resend.emails.send({
       from: 'Nexus Med News Contact <info@nexusmednews.com>',
-      to: 'info@nexusmednews.com',
+      to: 'here@coghorizon.com',
       replyTo: email,
       subject: `Contact Form: ${subject}`,
       html: `
