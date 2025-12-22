@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArticleCard } from "@/components/article-card";
 import { getArticles } from "@/lib/data/articles";
+import { buildCategoryBreadcrumbs } from "@/lib/seo";
 
 export const revalidate = 300;
 
@@ -47,8 +48,14 @@ export default async function CategoryPage(props: { params: Params }) {
     ? data[0].category
     : await getCategoryName(params.slug);
 
+  const breadcrumbsJsonLd = buildCategoryBreadcrumbs(categoryName, params.slug);
+
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-6 px-6 py-10">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsJsonLd) }}
+      />
       <div className="flex items-center justify-between">
         <div>
           <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Category</p>

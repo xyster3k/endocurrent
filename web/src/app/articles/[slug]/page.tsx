@@ -11,7 +11,7 @@ import { AdSlotClient } from "@/components/ad-slot-client";
 import { ShareButton } from "@/components/share-button";
 import { shouldShowAds } from "@/lib/ads";
 import { getArticleBySlug } from "@/lib/data/articles";
-import { buildArticleJsonLd } from "@/lib/seo";
+import { buildArticleJsonLd, buildArticleBreadcrumbs } from "@/lib/seo";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export const revalidate = 300;
@@ -116,6 +116,7 @@ export default async function ArticlePage(props: { params: Params }) {
 
   const showAds = shouldShowAds("FREE");
   const jsonLd = buildArticleJsonLd(article);
+  const breadcrumbsJsonLd = buildArticleBreadcrumbs(article);
 
   // Fetch author name from the author_id stored in the article
   const authorName = await getAuthorName((article as any).author_id);
@@ -134,6 +135,10 @@ export default async function ArticlePage(props: { params: Params }) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsJsonLd) }}
       />
       <div className="flex flex-col gap-3">
         <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.3em] text-slate-500">

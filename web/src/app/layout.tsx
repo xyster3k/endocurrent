@@ -9,6 +9,7 @@ import { AdsenseScript } from "@/components/adsense-script";
 import { CookieConsent } from "@/components/cookie-consent";
 import { adsenseClient } from "@/lib/ads";
 import { cn } from "@/lib/utils";
+import { buildOrganizationJsonLd, buildWebSiteJsonLd } from "@/lib/seo";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -101,6 +102,17 @@ export default function RootLayout({
 
   const shell = (
     <html lang="en" className="min-h-full">
+      <head>
+        <link rel="alternate" type="application/rss+xml" title="Nexus Med News RSS Feed" href="/feed.xml" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(buildOrganizationJsonLd()) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(buildWebSiteJsonLd()) }}
+        />
+      </head>
       <body
         className={cn(
           geistSans.variable,
