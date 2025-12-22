@@ -15,6 +15,7 @@ interface ImageUploadProps {
 export function ImageUpload({ value, onChange, label, description }: ImageUploadProps) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [debugInfo, setDebugInfo] = useState<Record<string, unknown> | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,6 +35,7 @@ export function ImageUpload({ value, onChange, label, description }: ImageUpload
     }
 
     setError(null);
+    setDebugInfo(null);
     setUploading(true);
 
     try {
@@ -45,13 +47,18 @@ export function ImageUpload({ value, onChange, label, description }: ImageUpload
         body: formData,
       });
 
+      const responseData = await res.json();
+
       if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.error || "Upload failed");
+        // Store debug info if available
+        if (responseData.debug) {
+          setDebugInfo(responseData.debug);
+          console.error("Upload debug info:", responseData.debug);
+        }
+        throw new Error(responseData.error || "Upload failed");
       }
 
-      const data = await res.json();
-      onChange(data.url);
+      onChange(responseData.url);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Upload failed");
     } finally {
@@ -130,7 +137,19 @@ export function ImageUpload({ value, onChange, label, description }: ImageUpload
       )}
 
       {error && (
-        <p className="text-sm text-rose-600 dark:text-rose-400">{error}</p>
+        <div className="space-y-2">
+          <p className="text-sm text-rose-600 dark:text-rose-400">{error}</p>
+          {debugInfo && (
+            <details className="text-xs">
+              <summary className="cursor-pointer text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300">
+                Debug info (click to expand)
+              </summary>
+              <pre className="mt-2 max-h-48 overflow-auto rounded bg-slate-100 p-2 text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                {JSON.stringify(debugInfo, null, 2)}
+              </pre>
+            </details>
+          )}
+        </div>
       )}
 
       <input
