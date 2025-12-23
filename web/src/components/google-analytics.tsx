@@ -24,7 +24,16 @@ export function GoogleAnalytics() {
     };
     window.addEventListener("cookieConsentUpdate", handleConsentUpdate as EventListener);
 
-    // Fetch analytics config
+    // Check for environment variable first
+    const envMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+    if (envMeasurementId) {
+      setConfig({ measurementId: envMeasurementId, gtmId: null });
+      return () => {
+        window.removeEventListener("cookieConsentUpdate", handleConsentUpdate as EventListener);
+      };
+    }
+
+    // Fetch analytics config from API as fallback
     fetch("/api/settings/analytics")
       .then((res) => res.json())
       .then((data) => {
