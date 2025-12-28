@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { z } from "zod";
 import Link from "next/link";
 import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
-import { ShieldCheck, Sparkles } from "lucide-react";
+import { ShieldCheck, Sparkles, X } from "lucide-react";
 
 type Menu = { id: string; name: string };
 type MenuItem = {
@@ -136,11 +136,24 @@ function ClientMenuManager() {
     setLoading(false);
   };
 
+  const deleteItem = async (itemId: string, itemLabel: string) => {
+    if (!confirm(`Delete "${itemLabel}" and all its children?`)) return;
+    setLoading(true);
+    setError(null);
+    const res = await fetch(`/api/admin/menus/items/${itemId}`, {
+      method: "DELETE",
+    });
+    const json = await res.json();
+    if (!res.ok) setError(json?.error || "Failed to delete item");
+    else await refresh();
+    setLoading(false);
+  };
+
   const renderBranch = (parent: string, depth: number): React.ReactNode[] => {
     if (depth > 10) return [];
     return (tree[parent] ?? []).map((node) => (
       <div key={node.id} className="border-l-2 border-slate-200 pl-3 dark:border-slate-700">
-        <div className="flex items-center justify-between py-1.5 text-sm">
+        <div className="group flex items-center justify-between py-1.5 text-sm">
           <div className="flex flex-col gap-0.5">
             <span className={node.url ? "font-medium text-slate-700 dark:text-slate-200" : "font-bold text-slate-900 dark:text-slate-100"}>
               {node.label}
@@ -148,11 +161,21 @@ function ClientMenuManager() {
             </span>
             {node.url && <span className="text-xs text-slate-500">{node.url}</span>}
           </div>
-          {node.category ? (
-            <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-200">
-              {node.category}
-            </span>
-          ) : null}
+          <div className="flex items-center gap-2">
+            {node.category ? (
+              <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-200">
+                {node.category}
+              </span>
+            ) : null}
+            <button
+              onClick={() => deleteItem(node.id, node.label)}
+              disabled={loading}
+              className="rounded p-1 text-slate-400 opacity-0 transition-opacity hover:bg-rose-100 hover:text-rose-600 group-hover:opacity-100 disabled:opacity-50 dark:hover:bg-rose-900/30"
+              title="Delete item"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
         </div>
         {renderBranch(node.id, depth + 1)}
       </div>
