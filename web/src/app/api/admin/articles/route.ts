@@ -84,6 +84,7 @@ export async function POST(req: NextRequest) {
       reading_time_minutes: reading.minutes,
       word_count: reading.words,
       author_id: user?.id ?? null,
+      published_at: status === "published" ? new Date().toISOString() : null,
     })
     .select()
     .maybeSingle();

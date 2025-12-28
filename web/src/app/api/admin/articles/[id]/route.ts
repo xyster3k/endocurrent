@@ -65,12 +65,23 @@ export async function PUT(req: NextRequest, props: { params: Params }) {
   const supabase = await createSupabaseServerClient({ useServiceRole: true });
   const articles = (supabase as any).from("articles");
 
+  // Build update object
+  const updateData: Record<string, unknown> = {
+    ...parsed.data,
+    reading_time_minutes: reading.minutes,
+    word_count: reading.words,
+  };
+
+  // Set published_at when status changes to published
+  if (parsed.data.status === "published") {
+    const { data: existing } = await articles.select("published_at").eq("id", params.id).maybeSingle();
+    if (!existing?.published_at) {
+      updateData.published_at = new Date().toISOString();
+    }
+  }
+
   const { data, error } = await articles
-    .update({
-      ...parsed.data,
-      reading_time_minutes: reading.minutes,
-      word_count: reading.words,
-    })
+    .update(updateData)
     .eq("id", params.id)
     .select()
     .maybeSingle();
