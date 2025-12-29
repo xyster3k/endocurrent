@@ -2,8 +2,15 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSessionUser, requireRole } from "@/lib/auth";
 import { getArticles } from "@/lib/data/articles";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { formatDate } from "@/lib/utils";
 
-export default async function AdminArticlesPage() {
+type SearchParams = Promise<Record<string, string | string[] | undefined>>;
+
+const PAGE_SIZE = 20;
+
+export default async function AdminArticlesPage(props: { searchParams: SearchParams }) {
+  const searchParams = await props.searchParams;
   const user = await getSessionUser();
   if (!user) {
     redirect("/sign-in");
@@ -21,7 +28,14 @@ export default async function AdminArticlesPage() {
     );
   }
 
-  const { data } = await getArticles({ includeDrafts: true });
+  const currentPage = typeof searchParams.page === "string" ? parseInt(searchParams.page, 10) : 1;
+  const { data, meta } = await getArticles({
+    includeDrafts: true,
+    pageSize: PAGE_SIZE,
+    page: currentPage,
+  });
+
+  const totalPages = Math.ceil(meta.total / PAGE_SIZE);
 
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-6 px-6 py-10">
@@ -29,6 +43,9 @@ export default async function AdminArticlesPage() {
         <div>
           <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Admin</p>
           <h1 className="text-3xl font-semibold">Articles</h1>
+          <p className="text-sm text-slate-500">
+            {meta.total} total articles
+          </p>
         </div>
         <Link
           href="/admin/articles/new"
@@ -63,7 +80,7 @@ export default async function AdminArticlesPage() {
                 </td>
                 <td className="px-4 py-3">{article.category || "—"}</td>
                 <td className="px-4 py-3">
-                  {article.published_at ? new Date(article.published_at).toLocaleDateString() : "—"}
+                  {article.published_at ? formatDate(article.published_at) : "—"}
                 </td>
                 <td className="px-4 py-3 text-right">
                   <div className="flex justify-end gap-2 text-xs font-semibold">
@@ -86,6 +103,45 @@ export default async function AdminArticlesPage() {
           </tbody>
         </table>
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between">
+          <p className="text-sm text-slate-500">
+            Page {currentPage} of {totalPages}
+          </p>
+          <div className="flex items-center gap-2">
+            {currentPage > 1 ? (
+              <Link
+                href={`/admin/articles?page=${currentPage - 1}`}
+                className="inline-flex items-center gap-1 rounded-full border border-slate-200 px-3 py-1.5 text-sm font-medium hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800"
+              >
+                <ChevronLeft className="h-4 w-4" />
+                Previous
+              </Link>
+            ) : (
+              <span className="inline-flex items-center gap-1 rounded-full border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-400 dark:border-slate-700">
+                <ChevronLeft className="h-4 w-4" />
+                Previous
+              </span>
+            )}
+            {currentPage < totalPages ? (
+              <Link
+                href={`/admin/articles?page=${currentPage + 1}`}
+                className="inline-flex items-center gap-1 rounded-full border border-slate-200 px-3 py-1.5 text-sm font-medium hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800"
+              >
+                Next
+                <ChevronRight className="h-4 w-4" />
+              </Link>
+            ) : (
+              <span className="inline-flex items-center gap-1 rounded-full border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-400 dark:border-slate-700">
+                Next
+                <ChevronRight className="h-4 w-4" />
+              </span>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

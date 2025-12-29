@@ -1,34 +1,35 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Compass } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { ArticleCard } from "@/components/article-card";
-import { AdSlotClient } from "@/components/ad-slot-client";
-import { shouldShowAds } from "@/lib/ads";
 import { getArticles, getFeaturedArticle } from "@/lib/data/articles";
+import { LoadMoreArticles } from "@/components/load-more-articles";
+import { formatDate } from "@/lib/utils";
 
 export const revalidate = 300;
+
+const PAGE_SIZE = 20;
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
 export default async function Home(props: { searchParams: SearchParams }) {
   const searchParams = await props.searchParams;
   let articles: Awaited<ReturnType<typeof getArticles>>["data"] = [];
-  let meta: Awaited<ReturnType<typeof getArticles>>["meta"] = { page: 1, pageSize: 10, total: 0 };
+  let meta: Awaited<ReturnType<typeof getArticles>>["meta"] = { page: 1, pageSize: PAGE_SIZE, total: 0 };
 
   try {
     const result = await getArticles({
       tag: typeof searchParams.tag === "string" ? searchParams.tag : undefined,
       category: typeof searchParams.category === "string" ? searchParams.category : undefined,
       search: typeof searchParams.q === "string" ? searchParams.q : undefined,
+      pageSize: PAGE_SIZE,
     });
     articles = result.data;
     meta = result.meta;
   } catch (error) {
     console.error("Failed to load articles, falling back to empty list", error);
   }
-  const showAds = shouldShowAds("FREE");
 
   // Get featured article or fallback to latest
   const featuredArticle = await getFeaturedArticle();
@@ -43,7 +44,7 @@ export default async function Home(props: { searchParams: SearchParams }) {
               Featured
             </span>
             <span className="text-sm text-slate-500 dark:text-slate-400">
-              {heroArticle.published_at ? new Date(heroArticle.published_at).toLocaleDateString() : ""}
+              {heroArticle.published_at ? formatDate(heroArticle.published_at) : ""}
             </span>
           </div>
           <div className="flex flex-row items-center gap-6">
@@ -97,32 +98,27 @@ export default async function Home(props: { searchParams: SearchParams }) {
             New article
           </Link>
         </div>
-        <div className="grid gap-4">
-          {articles.length === 0 ? (
-            <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center dark:border-slate-800 dark:bg-slate-900">
-              <h3 className="text-xl font-semibold text-slate-900 dark:text-white">No articles yet</h3>
-              <p className="mt-2 text-slate-600 dark:text-slate-400">
-                Publish your first article from the admin panel to see it here.
-              </p>
-              <Link
-                href="/admin/articles/new"
-                className="mt-4 inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5 dark:bg-white dark:text-black"
-              >
-                Create Article
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-          ) : (
-            articles.map((article, idx) => (
-              <div key={article.id} className="space-y-3">
-                <ArticleCard article={article} />
-                {showAds && idx % 2 === 1 ? (
-                  <AdSlotClient slotId={`feed-${idx}`} show={showAds} />
-                ) : null}
-              </div>
-            ))
-          )}
-        </div>
+        {articles.length === 0 ? (
+          <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center dark:border-slate-800 dark:bg-slate-900">
+            <h3 className="text-xl font-semibold text-slate-900 dark:text-white">No articles yet</h3>
+            <p className="mt-2 text-slate-600 dark:text-slate-400">
+              Publish your first article from the admin panel to see it here.
+            </p>
+            <Link
+              href="/admin/articles/new"
+              className="mt-4 inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5 dark:bg-white dark:text-black"
+            >
+              Create Article
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        ) : (
+          <LoadMoreArticles
+            initialArticles={articles}
+            totalCount={meta.total}
+            pageSize={PAGE_SIZE}
+          />
+        )}
       </section>
     </div>
   );

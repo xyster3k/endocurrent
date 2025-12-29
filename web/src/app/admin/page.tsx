@@ -49,7 +49,7 @@ export default async function AdminHome() {
     );
   }
 
-  const { data } = await getArticles({ includeDrafts: true });
+  const { data } = await getArticles({ includeDrafts: true, pageSize: 100 });
   const drafts = data.filter((a) => a.status === "draft" || a.status === "draft_ai");
   const published = data.filter((a) => a.status === "published");
 
