@@ -10,6 +10,9 @@ import { useEffect, useMemo, useState } from "react";
 
 const navLinks = [{ href: "/admin", label: "Admin", requiresRole: ["editor", "admin"] as string[] }];
 
+// Convert category name to URL slug (spaces to hyphens, lowercase)
+const categoryToSlug = (category: string) => category.toLowerCase().replace(/\s+/g, "-");
+
 type MenuItem = {
   id: string;
   label: string;
@@ -132,7 +135,7 @@ export function SiteHeader() {
                           {item.label}
                         </Link>
                       ) : item.category ? (
-                        <Link href={`/category/${item.category.toLowerCase()}`} className="block font-semibold text-slate-800 hover:text-blue-600 dark:text-slate-100 dark:hover:text-blue-400">
+                        <Link href={`/category/${categoryToSlug(item.category)}`} className="block font-semibold text-slate-800 hover:text-blue-600 dark:text-slate-100 dark:hover:text-blue-400">
                           {item.label}
                         </Link>
                       ) : (
@@ -149,7 +152,7 @@ export function SiteHeader() {
                                   {child.label}
                                 </Link>
                               ) : child.category ? (
-                                <Link href={`/category/${child.category.toLowerCase()}`} className="text-slate-700 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400">
+                                <Link href={`/category/${categoryToSlug(child.category)}`} className="text-slate-700 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400">
                                   {child.label}
                                 </Link>
                               ) : (
