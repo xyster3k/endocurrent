@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowUpRight, Clock3 } from "lucide-react";
 import type { ArticleSummary } from "@/lib/types";
-import { cn } from "@/lib/utils";
+import { cn, formatDate } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -43,7 +43,7 @@ export function ArticleCard({ article, variant = "featured" }: Props) {
             </span>
           ) : null}
           {article.published_at ? (
-            <span>{new Date(article.published_at).toLocaleDateString()}</span>
+            <span>{formatDate(article.published_at)}</span>
           ) : (
             <span>Not published</span>
           )}
