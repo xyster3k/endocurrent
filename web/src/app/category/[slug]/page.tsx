@@ -10,7 +10,9 @@ type Params = Promise<{ slug: string }>;
 
 export async function generateMetadata(props: { params: Params }): Promise<Metadata> {
   const params = await props.params;
-  const categoryName = params.slug.replace(/-/g, " ");
+  // Decode URL-encoded slug and convert hyphens to spaces
+  const decodedSlug = decodeURIComponent(params.slug);
+  const categoryName = decodedSlug.replace(/-/g, " ");
   const formattedName = categoryName.charAt(0).toUpperCase() + categoryName.slice(1);
 
   return {
@@ -41,12 +43,16 @@ async function getCategoryName(slug: string): Promise<string> {
 
 export default async function CategoryPage(props: { params: Params }) {
   const params = await props.params;
-  const { data } = await getArticles({ category: params.slug, pageSize: 50 });
+  // Decode URL-encoded slug and convert hyphens to spaces for DB query
+  // e.g., "general%20medicine" -> "general medicine"
+  // e.g., "bone-health" -> "bone health"
+  const decodedSlug = decodeURIComponent(params.slug).replace(/-/g, " ");
+  const { data } = await getArticles({ category: decodedSlug, pageSize: 50 });
 
   // Get the actual category name with exact capitalization from menu or first article
   const categoryName = data.length > 0 && data[0].category
     ? data[0].category
-    : await getCategoryName(params.slug);
+    : await getCategoryName(decodedSlug);
 
   const breadcrumbsJsonLd = buildCategoryBreadcrumbs(categoryName, params.slug);
 
