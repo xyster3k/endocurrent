@@ -13,6 +13,7 @@ import { shouldShowAds } from "@/lib/ads";
 import { getArticleBySlug } from "@/lib/data/articles";
 import { buildArticleJsonLd, buildArticleBreadcrumbs } from "@/lib/seo";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { formatDate } from "@/lib/utils";
 
 export const revalidate = 300;
 
@@ -146,7 +147,7 @@ export default async function ArticlePage(props: { params: Params }) {
             {article.category || "Endocrinology"}
           </span>
           {article.published_at ? (
-            <span>{new Date(article.published_at).toLocaleDateString()}</span>
+            <span>{formatDate(article.published_at)}</span>
           ) : (
             <span className="text-amber-600">Draft</span>
           )}
