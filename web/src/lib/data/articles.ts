@@ -81,6 +81,10 @@ export async function getArticles(
       query = query.eq("status", filters.status);
     }
     if (filters.category) query = query.ilike("category", filters.category);
+    if (filters.tag) {
+      // Filter by tag - tags is a PostgreSQL array, use contains
+      query = query.contains("tags", [filters.tag]);
+    }
     if (filters.search) {
       // Search across title, summary, and body using ilike for partial matches
       const searchTerm = `%${filters.search}%`;
