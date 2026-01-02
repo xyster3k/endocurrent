@@ -1,6 +1,6 @@
-# EndoCurrent Supabase Database Setup
+# Nexus Med News Supabase Database Setup
 
-This document provides complete instructions for recreating the Supabase database schema for the EndoCurrent project.
+This document provides complete instructions for recreating the Supabase database schema for the Nexus Med News project.
 
 ## Prerequisites
 
@@ -429,7 +429,7 @@ Run this complete script in Supabase SQL Editor to set up everything:
 
 ```sql
 -- ============================================
--- COMPLETE ENDOCURRENT DATABASE SETUP
+-- COMPLETE NEXUS MED NEWS DATABASE SETUP
 -- ============================================
 
 -- Enable UUID extension

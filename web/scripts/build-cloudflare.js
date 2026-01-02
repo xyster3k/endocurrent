@@ -9,13 +9,13 @@ console.log('Building for Cloudflare Pages...\n');
 // This tells wrangler to use Node.js compatibility during deployment
 // ALL environment variable names must be declared here
 // Values will be set as Secrets in Cloudflare Pages UI
-const rootWrangler = `name = "endocurrent"
+const rootWrangler = `name = "nexusmednews"
 compatibility_date = "2024-09-23"
 compatibility_flags = ["nodejs_compat", "nodejs_als"]
 pages_build_output_dir = ".cloudflare/dist"
 
 # Environment variables - values MUST be set as Secrets in Cloudflare Pages UI
-# Go to: Workers & Pages > endocurrent > Settings > Variables and Secrets > Add variable
+# Go to: Workers & Pages > nexusmednews > Settings > Variables and Secrets > Add variable
 [vars]
 # Note: These are declared here but actual values come from Secrets in the UI
 # NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY = ""  # Set as Secret in UI
