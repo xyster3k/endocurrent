@@ -15,7 +15,7 @@ The adapter converts Next.js output to Cloudflare Pages Advanced Mode format usi
 ## Step 1: Cloudflare Pages Build Settings
 
 1. Go to https://dash.cloudflare.com
-2. Click **Workers & Pages** → Select your **endocurrent** project
+2. Click **Workers & Pages** → Select your **nexusmednews** project
 3. Go to **Settings** → **Builds & deployments**
 4. Click **Edit configuration** and set:
 
@@ -100,7 +100,7 @@ Environment: Production AND Preview
 **Variable 7:**
 ```
 Name: NEXT_PUBLIC_SITE_URL
-Value: https://endocurrent.pages.dev
+Value: https://nexusmednews.pages.dev
 Environment: Production AND Preview
 ```
 

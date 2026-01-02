@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { getArticles, getFeaturedArticle } from "@/lib/data/articles";
 import { LoadMoreArticles } from "@/components/load-more-articles";
+import { TagCloud } from "@/components/tag-cloud";
 import { formatDate } from "@/lib/utils";
 
 export const revalidate = 300;
@@ -80,6 +81,18 @@ export default async function Home(props: { searchParams: SearchParams }) {
           </div>
         </section>
       )}
+
+      {/* Tag Cloud Section */}
+      <section className="rounded-2xl border border-slate-200 bg-white/80 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
+        <div className="mb-4 flex items-center justify-between">
+          <div>
+            <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Topics</p>
+            <h2 className="text-xl font-semibold">Explore by tag</h2>
+          </div>
+        </div>
+        <TagCloud maxTags={25} />
+      </section>
+
       <section className="space-y-4">
         <div className="flex items-end justify-between">
           <div>

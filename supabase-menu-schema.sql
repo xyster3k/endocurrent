@@ -1,5 +1,5 @@
 -- ============================================
--- EndoCurrent Menu System - Database Schema
+-- Nexus Med News Menu System - Database Schema
 -- ============================================
 -- Run this in your Supabase SQL Editor to create the menu tables
 

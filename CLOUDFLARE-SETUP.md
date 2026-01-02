@@ -15,7 +15,7 @@ This is because Clerk's middleware uses Node.js `async_hooks` API which requires
 
 1. Go to https://dash.cloudflare.com/
 2. Navigate to **Pages**
-3. Select your **EndoCurrent** project
+3. Select your **Nexus Med News** project
 4. Click on **Settings**
 5. Scroll down to **Functions**
 

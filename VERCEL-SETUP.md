@@ -13,7 +13,7 @@ Vercel is made by the creators of Next.js. It requires **zero configuration** an
 ## Step 2: Import Your Project
 
 1. Once logged in, click **"Add New..."** → **"Project"**
-2. Find and click **"Import"** next to `xyster3k/endocurrent`
+2. Find and click **"Import"** next to `xyster3k/nexusmednews`
 3. If you don't see it, click **"Adjust GitHub App Permissions"** and give Vercel access to the repo
 
 ## Step 3: Configure Project
@@ -53,7 +53,7 @@ SUPABASE_SERVICE_ROLE_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXB
 
 1. Click **"Deploy"**
 2. Wait 2-3 minutes for the build to complete
-3. You'll get a URL like `https://endocurrent.vercel.app`
+3. You'll get a URL like `https://nexusmednews.vercel.app`
 
 ## Step 5: Update Environment Variables (After First Deploy)
 
@@ -61,14 +61,14 @@ SUPABASE_SERVICE_ROLE_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXB
 2. Click **Settings** → **Environment Variables**
 3. Add `NEXT_PUBLIC_SITE_URL` with your Vercel URL:
    ```
-   NEXT_PUBLIC_SITE_URL = https://endocurrent.vercel.app
+   NEXT_PUBLIC_SITE_URL = https://nexusmednews.vercel.app
    ```
 4. Click **Redeploy** to apply the change
 
 ## Step 6: Custom Domain (Optional)
 
 1. Go to **Settings** → **Domains**
-2. Add your custom domain (e.g., `endocurrent.com`)
+2. Add your custom domain (e.g., `nexusmednews.com`)
 3. Update DNS records as instructed by Vercel
 4. Update `NEXT_PUBLIC_SITE_URL` to your custom domain
 
