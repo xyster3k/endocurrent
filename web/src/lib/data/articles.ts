@@ -81,7 +81,11 @@ export async function getArticles(
       query = query.eq("status", filters.status);
     }
     if (filters.category) query = query.ilike("category", filters.category);
-    if (filters.search) query = query.textSearch("title", filters.search);
+    if (filters.search) {
+      // Search across title, summary, and body using ilike for partial matches
+      const searchTerm = `%${filters.search}%`;
+      query = query.or(`title.ilike.${searchTerm},summary.ilike.${searchTerm},body_markdown.ilike.${searchTerm}`);
+    }
 
     const { data, error, count } = await query;
     if (error || !data) throw error;

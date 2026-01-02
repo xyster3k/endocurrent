@@ -7,6 +7,7 @@ import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/n
 import { cn } from "@/lib/utils";
 import { ShieldCheck, Sparkles, Menu as MenuIcon, ChevronDown } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { SearchBar } from "@/components/search-bar";
 
 const navLinks = [{ href: "/admin", label: "Admin", requiresRole: ["editor", "admin"] as string[] }];
 
@@ -181,6 +182,12 @@ export function SiteHeader() {
             </Link>
           ))}
         </nav>
+        <div className={cn(
+          "ml-auto flex items-center gap-3 transition-all duration-300",
+          isScrolled && "ml-auto"
+        )}>
+          <SearchBar />
+        </div>
         <div className={cn(
           "ml-2.5 flex items-center gap-3 transition-all duration-300",
           isScrolled && "opacity-0 pointer-events-none"
