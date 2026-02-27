@@ -44,8 +44,8 @@ export default function SignUpPage() {
         setError(oauthError.message);
         setGoogleLoading(false);
       }
-    } catch {
-      setError("Failed to start Google sign-up");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to start Google sign-up");
       setGoogleLoading(false);
     }
   };

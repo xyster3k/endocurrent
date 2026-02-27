@@ -48,8 +48,8 @@ export default function SignInPage() {
         setError(oauthError.message);
         setGoogleLoading(false);
       }
-    } catch {
-      setError("Failed to start Google sign-in");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to start Google sign-in");
       setGoogleLoading(false);
     }
   };
