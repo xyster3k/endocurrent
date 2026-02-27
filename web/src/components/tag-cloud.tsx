@@ -9,16 +9,16 @@ type TagData = {
   count: number;
 };
 
-// Color palette for tags - varies by frequency
+// Minimal editorial tag styles - no color, just borders
 const colorClasses = [
-  "bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:hover:bg-blue-900/60",
-  "bg-emerald-100 text-emerald-700 hover:bg-emerald-200 dark:bg-emerald-900/40 dark:text-emerald-300 dark:hover:bg-emerald-900/60",
-  "bg-violet-100 text-violet-700 hover:bg-violet-200 dark:bg-violet-900/40 dark:text-violet-300 dark:hover:bg-violet-900/60",
-  "bg-amber-100 text-amber-700 hover:bg-amber-200 dark:bg-amber-900/40 dark:text-amber-300 dark:hover:bg-amber-900/60",
-  "bg-rose-100 text-rose-700 hover:bg-rose-200 dark:bg-rose-900/40 dark:text-rose-300 dark:hover:bg-rose-900/60",
-  "bg-cyan-100 text-cyan-700 hover:bg-cyan-200 dark:bg-cyan-900/40 dark:text-cyan-300 dark:hover:bg-cyan-900/60",
-  "bg-pink-100 text-pink-700 hover:bg-pink-200 dark:bg-pink-900/40 dark:text-pink-300 dark:hover:bg-pink-900/60",
-  "bg-indigo-100 text-indigo-700 hover:bg-indigo-200 dark:bg-indigo-900/40 dark:text-indigo-300 dark:hover:bg-indigo-900/60",
+  "border-foreground/20 text-foreground/70 hover:border-foreground/40 hover:text-foreground",
+  "border-foreground/20 text-foreground/70 hover:border-foreground/40 hover:text-foreground",
+  "border-foreground/20 text-foreground/70 hover:border-foreground/40 hover:text-foreground",
+  "border-foreground/20 text-foreground/70 hover:border-foreground/40 hover:text-foreground",
+  "border-foreground/20 text-foreground/70 hover:border-foreground/40 hover:text-foreground",
+  "border-foreground/20 text-foreground/70 hover:border-foreground/40 hover:text-foreground",
+  "border-foreground/20 text-foreground/70 hover:border-foreground/40 hover:text-foreground",
+  "border-foreground/20 text-foreground/70 hover:border-foreground/40 hover:text-foreground",
 ];
 
 // Seeded random for consistent shuffling
@@ -97,7 +97,7 @@ export function TagCloud({ className, maxTags = 30 }: Props) {
           {skeletonWidths.map((width, i) => (
             <div
               key={i}
-              className="h-8 rounded-full bg-slate-200 dark:bg-slate-700"
+              className="h-8 border border-border bg-foreground/5"
               style={{ width: `${width}px` }}
             />
           ))}
@@ -118,7 +118,7 @@ export function TagCloud({ className, maxTags = 30 }: Props) {
             key={tag.tag}
             href={`/tag/${encodeURIComponent(tag.tag)}`}
             className={cn(
-              "inline-flex items-center rounded-full px-3 py-1.5 font-medium transition-all duration-200 hover:scale-105 hover:shadow-md",
+              "inline-flex items-center border px-3 py-1.5 font-mono text-xs uppercase tracking-wider transition-all duration-200 hover:scale-105",
               tag.colorClass
             )}
             style={{

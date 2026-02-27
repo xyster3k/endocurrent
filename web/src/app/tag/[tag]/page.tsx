@@ -34,12 +34,12 @@ export default async function TagPage(props: { params: Params }) {
     <div className="mx-auto flex max-w-5xl flex-col gap-8 px-6 py-10">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Tag</p>
+          <p className="font-mono text-xs uppercase tracking-[0.3em] text-foreground/40">Tag</p>
           <div className="flex items-center gap-2">
-            <Tag className="h-6 w-6 text-blue-600" />
-            <h1 className="text-3xl font-semibold">#{tag}</h1>
+            <Tag className="h-5 w-5 text-foreground/40" />
+            <h1 className="font-serif text-3xl font-bold">#{tag}</h1>
           </div>
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 font-mono text-xs uppercase tracking-wider text-foreground/40">
             {meta.total === 0
               ? "No articles with this tag"
               : `${meta.total} article${meta.total !== 1 ? "s" : ""}`}
@@ -57,17 +57,17 @@ export default async function TagPage(props: { params: Params }) {
           ))}
         </div>
       ) : (
-        <div className="rounded-2xl border border-slate-200 bg-white/80 p-12 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
-          <Tag className="mx-auto h-12 w-12 text-slate-300 dark:text-slate-600" />
-          <h3 className="mt-4 text-lg font-semibold text-slate-900 dark:text-white">
+        <div className="border border-border bg-card p-12 text-center">
+          <Tag className="mx-auto h-12 w-12 text-foreground/20" />
+          <h3 className="mt-4 font-serif text-lg font-bold">
             No articles found
           </h3>
-          <p className="mt-2 text-slate-600 dark:text-slate-400">
+          <p className="mt-2 text-foreground/50">
             There are no published articles with this tag yet.
           </p>
           <Link
             href="/"
-            className="mt-4 inline-block text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
+            className="mt-4 inline-block font-mono text-xs uppercase tracking-wider text-foreground/70 underline underline-offset-4 hover:text-foreground"
           >
             Browse all articles
           </Link>
@@ -75,8 +75,8 @@ export default async function TagPage(props: { params: Params }) {
       )}
 
       {/* Show other tags */}
-      <div className="mt-8 rounded-2xl border border-slate-200 bg-white/80 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
-        <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">
+      <div className="mt-8 border border-border bg-card p-6">
+        <h2 className="mb-4 font-serif text-lg font-bold">
           Explore more tags
         </h2>
         <TagCloud maxTags={20} />

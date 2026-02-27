@@ -46,8 +46,8 @@ export default async function SearchPage(props: { searchParams: SearchParams }) 
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Search</p>
-            <h1 className="text-3xl font-semibold">
+            <p className="font-mono text-xs uppercase tracking-[0.3em] text-foreground/40">Search</p>
+            <h1 className="font-serif text-3xl font-bold">
               {query ? `Results for "${query}"` : "Search articles"}
             </h1>
           </div>
@@ -59,13 +59,13 @@ export default async function SearchPage(props: { searchParams: SearchParams }) 
         {/* Search input on the page */}
         <form action="/search" method="GET" className="relative">
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+            <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-foreground/40" />
             <input
               type="text"
               name="q"
               defaultValue={query}
               placeholder="Search by title, content, or keywords..."
-              className="w-full rounded-xl border border-slate-200 bg-white py-3 pl-12 pr-4 text-base outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-slate-700 dark:bg-slate-900 dark:focus:border-blue-400"
+              className="w-full border border-border bg-card py-3 pl-12 pr-4 text-base outline-none transition focus:border-foreground/40"
               autoFocus={!query}
             />
           </div>
@@ -75,7 +75,7 @@ export default async function SearchPage(props: { searchParams: SearchParams }) 
       {/* Results */}
       {query ? (
         <>
-          <p className="text-sm text-slate-500">
+          <p className="font-mono text-xs uppercase tracking-wider text-foreground/40">
             {total === 0
               ? "No articles found"
               : `Found ${total} article${total !== 1 ? "s" : ""}`}
@@ -88,17 +88,17 @@ export default async function SearchPage(props: { searchParams: SearchParams }) 
               ))}
             </div>
           ) : (
-            <div className="rounded-2xl border border-slate-200 bg-white/80 p-12 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
-              <Search className="mx-auto h-12 w-12 text-slate-300 dark:text-slate-600" />
-              <h3 className="mt-4 text-lg font-semibold text-slate-900 dark:text-white">
+            <div className="border border-border bg-card p-12 text-center">
+              <Search className="mx-auto h-12 w-12 text-foreground/20" />
+              <h3 className="mt-4 font-serif text-lg font-bold">
                 No results found
               </h3>
-              <p className="mt-2 text-slate-600 dark:text-slate-400">
+              <p className="mt-2 text-foreground/50">
                 Try different keywords or check your spelling
               </p>
               <Link
                 href="/"
-                className="mt-4 inline-block text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
+                className="mt-4 inline-block font-mono text-xs uppercase tracking-wider text-foreground/70 underline underline-offset-4 hover:text-foreground"
               >
                 Browse all articles
               </Link>
@@ -106,12 +106,12 @@ export default async function SearchPage(props: { searchParams: SearchParams }) 
           )}
         </>
       ) : (
-        <div className="rounded-2xl border border-slate-200 bg-white/80 p-12 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
-          <Search className="mx-auto h-12 w-12 text-slate-300 dark:text-slate-600" />
-          <h3 className="mt-4 text-lg font-semibold text-slate-900 dark:text-white">
+        <div className="border border-border bg-card p-12 text-center">
+          <Search className="mx-auto h-12 w-12 text-foreground/20" />
+          <h3 className="mt-4 font-serif text-lg font-bold">
             Start searching
           </h3>
-          <p className="mt-2 text-slate-600 dark:text-slate-400">
+          <p className="mt-2 text-foreground/50">
             Enter keywords to find articles on any medical topic
           </p>
         </div>

@@ -64,9 +64,9 @@ export default async function CategoryPage(props: { params: Params }) {
       />
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Category</p>
-          <h1 className="text-3xl font-semibold">{categoryName}</h1>
-          <p className="text-sm text-slate-500">
+          <p className="font-mono text-xs uppercase tracking-[0.3em] text-foreground/40">Category</p>
+          <h1 className="font-serif text-3xl font-bold">{categoryName}</h1>
+          <p className="font-mono text-xs uppercase tracking-wider text-foreground/40">
             {data.length > 0 ? `${data.length} article${data.length !== 1 ? 's' : ''} in this category` : 'No articles yet in this category'}
           </p>
         </div>
@@ -81,9 +81,9 @@ export default async function CategoryPage(props: { params: Params }) {
           ))}
         </div>
       ) : (
-        <div className="rounded-2xl border border-slate-200 bg-white/80 p-8 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
-          <p className="text-slate-600 dark:text-slate-300">No articles have been published in this category yet.</p>
-          <Link href="/" className="mt-4 inline-block text-sm text-blue-600 hover:underline dark:text-blue-400">
+        <div className="border border-border bg-card p-8 text-center">
+          <p className="text-foreground/60">No articles have been published in this category yet.</p>
+          <Link href="/" className="mt-4 inline-block font-mono text-xs uppercase tracking-wider text-foreground/70 underline underline-offset-4 hover:text-foreground">
             Browse all articles
           </Link>
         </div>

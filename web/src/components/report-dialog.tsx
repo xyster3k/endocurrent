@@ -39,7 +39,7 @@ export function ReportDialog({ articleId }: Props) {
 
   if (submitted) {
     return (
-      <div className="rounded-full bg-emerald-100 px-3 py-1 text-sm text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100">
+      <div className="border border-border px-3 py-1.5 font-mono text-xs uppercase tracking-wider text-foreground/60">
         Thanks for flagging this article.
       </div>
     );
@@ -49,23 +49,23 @@ export function ReportDialog({ articleId }: Props) {
     <div className="relative">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-2 rounded-full border border-rose-200 px-4 py-2 text-sm font-medium text-rose-700 transition hover:bg-rose-50 dark:border-rose-900 dark:text-rose-100 dark:hover:bg-rose-950"
+        className="flex items-center gap-2 border border-border px-4 py-2 font-mono text-xs font-medium uppercase tracking-wider text-foreground/60 transition hover:bg-foreground/5 hover:text-foreground"
       >
         <Flag className="h-4 w-4" />
         Report
       </button>
       {open ? (
-        <div className="absolute right-0 z-20 mt-3 w-72 rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl dark:border-slate-800 dark:bg-slate-900">
-          <h4 className="text-sm font-semibold">Report article</h4>
+        <div className="absolute right-0 z-20 mt-2 w-72 border border-border bg-card p-4 shadow-xl">
+          <h4 className="font-mono text-xs font-semibold uppercase tracking-wider">Report article</h4>
           <div className="mt-3 space-y-2 text-sm">
             {reasons.map((r) => (
               <label
                 key={r.value}
                 className={cn(
-                  "flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2",
+                  "flex cursor-pointer items-center gap-2 border px-3 py-2",
                   reason === r.value
-                    ? "border-blue-500 bg-blue-50 dark:border-blue-400/60 dark:bg-blue-900/30"
-                    : "border-slate-200 dark:border-slate-800"
+                    ? "border-foreground bg-foreground/5"
+                    : "border-border"
                 )}
               >
                 <input
@@ -82,15 +82,15 @@ export function ReportDialog({ articleId }: Props) {
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               placeholder="Optional comment for editors"
-              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none ring-0 focus:border-blue-500 dark:border-slate-800 dark:bg-slate-900/60"
+              className="w-full border border-border bg-background px-3 py-2 text-sm outline-none focus:border-foreground/40"
               rows={3}
             />
             <button
               onClick={submit}
               disabled={pending}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-rose-600 px-3 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-500 disabled:opacity-50"
+              className="flex w-full items-center justify-center gap-2 border border-foreground bg-foreground px-3 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-background transition hover:opacity-90 disabled:opacity-50"
             >
-              <Send className="h-4 w-4" />
+              <Send className="h-3.5 w-3.5" />
               Submit
             </button>
           </div>

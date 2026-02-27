@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import { ExternalLink, Sparkles } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { LikeToggle } from "@/components/like-toggle";
@@ -129,8 +129,8 @@ export default async function ArticlePage(props: { params: Params }) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsJsonLd) }}
       />
       <div className="flex flex-col gap-3">
-        <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.3em] text-slate-500">
-          <span className="rounded-full bg-slate-100 px-3 py-1 text-slate-700 dark:bg-slate-800 dark:text-slate-200">
+        <div className="flex flex-wrap items-center gap-3 font-mono text-xs uppercase tracking-[0.3em] text-foreground/40">
+          <span className="border border-border px-3 py-1 text-foreground/70">
             {article.category || "Endocrinology"}
           </span>
           {article.published_at ? (
@@ -138,28 +138,25 @@ export default async function ArticlePage(props: { params: Params }) {
           ) : (
             <span className="text-amber-600">Draft</span>
           )}
+          <span className="border border-border px-3 py-1 text-foreground/50">
+            {article.reading_time_minutes} min read
+          </span>
         </div>
-        <h1 className="text-4xl font-semibold leading-tight tracking-tight text-slate-900 dark:text-white">
+        <h1 className="font-serif text-4xl font-bold leading-tight tracking-tight">
           {article.title}
         </h1>
         {authorName ? (
-          <p className="text-sm text-slate-500 dark:text-slate-400">
-            By {authorName}
+          <p className="font-mono text-sm uppercase tracking-wider text-foreground/50">
+            Words by <strong className="font-semibold text-foreground/70">{authorName}</strong>
           </p>
         ) : null}
-        <div className="text-lg text-slate-600 dark:text-slate-300 prose prose-lg max-w-none dark:prose-invert">
+        <div className="text-lg leading-relaxed text-foreground/60 prose prose-lg max-w-none dark:prose-invert">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{article.summary}</ReactMarkdown>
-        </div>
-        <div className="flex flex-wrap items-center gap-3 text-sm text-slate-500 dark:text-slate-300">
-          <span className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-blue-700 dark:bg-blue-900/40 dark:text-blue-200">
-            <Sparkles className="h-4 w-4" />
-            {article.reading_time_minutes} min read
-          </span>
         </div>
       </div>
 
       {article.cover_image_url ? (
-        <div className="relative aspect-[1200/630] w-full overflow-hidden rounded-2xl">
+        <div className="relative aspect-[1200/630] w-full overflow-hidden border border-border">
           <Image
             src={article.cover_image_url}
             alt={article.title}
@@ -179,7 +176,7 @@ export default async function ArticlePage(props: { params: Params }) {
 
       {showAds ? <AdSlotClient slotId="article-top" show={showAds} /> : null}
 
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
+      <div className="flex flex-wrap items-center justify-between gap-3 border border-border bg-card p-4">
         <LikeToggle
           articleId={article.id}
           initialLikeCount={article.like_count ?? 0}
@@ -195,12 +192,12 @@ export default async function ArticlePage(props: { params: Params }) {
       {showAds ? <AdSlotClient slotId="article-bottom" show={showAds} /> : null}
 
       {article.references && article.references.length > 0 ? (
-        <section className="rounded-2xl border border-slate-200 bg-white/70 p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
-          <h3 className="text-lg font-semibold">References</h3>
-          <ul className="mt-3 space-y-2 text-sm text-slate-600 dark:text-slate-300">
+        <section className="border border-border bg-card p-6">
+          <h3 className="font-serif text-lg font-bold">References</h3>
+          <ul className="mt-3 space-y-2 text-sm text-foreground/60">
             {article.references.map((ref) => (
               <li key={ref.label} className="flex items-start gap-3">
-                <span className="font-semibold text-slate-700 dark:text-slate-200">
+                <span className="font-semibold text-foreground/80">
                   {ref.label}
                 </span>
                 <span>
@@ -208,7 +205,7 @@ export default async function ArticlePage(props: { params: Params }) {
                   {ref.url ? (
                     <a
                       href={ref.url}
-                      className="inline-flex items-center gap-1 text-blue-600 underline decoration-dotted underline-offset-4 dark:text-blue-300"
+                      className="inline-flex items-center gap-1 text-foreground underline decoration-dotted underline-offset-4"
                       target="_blank"
                       rel="noreferrer"
                     >

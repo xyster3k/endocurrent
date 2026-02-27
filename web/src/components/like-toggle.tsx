@@ -51,31 +51,31 @@ export function LikeToggle({
   };
 
   return (
-    <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-2 py-1 shadow-sm dark:border-slate-800 dark:bg-slate-900/60">
+    <div className="flex items-center gap-1 border border-border px-1 py-0.5">
       <button
         className={cn(
-          "flex items-center gap-1 rounded-full px-3 py-1 text-sm transition",
+          "flex items-center gap-1.5 px-3 py-1.5 font-mono text-xs transition",
           active === "like"
-            ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-100"
-            : "hover:bg-slate-100 dark:hover:bg-slate-800"
+            ? "bg-foreground text-background"
+            : "hover:bg-foreground/5"
         )}
         disabled={pending}
         onClick={() => submit(1)}
       >
-        <ThumbsUp className="h-4 w-4" />
+        <ThumbsUp className="h-3.5 w-3.5" />
         {likes}
       </button>
       <button
         className={cn(
-          "flex items-center gap-1 rounded-full px-3 py-1 text-sm transition",
+          "flex items-center gap-1.5 px-3 py-1.5 font-mono text-xs transition",
           active === "dislike"
-            ? "bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-100"
-            : "hover:bg-slate-100 dark:hover:bg-slate-800"
+            ? "bg-foreground text-background"
+            : "hover:bg-foreground/5"
         )}
         disabled={pending}
         onClick={() => submit(-1)}
       >
-        <ThumbsDown className="h-4 w-4" />
+        <ThumbsDown className="h-3.5 w-3.5" />
         {dislikes}
       </button>
     </div>
