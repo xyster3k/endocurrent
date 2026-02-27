@@ -41,8 +41,8 @@ export function CategorySection({ category, articles, totalInCategory }: Props) 
   const hasMore = totalInCategory && totalInCategory > articles.length;
 
   return (
-    <section className={`${style.bg} ${style.darkBg} border-t border-border`}>
-      <div className="mx-auto max-w-6xl px-6 py-16">
+    <section className="mx-auto max-w-6xl px-6 py-6">
+      <div className={`${style.bg} ${style.darkBg} border border-border px-8 py-12`}>
         <div className="mb-8">
           <h2 className={`font-serif text-3xl font-bold ${style.accent}`}>
             {category}
