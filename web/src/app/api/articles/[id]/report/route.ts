@@ -1,5 +1,4 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { sendReportEmail } from "@/lib/email";
 
@@ -8,7 +7,12 @@ type Params = Promise<{ id: string }>;
 
 export async function POST(req: NextRequest, props: { params: Params }) {
   const params = await props.params;
-  const { userId } = await auth();
+
+  // Get user if authenticated (optional for reports)
+  const supabase = await createSupabaseServerClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  const userId = user?.id ?? null;
+
   const body = await req.json();
   const reason_code = body?.reason_code;
   const comment = body?.comment ?? null;
@@ -25,11 +29,11 @@ export async function POST(req: NextRequest, props: { params: Params }) {
   }
 
   // Use service role so reports are recorded even with RLS enabled
-  const supabase = await createSupabaseServerClient({ useServiceRole: true });
-  const reports = (supabase as any).from("article_reports");
+  const adminSupabase = await createSupabaseServerClient({ useServiceRole: true });
+  const reports = (adminSupabase as any).from("article_reports");
   const { error } = await reports.insert({
     article_id: params.id,
-    user_id: userId ?? null,
+    user_id: userId,
     reason_code,
     comment,
   });
@@ -39,35 +43,15 @@ export async function POST(req: NextRequest, props: { params: Params }) {
   }
 
   // Fetch article details for email notification
-  const articles = (supabase as any).from("articles");
+  const articles = (adminSupabase as any).from("articles");
   const { data: article, error: articleError } = await articles
     .select("title, slug")
     .eq("id", params.id)
     .maybeSingle();
 
   if (!articleError && article) {
-    // Optionally fetch reporter email from Clerk
-    let reporterEmail: string | null = null;
-    if (userId) {
-      try {
-        const clerkSecretKey = process.env.CLERK_SECRET_KEY;
-        if (clerkSecretKey) {
-          const response = await fetch(`https://api.clerk.com/v1/users/${userId}`, {
-            headers: {
-              'Authorization': `Bearer ${clerkSecretKey}`,
-            },
-            cache: 'no-store',
-          });
-
-          if (response.ok) {
-            const userData = await response.json();
-            reporterEmail = userData.email_addresses?.[0]?.email_address ?? null;
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching reporter email:', error);
-      }
-    }
+    // Get reporter email from Supabase auth user
+    const reporterEmail = user?.email ?? null;
 
     // Send email notification
     await sendReportEmail({
@@ -76,7 +60,7 @@ export async function POST(req: NextRequest, props: { params: Params }) {
       articleSlug: article.slug,
       reasonCode: reason_code,
       comment,
-      reporterUserId: userId ?? null,
+      reporterUserId: userId,
       reporterEmail,
     });
   }

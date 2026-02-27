@@ -65,8 +65,8 @@ export default async function AdminHome() {
           </span>
         </div>
         <p className="max-w-3xl text-slate-600 dark:text-slate-300">
-          Draft, publish, and monitor complaints. Supabase + RLS backs all actions; Clerk governs
-          auth. AI drafts live in a separate queue until human review.
+          Draft, publish, and monitor complaints. Supabase + RLS backs all actions; Supabase Auth governs
+          authentication. AI drafts live in a separate queue until human review.
         </p>
         <div className="flex flex-wrap gap-3">
           <StatPill label="Published" value={published.length} />

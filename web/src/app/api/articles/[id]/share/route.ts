@@ -1,6 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { auth } from "@clerk/nextjs/server";
 
 type Params = Promise<{ id: string }>;
 
@@ -14,8 +13,9 @@ export async function POST(req: NextRequest, props: { params: Params }) {
   // Get user ID if authenticated (optional for shares)
   let userId: string | null = null;
   try {
-    const authResult = await auth();
-    userId = authResult.userId;
+    const supabase = await createSupabaseServerClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    userId = user?.id ?? null;
   } catch {
     // User not authenticated, continue anyway
   }

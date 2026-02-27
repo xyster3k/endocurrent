@@ -5,35 +5,28 @@ import { mapToSummary, mockArticles } from "@/lib/data/mock-articles";
 async function getAuthorInfo(authorId: string | null): Promise<ArticleAuthor | null> {
   if (!authorId) return null;
 
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    return null;
+  }
+
   try {
-    const clerkSecretKey = process.env.CLERK_SECRET_KEY;
-    if (!clerkSecretKey) return null;
+    const supabase = await createSupabaseServerClient({ useServiceRole: true });
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("display_name, affiliation")
+      .eq("id", authorId)
+      .maybeSingle();
 
-    const response = await fetch(`https://api.clerk.com/v1/users/${authorId}`, {
-      headers: {
-        'Authorization': `Bearer ${clerkSecretKey}`,
-      },
-      cache: 'no-store',
-    });
-
-    if (!response.ok) return null;
-
-    const userData = await response.json();
-
-    // Try display_name from publicMetadata first, fall back to email username
-    const displayName = userData.public_metadata?.display_name;
-    const email = userData.email_addresses?.[0]?.email_address;
-    const name = displayName || (email ? email.split('@')[0] : null);
-
+    const name = (profile as any)?.display_name;
     if (!name) return null;
 
     return {
       id: authorId,
       name,
-      affiliation: null,
+      affiliation: (profile as any)?.affiliation ?? null,
     };
   } catch (error) {
-    console.error('Error fetching author info:', error);
+    console.error("Error fetching author info:", error);
     return null;
   }
 }

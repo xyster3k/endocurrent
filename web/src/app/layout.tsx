@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { ClerkProvider } from "@clerk/nextjs";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
@@ -94,13 +93,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
-  const hasClerk =
-    typeof publishableKey === "string" &&
-    publishableKey.startsWith("pk_") &&
-    publishableKey !== "pk_test_placeholder";
-
-  const shell = (
+  return (
     <html lang="en" className="min-h-full">
       <head>
         <link rel="alternate" type="application/rss+xml" title="Nexus Med News RSS Feed" href="/feed.xml" />
@@ -133,10 +126,4 @@ export default function RootLayout({
       </body>
     </html>
   );
-
-  if (!hasClerk) {
-    return shell;
-  }
-
-  return <ClerkProvider publishableKey={publishableKey}>{shell}</ClerkProvider>;
 }

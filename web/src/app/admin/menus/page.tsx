@@ -3,8 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { z } from "zod";
 import Link from "next/link";
-import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
-import { ShieldCheck, Sparkles, X } from "lucide-react";
+import { useAuth } from "@/lib/hooks/use-auth";
+import { Sparkles, X } from "lucide-react";
 
 type Menu = { id: string; name: string };
 type MenuItem = {
@@ -27,25 +27,27 @@ const itemSchema = z.object({
 });
 
 export default function AdminMenus() {
-  return (
-    <>
-      <SignedIn>
-        <ClientMenuManager />
-      </SignedIn>
-      <SignedOut>
-        <div className="mx-auto flex max-w-4xl flex-col gap-4 px-6 py-12">
-          <h1 className="text-3xl font-semibold">Admin</h1>
-          <p className="text-slate-600 dark:text-slate-300">You’re not signed in. Please sign in to continue.</p>
-          <SignInButton mode="modal">
-            <button className="btn-primary flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold shadow-sm">
-              <Sparkles className="h-4 w-4" />
-              Go to sign in
-            </button>
-          </SignInButton>
-        </div>
-      </SignedOut>
-    </>
-  );
+  const { user, loading } = useAuth();
+
+  if (loading) return null;
+
+  if (!user) {
+    return (
+      <div className="mx-auto flex max-w-4xl flex-col gap-4 px-6 py-12">
+        <h1 className="text-3xl font-semibold">Admin</h1>
+        <p className="text-slate-600 dark:text-slate-300">You&apos;re not signed in. Please sign in to continue.</p>
+        <Link
+          href="/sign-in"
+          className="btn-primary flex w-fit items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold shadow-sm"
+        >
+          <Sparkles className="h-4 w-4" />
+          Go to sign in
+        </Link>
+      </div>
+    );
+  }
+
+  return <ClientMenuManager />;
 }
 
 function ClientMenuManager() {

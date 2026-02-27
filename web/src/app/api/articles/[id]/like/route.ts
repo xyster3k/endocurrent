@@ -1,5 +1,4 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { auth } from "@clerk/nextjs/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 
@@ -9,8 +8,9 @@ export async function POST(req: NextRequest, props: { params: Params }) {
   const params = await props.params;
 
   // Check authentication
-  const { userId } = await auth();
-  if (!userId) {
+  const supabase = await createSupabaseServerClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
     return NextResponse.json({ error: "Authentication required" }, { status: 401 });
   }
 
@@ -24,10 +24,10 @@ export async function POST(req: NextRequest, props: { params: Params }) {
     return NextResponse.json({ ok: true, message: "Supabase not configured; like skipped." });
   }
 
-  // Use service role so RLS policies do not block likes (auth is enforced via Clerk above)
-  const supabase = await createSupabaseServerClient({ useServiceRole: true });
-  const likes = (supabase as any).from("article_likes");
-  const { error } = await likes.upsert({ article_id: params.id, user_id: userId, value }, { onConflict: "article_id,user_id" });
+  // Use service role so RLS policies do not block likes
+  const adminSupabase = await createSupabaseServerClient({ useServiceRole: true });
+  const likes = (adminSupabase as any).from("article_likes");
+  const { error } = await likes.upsert({ article_id: params.id, user_id: user.id, value }, { onConflict: "article_id,user_id" });
   if (error) {
     console.error("Like error:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useClerk } from "@clerk/nextjs";
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { Download, Trash2, Loader2 } from "lucide-react";
 
 type Props = {
@@ -15,7 +15,6 @@ export function AccountActions({ action }: Props) {
   const [showConfirm, setShowConfirm] = useState(false);
   const [confirmText, setConfirmText] = useState("");
   const router = useRouter();
-  const { signOut } = useClerk();
 
   const handleExport = async () => {
     setLoading(true);
@@ -61,7 +60,8 @@ export function AccountActions({ action }: Props) {
         throw new Error(data.error || "Deletion failed");
       }
       // Sign out and redirect to home
-      await signOut();
+      const supabase = createSupabaseBrowserClient();
+      await supabase.auth.signOut();
       router.push("/?deleted=true");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Deletion failed");

@@ -4,7 +4,6 @@ import Image from "next/image";
 import { ExternalLink, Sparkles } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { auth } from "@clerk/nextjs/server";
 import { LikeToggle } from "@/components/like-toggle";
 import { ReportDialog } from "@/components/report-dialog";
 import { AdSlotClient } from "@/components/ad-slot-client";
@@ -52,34 +51,21 @@ export async function generateMetadata(props: { params: Params }): Promise<Metad
 async function getAuthorName(authorId: string | null | undefined): Promise<string | null> {
   if (!authorId) return null;
 
-  try {
-    const clerkSecretKey = process.env.CLERK_SECRET_KEY;
-    if (!clerkSecretKey) return null;
-
-    const response = await fetch(`https://api.clerk.com/v1/users/${authorId}`, {
-      headers: {
-        'Authorization': `Bearer ${clerkSecretKey}`,
-      },
-      cache: 'no-store',
-    });
-
-    if (!response.ok) return null;
-
-    const userData = await response.json();
-
-    // Try display_name from publicMetadata first
-    const displayName = userData.public_metadata?.display_name;
-    if (displayName) return displayName;
-
-    // Fall back to email username
-    const email = userData.email_addresses?.[0]?.email_address;
-    if (email) {
-      return email.split('@')[0];
-    }
-
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
     return null;
+  }
+
+  try {
+    const supabase = await createSupabaseServerClient({ useServiceRole: true });
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("display_name")
+      .eq("id", authorId)
+      .maybeSingle();
+
+    return (profile as any)?.display_name ?? null;
   } catch (error) {
-    console.error('Error fetching author info:', error);
+    console.error("Error fetching author info:", error);
     return null;
   }
 }
@@ -125,8 +111,9 @@ export default async function ArticlePage(props: { params: Params }) {
   // Get current user's ID and like status
   let userLikeValue: number | null = null;
   try {
-    const { userId } = await auth();
-    userLikeValue = await getUserLikeValue(article.id, userId);
+    const supabase = await createSupabaseServerClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    userLikeValue = await getUserLikeValue(article.id, user?.id ?? null);
   } catch {
     // User not authenticated
   }

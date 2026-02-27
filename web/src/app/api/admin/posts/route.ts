@@ -67,7 +67,7 @@ export async function POST(req: Request) {
       reading_time_minutes: reading.minutes,
       word_count: reading.words,
       published_at: publishedAt,
-      // Store author_id for both Clerk and Supabase users
+      // Store author_id from authenticated user
       author_id: user?.id ?? null,
       featured: parsed.data.featured ?? false,
     })

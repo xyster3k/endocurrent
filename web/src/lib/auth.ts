@@ -1,4 +1,4 @@
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export type UserRole = "subscriber" | "user" | "editor" | "admin";
 
@@ -10,31 +10,41 @@ export type SessionUser = {
 
 export async function getSessionUser(): Promise<SessionUser | null> {
   try {
-    const user = await currentUser();
+    const supabase = await createSupabaseServerClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (!user) return null;
 
-    const role =
-      (user.publicMetadata.role as UserRole | undefined) ||
-      (user.privateMetadata.role as UserRole | undefined) ||
-      "subscriber";
+    // Look up role from profiles table
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    const role = (profile?.role as UserRole) || "subscriber";
 
     return {
       id: user.id,
-      email: user.primaryEmailAddress?.emailAddress ?? null,
+      email: user.email ?? null,
       role,
     };
   } catch (error) {
-    console.error("Clerk currentUser failed, returning null", error);
+    console.error("getSessionUser failed, returning null", error);
     return null;
   }
 }
 
-export async function requireAuth() {
-  const { userId } = await auth();
-  if (!userId) {
+export async function requireAuth(): Promise<string> {
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
     throw new Error("Unauthenticated");
   }
-  return userId;
+  return user.id;
 }
 
 export function requireRole(user: SessionUser | null, allowed: UserRole[]) {

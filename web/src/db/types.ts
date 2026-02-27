@@ -61,7 +61,7 @@ export type Database = {
           user_id: string;
           plan: "FREE" | "PREMIUM";
           status: "active" | "canceled" | "past_due" | "incomplete";
-          billing_provider: "clerk_stripe";
+          billing_provider: "stripe";
           external_customer_id: string | null;
           external_subscription_id: string | null;
           current_period_end: string | null;
@@ -71,7 +71,7 @@ export type Database = {
           user_id: string;
           plan?: "FREE" | "PREMIUM";
           status?: "active" | "canceled" | "past_due" | "incomplete";
-          billing_provider?: "clerk_stripe";
+          billing_provider?: "stripe";
           external_customer_id?: string | null;
           external_subscription_id?: string | null;
           current_period_end?: string | null;
@@ -81,7 +81,7 @@ export type Database = {
           user_id?: string;
           plan?: "FREE" | "PREMIUM";
           status?: "active" | "canceled" | "past_due" | "incomplete";
-          billing_provider?: "clerk_stripe";
+          billing_provider?: "stripe";
           external_customer_id?: string | null;
           external_subscription_id?: string | null;
           current_period_end?: string | null;

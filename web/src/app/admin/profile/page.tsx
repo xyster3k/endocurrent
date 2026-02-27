@@ -1,21 +1,18 @@
- "use client";
+"use client";
 import React, { useState, useEffect } from "react";
-import { useUser } from "@clerk/nextjs";
+import { useAuth } from "@/lib/hooks/use-auth";
 
 function DisplayNameForm() {
-  const { user, isLoaded } = useUser();
+  const { user, profile, loading } = useAuth();
   const [name, setName] = useState("");
   const [message, setMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (isLoaded && user) {
-      const currentDisplayName = user.publicMetadata?.display_name as string | undefined;
-      if (currentDisplayName) {
-        setName(currentDisplayName);
-      }
+    if (!loading && profile?.display_name) {
+      setName(profile.display_name);
     }
-  }, [isLoaded, user]);
+  }, [loading, profile]);
 
   const save = async () => {
     setMessage(null);
@@ -32,8 +29,6 @@ function DisplayNameForm() {
         return;
       }
       setMessage("Saved successfully!");
-      // Reload user data to reflect changes
-      await user?.reload();
     } catch (error) {
       setMessage(`Error: ${String(error)}`);
     } finally {
@@ -41,8 +36,8 @@ function DisplayNameForm() {
     }
   };
 
-  const currentDisplayName = user?.publicMetadata?.display_name as string | undefined;
-  const userEmail = user?.primaryEmailAddress?.emailAddress;
+  const currentDisplayName = profile?.display_name;
+  const userEmail = user?.email;
 
   return (
     <div className="space-y-4 rounded-2xl border border-slate-200 bg-white/80 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
@@ -56,7 +51,7 @@ function DisplayNameForm() {
       {!currentDisplayName && userEmail && (
         <div className="rounded-xl bg-slate-50 p-4 dark:bg-slate-800/50">
           <p className="text-sm text-slate-600 dark:text-slate-400">
-            No display name set. Articles will show: <span className="font-semibold">{userEmail.split('@')[0]}</span>
+            No display name set. Articles will show: <span className="font-semibold">{userEmail.split("@")[0]}</span>
           </p>
         </div>
       )}
@@ -67,19 +62,19 @@ function DisplayNameForm() {
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="e.g., Dr. Amara Chen"
-          disabled={!isLoaded}
+          disabled={loading}
         />
       </label>
       <div className="flex items-center gap-3">
         <button
           onClick={save}
-          disabled={isLoading || !isLoaded || !name.trim()}
+          disabled={isLoading || loading || !name.trim()}
           className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed dark:bg-white dark:text-black"
         >
           {isLoading ? "Saving..." : "Save"}
         </button>
         {message ? (
-          <span className={`text-sm ${message.includes('Failed') || message.includes('Error') ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'}`}>
+          <span className={`text-sm ${message.includes("Failed") || message.includes("Error") ? "text-red-600 dark:text-red-400" : "text-green-600 dark:text-green-400"}`}>
             {message}
           </span>
         ) : null}

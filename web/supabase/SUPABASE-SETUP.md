@@ -12,14 +12,10 @@ This document provides complete instructions for recreating the Supabase databas
 Add these to your `.env.local` file and Cloudflare environment:
 
 ```bash
-# Supabase
+# Supabase (Database + Auth)
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
-
-# Clerk (Authentication)
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_...
-CLERK_SECRET_KEY=sk_...
 
 # Resend (Email)
 RESEND_API_KEY=re_...
@@ -35,11 +31,11 @@ ADS_DISABLED=true
 
 ### 1. Users Table
 
-Stores user accounts synced from Clerk.
+Stores user accounts (synced from Supabase Auth).
 
 ```sql
 CREATE TABLE IF NOT EXISTS public.users (
-  id TEXT PRIMARY KEY,  -- Clerk user IDs like "user_2abc123..."
+  id TEXT PRIMARY KEY,  -- Supabase Auth UUIDs
   email TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -63,7 +59,7 @@ CREATE TABLE IF NOT EXISTS public.profiles (
 
 ### 3. User Subscriptions Table
 
-Subscription/billing data from Clerk Stripe integration.
+Subscription/billing data.
 
 ```sql
 CREATE TABLE IF NOT EXISTS public.user_subscriptions (
@@ -71,7 +67,7 @@ CREATE TABLE IF NOT EXISTS public.user_subscriptions (
   user_id TEXT REFERENCES public.users(id) ON DELETE CASCADE,
   plan TEXT CHECK (plan IN ('FREE','PREMIUM')) DEFAULT 'FREE',
   status TEXT CHECK (status IN ('active','canceled','past_due','incomplete')) DEFAULT 'active',
-  billing_provider TEXT DEFAULT 'clerk_stripe',
+  billing_provider TEXT DEFAULT 'stripe',
   external_customer_id TEXT,
   external_subscription_id TEXT,
   current_period_end TIMESTAMPTZ
@@ -463,7 +459,7 @@ CREATE TABLE IF NOT EXISTS public.user_subscriptions (
   user_id TEXT REFERENCES public.users(id) ON DELETE CASCADE,
   plan TEXT CHECK (plan IN ('FREE','PREMIUM')) DEFAULT 'FREE',
   status TEXT CHECK (status IN ('active','canceled','past_due','incomplete')) DEFAULT 'active',
-  billing_provider TEXT DEFAULT 'clerk_stripe',
+  billing_provider TEXT DEFAULT 'stripe',
   external_customer_id TEXT,
   external_subscription_id TEXT,
   current_period_end TIMESTAMPTZ
@@ -949,13 +945,14 @@ CREATE TRIGGER set_site_settings_updated_at
 After running the database setup, create your admin user:
 
 ```sql
--- Replace with your actual Clerk user ID and email
+-- Replace with your Supabase Auth UUID and email
+-- Find your UUID in: Supabase Dashboard → Authentication → Users
 INSERT INTO public.users (id, email)
-VALUES ('user_2abc123...', 'your-email@example.com')
+VALUES ('your-supabase-auth-uuid', 'your-email@example.com')
 ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO public.profiles (id, display_name, role)
-VALUES ('user_2abc123...', 'Admin User', 'admin')
+VALUES ('your-supabase-auth-uuid', 'Admin User', 'admin')
 ON CONFLICT (id) DO UPDATE SET role = 'admin';
 ```
 

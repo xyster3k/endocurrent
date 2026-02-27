@@ -18,8 +18,6 @@ pages_build_output_dir = ".cloudflare/dist"
 # Go to: Workers & Pages > nexusmednews > Settings > Variables and Secrets > Add variable
 [vars]
 # Note: These are declared here but actual values come from Secrets in the UI
-# NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY = ""  # Set as Secret in UI
-# CLERK_SECRET_KEY = ""  # Set as Secret in UI
 # NEXT_PUBLIC_SUPABASE_URL = ""  # Set as Secret in UI
 # NEXT_PUBLIC_SUPABASE_ANON_KEY = ""  # Set as Secret in UI
 # SUPABASE_SERVICE_ROLE_KEY = ""  # Set as Secret in UI
