@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { getArticlesGroupedByCategory, getFeaturedArticle, getCategories } from "@/lib/data/articles";
 import { CategorySection } from "@/components/category-section";
+import { TagCloud } from "@/components/tag-cloud";
 import { formatDate } from "@/lib/utils";
 
 export const revalidate = 300;
@@ -110,6 +111,18 @@ export default async function Home() {
           imageUrl={categoryImageMap[category]}
         />
       ))}
+
+      {/* Tags */}
+      {sortedCategories.length > 0 && (
+        <section className="mx-auto max-w-6xl px-6 py-6">
+          <div className="border border-border bg-card px-8 py-10">
+            <h2 className="mb-6 text-center font-mono text-xs font-semibold uppercase tracking-[0.3em] text-foreground/40">
+              Explore by topic
+            </h2>
+            <TagCloud maxTags={30} />
+          </div>
+        </section>
+      )}
 
       {/* Empty state */}
       {sortedCategories.length === 0 && (
