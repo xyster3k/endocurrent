@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import {
   FileText,
+  ImageIcon,
   LayoutTemplate,
   Settings,
   ShieldCheck,
@@ -111,6 +112,12 @@ export default async function AdminHome() {
           title="Settings"
           body="Configure Google Analytics, Tag Manager, and site settings."
           href="/admin/settings"
+        />
+        <AdminCard
+          icon={<ImageIcon className="h-5 w-5" />}
+          title="Category backgrounds"
+          body="Upload background images for homepage category sections."
+          href="/admin/categories"
         />
         <AdminCard
           icon={<FileText className="h-5 w-5" />}

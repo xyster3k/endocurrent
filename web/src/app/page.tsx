@@ -3,7 +3,7 @@ import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { getArticlesGroupedByCategory, getFeaturedArticle } from "@/lib/data/articles";
+import { getArticlesGroupedByCategory, getFeaturedArticle, getCategories } from "@/lib/data/articles";
 import { CategorySection } from "@/components/category-section";
 import { formatDate } from "@/lib/utils";
 
@@ -25,18 +25,30 @@ export default async function Home() {
   let grouped: Record<string, import("@/lib/types").ArticleSummary[]> = {};
 
   try {
-    grouped = await getArticlesGroupedByCategory(6);
+    grouped = await getArticlesGroupedByCategory(4);
   } catch (error) {
     console.error("Failed to load articles", error);
   }
 
-  const featuredArticle = await getFeaturedArticle();
+  const [featuredArticle, dbCategories] = await Promise.all([
+    getFeaturedArticle(),
+    getCategories(),
+  ]);
 
-  // Sort categories: ordered ones first, then alphabetical
-  const categories = Object.keys(grouped);
+  // Build image lookup from database categories
+  const categoryImageMap: Record<string, string | null> = {};
+  for (const cat of dbCategories) {
+    categoryImageMap[cat.name] = cat.image_url ?? null;
+  }
+
+  // Sort categories: DB order first, then CATEGORY_ORDER fallback, then alphabetical
+  const articleCategories = Object.keys(grouped);
+  const dbOrder = dbCategories.map((c) => c.name).filter((n) => articleCategories.includes(n));
+  const remaining = articleCategories.filter((c) => !dbOrder.includes(c));
   const sortedCategories = [
-    ...CATEGORY_ORDER.filter((c) => categories.includes(c)),
-    ...categories.filter((c) => !CATEGORY_ORDER.includes(c)).sort(),
+    ...dbOrder,
+    ...CATEGORY_ORDER.filter((c) => remaining.includes(c)),
+    ...remaining.filter((c) => !CATEGORY_ORDER.includes(c)).sort(),
   ];
 
   return (
@@ -95,6 +107,7 @@ export default async function Home() {
           key={category}
           category={category}
           articles={grouped[category]}
+          imageUrl={categoryImageMap[category]}
         />
       ))}
 

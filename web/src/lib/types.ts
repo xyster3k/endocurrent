@@ -32,6 +32,14 @@ export type ArticleSummary = {
   featured?: boolean;
 };
 
+export type Category = {
+  id: string;
+  name: string;
+  slug: string;
+  image_url?: string | null;
+  order_index: number;
+};
+
 export type ArticleDetail = ArticleSummary & {
   body_markdown: string;
   word_count?: number;

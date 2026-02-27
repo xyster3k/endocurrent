@@ -1,5 +1,5 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import type { ArticleDetail, ArticleSummary, ArticleAuthor } from "@/lib/types";
+import type { ArticleDetail, ArticleSummary, ArticleAuthor, Category } from "@/lib/types";
 import { mapToSummary, mockArticles } from "@/lib/data/mock-articles";
 
 async function getAuthorInfo(authorId: string | null): Promise<ArticleAuthor | null> {
@@ -124,8 +124,26 @@ export async function getArticles(
   }
 }
 
+export async function getCategories(): Promise<Category[]> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    return [];
+  }
+
+  try {
+    const supabase = await createSupabaseServerClient();
+    const { data, error } = await supabase
+      .from("categories")
+      .select("*")
+      .order("order_index", { ascending: true });
+    if (error) throw error;
+    return (data ?? []) as Category[];
+  } catch {
+    return [];
+  }
+}
+
 export async function getArticlesGroupedByCategory(
-  maxPerCategory = 6
+  maxPerCategory = 4
 ): Promise<Record<string, ArticleSummary[]>> {
   const { data: articles } = await getArticles({ pageSize: 100 });
 
