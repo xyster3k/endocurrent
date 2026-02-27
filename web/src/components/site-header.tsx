@@ -6,8 +6,60 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/hooks/use-auth";
 import { ShieldCheck, Sparkles, LogOut, User as UserIcon, Menu as MenuIcon, ChevronDown } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { SearchBar } from "@/components/search-bar";
+
+function UserMenu({ displayName, onSignOut }: { displayName: string; onSignOut: () => void }) {
+  const [open, setOpen] = useState(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
+
+  const show = useCallback(() => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setOpen(true);
+  }, []);
+
+  const hide = useCallback(() => {
+    timeoutRef.current = setTimeout(() => setOpen(false), 200);
+  }, []);
+
+  useEffect(() => () => { if (timeoutRef.current) clearTimeout(timeoutRef.current); }, []);
+
+  return (
+    <div className="relative" onMouseEnter={show} onMouseLeave={hide}>
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="flex items-center gap-2 rounded-full bg-slate-100 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+      >
+        <UserIcon className="h-4 w-4" />
+        {displayName}
+      </button>
+      <div
+        className={cn(
+          "absolute right-0 z-30 pt-1 transition-all",
+          open ? "visible opacity-100" : "invisible opacity-0 pointer-events-none"
+        )}
+      >
+        <div className="w-48 rounded-xl border border-slate-200 bg-white p-2 shadow-xl dark:border-slate-700 dark:bg-slate-900">
+          <Link
+            href="/account"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
+          >
+            <UserIcon className="h-4 w-4" />
+            Account
+          </Link>
+          <button
+            onClick={() => { setOpen(false); onSignOut(); }}
+            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
+          >
+            <LogOut className="h-4 w-4" />
+            Sign out
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const navLinks = [{ href: "/admin", label: "Admin", requiresRole: ["editor", "admin"] as string[] }];
 
@@ -124,7 +176,8 @@ export function SiteHeader() {
               <ChevronDown className="h-4 w-4" />
             </button>
             {menuItems.length > 0 ? (
-              <div className="invisible absolute left-1/2 z-30 mt-2 w-72 -translate-x-1/2 rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl opacity-0 transition group-hover:visible group-hover:opacity-100 dark:border-slate-700 dark:bg-slate-900">
+              <div className="invisible absolute left-1/2 z-30 pt-2 -translate-x-1/2 opacity-0 transition group-hover:visible group-hover:opacity-100">
+              <div className="w-72 rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl dark:border-slate-700 dark:bg-slate-900">
                 <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Sections</p>
                 <div className="space-y-3">
                   {(menuTree["root"] ?? []).map((item) => (
@@ -172,6 +225,7 @@ export function SiteHeader() {
                   ))}
                 </div>
               </div>
+              </div>
             ) : null}
           </div>
           {visibleNavLinks.map((link) => (
@@ -199,28 +253,10 @@ export function SiteHeader() {
               Sign in
             </Link>
           ) : user ? (
-            <div className="relative group">
-              <button className="flex items-center gap-2 rounded-full bg-slate-100 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700">
-                <UserIcon className="h-4 w-4" />
-                {profile?.display_name || user.email?.split("@")[0] || "Account"}
-              </button>
-              <div className="invisible absolute right-0 z-30 mt-2 w-48 rounded-xl border border-slate-200 bg-white p-2 shadow-xl opacity-0 transition group-hover:visible group-hover:opacity-100 dark:border-slate-700 dark:bg-slate-900">
-                <Link
-                  href="/account"
-                  className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
-                >
-                  <UserIcon className="h-4 w-4" />
-                  Account
-                </Link>
-                <button
-                  onClick={signOut}
-                  className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
-                >
-                  <LogOut className="h-4 w-4" />
-                  Sign out
-                </button>
-              </div>
-            </div>
+            <UserMenu
+              displayName={profile?.display_name || user.email?.split("@")[0] || "Account"}
+              onSignOut={signOut}
+            />
           ) : null}
         </div>
       </div>
