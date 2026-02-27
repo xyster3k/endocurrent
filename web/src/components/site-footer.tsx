@@ -19,11 +19,11 @@ function PatreonIcon({ className }: { className?: string }) {
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-white/10 bg-white/60 py-10 backdrop-blur dark:bg-black/60">
+    <footer className="border-t border-border bg-background py-10">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 px-6 md:flex-row md:items-center">
         <div>
-          <h3 className="text-lg font-semibold">Nexus Med News</h3>
-          <p className="text-sm text-slate-500">
+          <h3 className="font-serif text-lg font-bold">Nexus Med News</h3>
+          <p className="font-mono text-xs uppercase tracking-wider text-foreground/40">
             Curated medical intelligence. Evidence-first.
           </p>
         </div>
@@ -37,7 +37,7 @@ export function SiteFooter() {
           <PatreonIcon className="h-4 w-4" />
           Support on Patreon
         </a>
-        <div className="flex flex-wrap gap-4 text-sm text-slate-600 dark:text-slate-300">
+        <div className="flex flex-wrap gap-4 font-mono text-xs uppercase tracking-wider text-foreground/50">
           <Link href="/about">About</Link>
           <Link href="/policies/privacy">Privacy</Link>
           <Link href="/policies/terms">Terms</Link>
@@ -45,7 +45,7 @@ export function SiteFooter() {
           <Link href="/account">Account</Link>
           <button
             onClick={openCookieSettings}
-            className="hover:text-slate-900 dark:hover:text-white transition-colors"
+            className="hover:text-foreground transition-colors"
           >
             Cookie Settings
           </button>

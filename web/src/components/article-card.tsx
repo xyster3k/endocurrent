@@ -1,94 +1,81 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowUpRight, Clock3 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import type { ArticleSummary } from "@/lib/types";
-import { cn, formatDate } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 type Props = {
   article: ArticleSummary;
-  variant?: "featured" | "compact";
 };
 
-export function ArticleCard({ article, variant = "featured" }: Props) {
+export function ArticleCard({ article }: Props) {
   const isDraft = article.status === "draft" || article.status === "draft_ai";
+
   return (
-    <article
-      className={cn(
-        "group relative overflow-hidden rounded-2xl border border-slate-200/70 bg-white/80 shadow-sm transition hover:-translate-y-1 hover:shadow-xl dark:border-slate-800/60 dark:bg-slate-900/70",
-        variant === "compact" && "border-none bg-transparent shadow-none hover:translate-y-0"
+    <article className="group relative flex flex-col border border-border bg-card">
+      {article.cover_image_url && (
+        <div className="relative aspect-[16/10] w-full overflow-hidden">
+          <Image
+            src={article.cover_image_url}
+            alt={article.title}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
+        </div>
       )}
-    >
-      <div className="flex flex-row items-center gap-5 p-5">
-        {article.cover_image_url && (
-          <div className="relative h-40 w-40 flex-shrink-0 overflow-hidden rounded-xl">
-            <Image
-              src={article.cover_image_url}
-              alt={article.title}
-              fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-              sizes="160px"
-            />
-          </div>
-        )}
-        <div className="flex flex-1 flex-col gap-3">
-        <div className="flex items-center gap-3 text-xs uppercase tracking-wide text-slate-500">
-          <span className="rounded-full bg-slate-100 px-2 py-1 text-slate-700 dark:bg-slate-800 dark:text-slate-200">
-            {article.category || "Endocrinology"}
-          </span>
-          {isDraft ? (
-            <span className="rounded-full bg-amber-100 px-2 py-1 text-amber-700 dark:bg-amber-900/40 dark:text-amber-100">
+      <div className="flex flex-1 flex-col p-5">
+        <div className="flex-1">
+          <h3 className="font-serif text-xl font-bold leading-tight line-clamp-2">
+            {article.title}
+          </h3>
+          {article.author && (
+            <p className="mt-1.5 font-mono text-xs uppercase tracking-wider text-foreground/50">
+              Words by <strong className="font-semibold text-foreground/70">{article.author.name}</strong>
+            </p>
+          )}
+          {isDraft && (
+            <span className="mt-2 inline-block border border-amber-400 px-2 py-0.5 font-mono text-xs text-amber-700 dark:text-amber-300">
               Draft
             </span>
-          ) : null}
-          {article.published_at ? (
-            <span>{formatDate(article.published_at)}</span>
-          ) : (
-            <span>Not published</span>
           )}
-        </div>
-        <div className="flex flex-col gap-3">
-          <div>
-            <Link href={`/articles/${article.slug}`} className="group/link">
-              <h3 className="text-2xl font-semibold leading-tight tracking-tight group-hover/link:text-blue-700 dark:group-hover/link:text-blue-300">
-                {article.title}
-              </h3>
-            </Link>
-            {article.author ? (
-              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                By {article.author.name}
-              </p>
-            ) : null}
-          </div>
-          <div className="text-base text-slate-600 dark:text-slate-300 prose prose-sm max-w-none dark:prose-invert">
+          <div className="mt-3 text-sm leading-relaxed text-foreground/60 line-clamp-3 prose prose-sm max-w-none dark:prose-invert">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>{article.summary}</ReactMarkdown>
           </div>
-          <div className="flex flex-wrap items-center gap-2 text-sm">
-            <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1 text-slate-700 dark:bg-slate-800/60 dark:text-slate-300">
-              <Clock3 className="h-4 w-4" />
-              {article.reading_time_minutes} min read
+        </div>
+
+        <div className="mt-4 flex items-center justify-between">
+          {article.published_at && (
+            <span className="font-mono text-xs text-foreground/40">
+              {formatDate(article.published_at)}
             </span>
-            {(article.tags || []).slice(0, 3).map((tag) => (
+          )}
+          <span className="inline-flex items-center gap-1.5 font-mono text-xs font-semibold uppercase tracking-wider transition-transform duration-150 group-hover:translate-x-1">
+            Read more <ArrowRight className="h-3.5 w-3.5" />
+          </span>
+        </div>
+
+        {(article.tags?.length ?? 0) > 0 && (
+          <div className="mt-3 flex flex-wrap gap-1.5 border-t border-border pt-3">
+            {article.tags!.slice(0, 3).map((tag) => (
               <span
                 key={tag}
-                className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-700 dark:bg-blue-900/40 dark:text-blue-300"
+                className="border border-border px-2 py-0.5 font-mono text-[0.65rem] uppercase tracking-wider text-foreground/50"
               >
                 {tag}
               </span>
             ))}
           </div>
-        </div>
-        </div>
+        )}
       </div>
+
       <Link
         href={`/articles/${article.slug}`}
         className="absolute inset-0"
         aria-label={`Read ${article.title}`}
       />
-      <div className="pointer-events-none absolute right-5 top-5 rounded-full bg-slate-900 text-white opacity-0 transition group-hover:opacity-100 dark:bg-white dark:text-black">
-        <ArrowUpRight className="h-5 w-5" />
-      </div>
     </article>
   );
 }

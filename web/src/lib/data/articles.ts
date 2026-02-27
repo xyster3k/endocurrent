@@ -124,6 +124,23 @@ export async function getArticles(
   }
 }
 
+export async function getArticlesGroupedByCategory(
+  maxPerCategory = 6
+): Promise<Record<string, ArticleSummary[]>> {
+  const { data: articles } = await getArticles({ pageSize: 100 });
+
+  const grouped: Record<string, ArticleSummary[]> = {};
+  for (const article of articles) {
+    const cat = article.category || "General";
+    if (!grouped[cat]) grouped[cat] = [];
+    if (grouped[cat].length < maxPerCategory) {
+      grouped[cat].push(article);
+    }
+  }
+
+  return grouped;
+}
+
 export async function getArticleBySlug(slug: string): Promise<ArticleDetail | null> {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
     return mockArticles.find((a) => a.slug === slug) ?? null;

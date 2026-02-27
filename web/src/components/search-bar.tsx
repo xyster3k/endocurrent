@@ -57,12 +57,12 @@ export function SearchBar({ className, placeholder = "Search articles...", defau
       {!isExpanded && (
         <button
           onClick={handleExpand}
-          className="flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3 py-2 text-sm text-slate-500 transition hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-800/80 dark:hover:border-slate-600 dark:hover:bg-slate-800"
+          className="flex items-center gap-2 border border-border bg-card px-3 py-2 font-mono text-xs uppercase tracking-wider text-foreground/50 transition hover:border-foreground/30 hover:text-foreground/70"
           aria-label="Open search"
         >
           <Search className="h-4 w-4" />
           <span className="hidden sm:inline">Search</span>
-          <kbd className="hidden rounded bg-slate-100 px-1.5 py-0.5 text-xs font-medium text-slate-500 sm:inline dark:bg-slate-700 dark:text-slate-400">
+          <kbd className="hidden border border-border px-1.5 py-0.5 text-[0.65rem] font-medium text-foreground/40 sm:inline">
             ⌘K
           </kbd>
         </button>
@@ -82,23 +82,23 @@ export function SearchBar({ className, placeholder = "Search articles...", defau
             onSubmit={handleSubmit}
             className="fixed left-1/2 top-24 z-50 w-full max-w-xl -translate-x-1/2 px-4 sm:px-0"
           >
-            <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl dark:border-slate-700 dark:bg-slate-900">
+            <div className="relative overflow-hidden border border-border bg-card shadow-xl">
               <div className="flex items-center gap-3 px-4 py-3">
-                <Search className="h-5 w-5 flex-shrink-0 text-slate-400" />
+                <Search className="h-5 w-5 flex-shrink-0 text-foreground/40" />
                 <input
                   ref={inputRef}
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder={placeholder}
-                  className="flex-1 bg-transparent text-lg outline-none placeholder:text-slate-400 dark:text-white"
+                  className="flex-1 bg-transparent text-lg outline-none placeholder:text-foreground/30 text-foreground"
                   autoComplete="off"
                 />
                 {query && (
                   <button
                     type="button"
                     onClick={handleClear}
-                    className="rounded-full p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800"
+                    className="p-1 text-foreground/40 hover:bg-foreground/5 hover:text-foreground/70"
                   >
                     <X className="h-4 w-4" />
                   </button>
@@ -106,13 +106,13 @@ export function SearchBar({ className, placeholder = "Search articles...", defau
                 <button
                   type="button"
                   onClick={() => setIsExpanded(false)}
-                  className="rounded-lg border border-slate-200 px-2 py-1 text-xs font-medium text-slate-500 hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800"
+                  className="border border-border px-2 py-1 font-mono text-xs font-medium text-foreground/50 hover:bg-foreground/5"
                 >
                   ESC
                 </button>
               </div>
-              <div className="border-t border-slate-100 bg-slate-50 px-4 py-2 text-xs text-slate-500 dark:border-slate-800 dark:bg-slate-800/50">
-                Press <kbd className="rounded bg-slate-200 px-1 py-0.5 font-mono dark:bg-slate-700">Enter</kbd> to search
+              <div className="border-t border-border bg-background px-4 py-2 text-xs text-foreground/50">
+                Press <kbd className="border border-border px-1 py-0.5 font-mono text-foreground/40">Enter</kbd> to search
               </div>
             </div>
           </form>

@@ -3,136 +3,119 @@ import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { getArticles, getFeaturedArticle } from "@/lib/data/articles";
-import { LoadMoreArticles } from "@/components/load-more-articles";
-import { TagCloud } from "@/components/tag-cloud";
+import { getArticlesGroupedByCategory, getFeaturedArticle } from "@/lib/data/articles";
+import { CategorySection } from "@/components/category-section";
 import { formatDate } from "@/lib/utils";
 
 export const revalidate = 300;
 
-const PAGE_SIZE = 20;
+// Display order — categories listed here appear first, rest follow alphabetically
+const CATEGORY_ORDER = [
+  "Oncology",
+  "Neurology",
+  "Endocrinology",
+  "Cardiology",
+  "Gastroenterology",
+  "Pulmonology",
+  "Rheumatology",
+  "Dermatology",
+];
 
-type SearchParams = Promise<Record<string, string | string[] | undefined>>;
-
-export default async function Home(props: { searchParams: SearchParams }) {
-  const searchParams = await props.searchParams;
-  let articles: Awaited<ReturnType<typeof getArticles>>["data"] = [];
-  let meta: Awaited<ReturnType<typeof getArticles>>["meta"] = { page: 1, pageSize: PAGE_SIZE, total: 0 };
+export default async function Home() {
+  let grouped: Record<string, import("@/lib/types").ArticleSummary[]> = {};
 
   try {
-    const result = await getArticles({
-      tag: typeof searchParams.tag === "string" ? searchParams.tag : undefined,
-      category: typeof searchParams.category === "string" ? searchParams.category : undefined,
-      search: typeof searchParams.q === "string" ? searchParams.q : undefined,
-      pageSize: PAGE_SIZE,
-    });
-    articles = result.data;
-    meta = result.meta;
+    grouped = await getArticlesGroupedByCategory(6);
   } catch (error) {
-    console.error("Failed to load articles, falling back to empty list", error);
+    console.error("Failed to load articles", error);
   }
 
-  // Get featured article or fallback to latest
   const featuredArticle = await getFeaturedArticle();
-  const heroArticle = featuredArticle || (articles.length > 0 ? articles[0] : null);
+
+  // Sort categories: ordered ones first, then alphabetical
+  const categories = Object.keys(grouped);
+  const sortedCategories = [
+    ...CATEGORY_ORDER.filter((c) => categories.includes(c)),
+    ...categories.filter((c) => !CATEGORY_ORDER.includes(c)).sort(),
+  ];
 
   return (
-    <div className="mx-auto flex max-w-6xl flex-col gap-10 px-6 pb-16 pt-10">
-      {heroArticle && (
-        <section className="rounded-2xl border border-slate-200 bg-gradient-to-br from-blue-50 to-white p-8 shadow-lg dark:border-slate-800 dark:from-slate-900 dark:to-slate-800">
-          <div className="flex items-center gap-2 mb-4">
-            <span className="rounded-full bg-blue-600 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white">
-              Featured
-            </span>
-            <span className="text-sm text-slate-500 dark:text-slate-400">
-              {heroArticle.published_at ? formatDate(heroArticle.published_at) : ""}
-            </span>
-          </div>
-          <div className="flex flex-row items-center gap-6">
-            {heroArticle.cover_image_url && (
-              <div className="relative h-56 w-56 flex-shrink-0 overflow-hidden rounded-xl">
+    <div>
+      {/* Hero: Featured article */}
+      {featuredArticle && (
+        <section className="border-b border-border bg-background">
+          <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-16 md:flex-row md:items-center md:gap-10">
+            {featuredArticle.cover_image_url && (
+              <div className="relative aspect-square w-full flex-shrink-0 overflow-hidden md:w-72">
                 <Image
-                  src={heroArticle.cover_image_url}
-                  alt={heroArticle.title}
+                  src={featuredArticle.cover_image_url}
+                  alt={featuredArticle.title}
                   fill
-                  className="object-cover transition-transform duration-300 hover:scale-105"
-                  sizes="224px"
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 288px"
                   priority
                 />
               </div>
             )}
-            <Link href={`/articles/${heroArticle.slug}`} className="group flex-1">
-              <h2 className="text-3xl font-bold leading-tight tracking-tight text-slate-900 transition group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400">
-                {heroArticle.title}
-              </h2>
-              {heroArticle.author ? (
-                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                  By {heroArticle.author.name}
+            <div className="flex-1">
+              <p className="font-mono text-xs uppercase tracking-[0.3em] text-foreground/40">Featured</p>
+              <Link href={`/articles/${featuredArticle.slug}`} className="group">
+                <h1 className="mt-2 font-serif text-4xl font-bold leading-tight md:text-5xl">
+                  {featuredArticle.title}
+                </h1>
+              </Link>
+              {featuredArticle.author && (
+                <p className="mt-3 font-mono text-sm uppercase tracking-wider text-foreground/50">
+                  Words by <strong className="font-semibold text-foreground/70">{featuredArticle.author.name}</strong>
                 </p>
-              ) : null}
-              <div className="mt-3 text-lg leading-relaxed text-slate-600 dark:text-slate-300 prose prose-lg max-w-none dark:prose-invert">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>{heroArticle.summary}</ReactMarkdown>
+              )}
+              <div className="mt-4 text-lg leading-relaxed text-foreground/60 prose prose-lg max-w-none dark:prose-invert">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{featuredArticle.summary}</ReactMarkdown>
               </div>
-              <span className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-blue-600 dark:text-blue-400">
+              <Link
+                href={`/articles/${featuredArticle.slug}`}
+                className="group/link mt-6 inline-flex items-center gap-2 border border-foreground px-6 py-2.5 font-mono text-xs font-semibold uppercase tracking-widest transition-all hover:bg-foreground hover:text-background"
+              >
                 Read article
-                <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
-              </span>
-            </Link>
+                <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover/link:translate-x-1" />
+              </Link>
+              {featuredArticle.published_at && (
+                <span className="ml-4 font-mono text-xs text-foreground/30">
+                  {formatDate(featuredArticle.published_at)}
+                </span>
+              )}
+            </div>
           </div>
         </section>
       )}
 
-      {/* Tag Cloud Section */}
-      <section className="rounded-2xl border border-slate-200 bg-white/80 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/70">
-        <div className="mb-4 flex items-center justify-between">
-          <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Topics</p>
-            <h2 className="text-xl font-semibold">Explore by tag</h2>
-          </div>
-        </div>
-        <TagCloud maxTags={25} />
-      </section>
+      {/* Category sections */}
+      {sortedCategories.map((category) => (
+        <CategorySection
+          key={category}
+          category={category}
+          articles={grouped[category]}
+        />
+      ))}
 
-      <section className="space-y-4">
-        <div className="flex items-end justify-between">
-          <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-slate-500">
-              Latest briefs
-            </p>
-            <h2 className="text-2xl font-semibold">Editorial feed</h2>
-            <p className="text-sm text-slate-500">
-              Showing {articles.length} of {meta.total} articles
-            </p>
-          </div>
-          <Link
-            href="/admin"
-            className="hidden rounded-full border border-slate-200 px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-600 transition hover:-translate-y-0.5 hover:shadow-sm md:inline-flex"
-          >
-            New article
-          </Link>
-        </div>
-        {articles.length === 0 ? (
-          <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center dark:border-slate-800 dark:bg-slate-900">
-            <h3 className="text-xl font-semibold text-slate-900 dark:text-white">No articles yet</h3>
-            <p className="mt-2 text-slate-600 dark:text-slate-400">
+      {/* Empty state */}
+      {sortedCategories.length === 0 && (
+        <section className="border-t border-border bg-background">
+          <div className="mx-auto max-w-6xl px-6 py-24 text-center">
+            <h2 className="font-serif text-3xl font-bold">No articles yet</h2>
+            <p className="mt-3 text-foreground/50">
               Publish your first article from the admin panel to see it here.
             </p>
             <Link
               href="/admin/articles/new"
-              className="mt-4 inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:-translate-y-0.5 dark:bg-white dark:text-black"
+              className="mt-6 inline-flex items-center gap-2 border border-foreground px-6 py-2.5 font-mono text-xs font-semibold uppercase tracking-widest transition-all hover:bg-foreground hover:text-background"
             >
               Create Article
-              <ArrowRight className="h-4 w-4" />
+              <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
-        ) : (
-          <LoadMoreArticles
-            initialArticles={articles}
-            totalCount={meta.total}
-            pageSize={PAGE_SIZE}
-          />
-        )}
-      </section>
+        </section>
+      )}
     </div>
   );
 }

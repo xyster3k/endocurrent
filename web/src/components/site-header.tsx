@@ -5,7 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/hooks/use-auth";
-import { ShieldCheck, Sparkles, LogOut, User as UserIcon, Menu as MenuIcon, ChevronDown } from "lucide-react";
+import { ShieldCheck, LogOut, User as UserIcon, Menu as MenuIcon, ChevronDown } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { SearchBar } from "@/components/search-bar";
 
@@ -28,7 +28,7 @@ function UserMenu({ displayName, onSignOut }: { displayName: string; onSignOut: 
     <div className="relative" onMouseEnter={show} onMouseLeave={hide}>
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-2 rounded-full bg-slate-100 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+        className="flex items-center gap-2 border border-border px-3 py-2 font-mono text-xs font-medium uppercase tracking-wider transition hover:bg-foreground hover:text-background"
       >
         <UserIcon className="h-4 w-4" />
         {displayName}
@@ -39,18 +39,18 @@ function UserMenu({ displayName, onSignOut }: { displayName: string; onSignOut: 
           open ? "visible opacity-100" : "invisible opacity-0 pointer-events-none"
         )}
       >
-        <div className="w-48 rounded-xl border border-slate-200 bg-white p-2 shadow-xl dark:border-slate-700 dark:bg-slate-900">
+        <div className="w-48 border border-border bg-card p-2 shadow-xl">
           <Link
             href="/account"
             onClick={() => setOpen(false)}
-            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
+            className="flex items-center gap-2 px-3 py-2 font-mono text-xs uppercase tracking-wider text-foreground/70 hover:bg-foreground/5 hover:text-foreground"
           >
             <UserIcon className="h-4 w-4" />
             Account
           </Link>
           <button
             onClick={() => { setOpen(false); onSignOut(); }}
-            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
+            className="flex w-full items-center gap-2 px-3 py-2 font-mono text-xs uppercase tracking-wider text-foreground/70 hover:bg-foreground/5 hover:text-foreground"
           >
             <LogOut className="h-4 w-4" />
             Sign out
@@ -122,8 +122,8 @@ export function SiteHeader() {
 
   return (
     <header className={cn(
-      "sticky top-0 z-40 w-full transition-all duration-300 border-b bg-white/80 backdrop-blur-lg dark:bg-black/60",
-      isScrolled ? "border-white/5" : "border-white/10"
+      "sticky top-0 z-40 w-full transition-all duration-300 border-b bg-background/90 backdrop-blur-lg",
+      isScrolled ? "border-border/30" : "border-border"
     )}>
       <div className={cn(
         "mx-auto flex items-center px-6 transition-all duration-300",
@@ -150,9 +150,9 @@ export function SiteHeader() {
                     className="transition-all duration-300"
                   />
                   <div className="flex flex-col items-start leading-tight">
-                    <span className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">Nexus</span>
-                    <span className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">Med</span>
-                    <span className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">News</span>
+                    <span className="text-lg font-bold tracking-tight text-foreground">Nexus</span>
+                    <span className="text-lg font-bold tracking-tight text-foreground">Med</span>
+                    <span className="text-lg font-bold tracking-tight text-foreground">News</span>
                   </div>
                 </>
               )}
@@ -160,13 +160,13 @@ export function SiteHeader() {
             {!isScrolled && (
               <div className="flex items-center gap-1.5 text-xs mt-1">
                 <ShieldCheck className="h-4 w-4 text-emerald-500" />
-                <span className="text-slate-500 whitespace-nowrap">Clinician-led, AI-assisted</span>
+                <span className="text-foreground/50 whitespace-nowrap">Clinician-led, AI-assisted</span>
               </div>
             )}
           </Link>
         </div>
         <nav className={cn(
-          "ml-auto hidden items-center gap-6 text-sm font-medium md:flex transition-all duration-300",
+          "ml-auto hidden items-center gap-6 md:flex transition-all duration-300",
           isScrolled && "opacity-0 pointer-events-none"
         )}>
           <div className="relative group">
@@ -177,21 +177,21 @@ export function SiteHeader() {
             </button>
             {menuItems.length > 0 ? (
               <div className="invisible absolute left-1/2 z-30 pt-2 -translate-x-1/2 opacity-0 transition group-hover:visible group-hover:opacity-100">
-              <div className="w-72 rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl dark:border-slate-700 dark:bg-slate-900">
-                <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Sections</p>
+              <div className="w-72 border border-border bg-card p-4 shadow-xl">
+                <p className="mb-2 font-mono text-xs font-semibold uppercase tracking-[0.2em] text-foreground/40">Sections</p>
                 <div className="space-y-3">
                   {(menuTree["root"] ?? []).map((item) => (
                     <div key={item.id}>
                       {item.url ? (
-                        <Link href={item.url} className="block font-semibold text-slate-800 hover:text-blue-600 dark:text-slate-100 dark:hover:text-blue-400">
+                        <Link href={item.url} className="block font-semibold text-foreground hover:text-foreground/70">
                           {item.label}
                         </Link>
                       ) : item.category ? (
-                        <Link href={`/category/${categoryToSlug(item.category)}`} className="block font-semibold text-slate-800 hover:text-blue-600 dark:text-slate-100 dark:hover:text-blue-400">
+                        <Link href={`/category/${categoryToSlug(item.category)}`} className="block font-semibold text-foreground hover:text-foreground/70">
                           {item.label}
                         </Link>
                       ) : (
-                        <div className="font-bold text-slate-900 dark:text-slate-50">
+                        <div className="font-bold text-foreground">
                           {item.label}
                         </div>
                       )}
@@ -200,20 +200,20 @@ export function SiteHeader() {
                           {menuTree[item.id].map((child) => (
                             <div key={child.id} className="flex items-center justify-between">
                               {child.url ? (
-                                <Link href={child.url} className="text-slate-700 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400">
+                                <Link href={child.url} className="text-foreground/70 hover:text-foreground">
                                   {child.label}
                                 </Link>
                               ) : child.category ? (
-                                <Link href={`/category/${categoryToSlug(child.category)}`} className="text-slate-700 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400">
+                                <Link href={`/category/${categoryToSlug(child.category)}`} className="text-foreground/70 hover:text-foreground">
                                   {child.label}
                                 </Link>
                               ) : (
-                                <span className="font-medium text-slate-800 dark:text-slate-200">
+                                <span className="font-medium text-foreground/80">
                                   {child.label}
                                 </span>
                               )}
                               {child.category ? (
-                                <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-200">
+                                <span className="border border-border px-2 py-0.5 font-mono text-xs text-foreground/50">
                                   {child.category}
                                 </span>
                               ) : null}
@@ -247,9 +247,8 @@ export function SiteHeader() {
           {!loading && !user ? (
             <Link
               href="/sign-in"
-              className="btn-primary flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold shadow-sm"
+              className="flex items-center gap-2 border border-foreground px-4 py-2 font-mono text-xs font-semibold uppercase tracking-wider transition-all hover:bg-foreground hover:text-background"
             >
-              <Sparkles className="h-4 w-4" />
               Sign in
             </Link>
           ) : user ? (

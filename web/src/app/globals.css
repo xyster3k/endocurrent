@@ -1,22 +1,23 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f9fbff;
-  --foreground: #0f172a;
-  --muted: #e2e8f0;
+  --background: #fff7f4;
+  --foreground: #1a1a1a;
+  --muted: #e8e0da;
   --card: #ffffff;
-  --accent: #1f7aed;
-  --accent-soft: #e5efff;
+  --accent: #1a1a1a;
+  --accent-soft: #f8f0eb;
   --success: #00c389;
   --warning: #f97316;
-  --btn-bg: #0f172a;
+  --btn-bg: #1a1a1a;
   --btn-text: #ffffff;
   --btn-text-hover: #ffffff;
   --btn-text-active: #ffffff;
-  --btn-bg-hover: #0b1222;
-  --btn-bg-active: #080f1a;
-  --nav-active-bg: #0f172a;
+  --btn-bg-hover: #2a2a2a;
+  --btn-bg-active: #111111;
+  --nav-active-bg: #1a1a1a;
   --nav-active-text: #ffffff;
+  --border: #d4c8be;
 }
 
 @theme inline {
@@ -24,33 +25,34 @@
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-card: var(--card);
+  --color-border: var(--border);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-lora);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #070a12;
-    --foreground: #f8fafc;
-    --muted: #0f172a;
-    --card: #0b1222;
-    --accent: #4ea3ff;
-    --accent-soft: #0c1a32;
-    --btn-bg: #e5e7eb;
-    --btn-text: #0b1222;
-    --btn-text-hover: #0b1222;
-    --btn-text-active: #0b1222;
-    --btn-bg-hover: #dfe3e8;
-    --btn-bg-active: #d0d5db;
-    --nav-active-bg: #ffffff;
-    --nav-active-text: #0b1222;
+    --background: #0f0d0b;
+    --foreground: #f0ebe6;
+    --muted: #1a1714;
+    --card: #161310;
+    --accent: #f0ebe6;
+    --accent-soft: #1a1714;
+    --btn-bg: #e5e0d8;
+    --btn-text: #0f0d0b;
+    --btn-text-hover: #0f0d0b;
+    --btn-text-active: #0f0d0b;
+    --btn-bg-hover: #dfd8ce;
+    --btn-bg-active: #d0c8bc;
+    --nav-active-bg: #f0ebe6;
+    --nav-active-text: #0f0d0b;
+    --border: #2a2520;
   }
 }
 
 body {
-  background: radial-gradient(circle at 20% 20%, #f2f8ff 0, transparent 30%),
-    radial-gradient(circle at 80% 0%, #e8f1ff 0, transparent 25%),
-    var(--background);
+  background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), "Segoe UI", sans-serif;
 }
@@ -82,23 +84,21 @@ a {
 
 .nav-link {
   color: var(--foreground);
-  border-radius: 9999px;
-  padding: 0.375rem 0.75rem;
-  transition: background-color 120ms ease, color 120ms ease;
+  padding: 0.375rem 0;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-bottom: 1px solid transparent;
+  transition: border-color 120ms ease, opacity 120ms ease;
 }
 .nav-link:hover {
-  background: var(--btn-bg-hover);
-  color: var(--btn-text-hover);
+  border-bottom-color: var(--foreground);
+  opacity: 0.7;
 }
 .nav-link-active {
-  background: var(--nav-active-bg);
-  color: var(--nav-active-text);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-/* Safety net so dark pills always show text */
-.bg-slate-900 {
-  color: var(--btn-text) !important;
+  border-bottom-color: var(--foreground);
+  font-weight: 600;
 }
 
 /* Ensure lists display bullets/numbers in prose content */
