@@ -22,12 +22,10 @@ create policy "categories manage editors" on public.categories
 
 -- Seed with known categories
 insert into public.categories (name, slug, order_index) values
-  ('Oncology',         'oncology',         1),
-  ('Neurology',        'neurology',        2),
-  ('Endocrinology',    'endocrinology',    3),
-  ('Cardiology',       'cardiology',       4),
-  ('Gastroenterology', 'gastroenterology', 5),
-  ('Pulmonology',      'pulmonology',      6),
-  ('Rheumatology',     'rheumatology',     7),
-  ('Dermatology',      'dermatology',      8)
+  ('Endocrinology',    'endocrinology',    1),
+  ('Medical AI',       'medical-ai',       2),
+  ('Oncology',         'oncology',          3),
+  ('General medicine', 'general-medicine',  4),
+  ('Neurology',        'neurology',         5),
+  ('Genetics',         'genetics',          6)
 on conflict (name) do nothing;

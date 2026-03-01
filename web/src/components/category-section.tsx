@@ -11,14 +11,12 @@ export type CategoryStyle = {
 };
 
 export const categoryStyles: Record<string, CategoryStyle> = {
-  Oncology:         { bg: "bg-[#fdf2f0]", darkBg: "dark:bg-[#1a100e]", accent: "text-rose-800 dark:text-rose-300" },
-  Neurology:        { bg: "bg-[#f0eef8]", darkBg: "dark:bg-[#12101a]", accent: "text-violet-800 dark:text-violet-300" },
-  Endocrinology:    { bg: "bg-[#fdf8ed]", darkBg: "dark:bg-[#1a1710]", accent: "text-amber-800 dark:text-amber-300" },
-  Cardiology:       { bg: "bg-[#eef3fb]", darkBg: "dark:bg-[#0e1118]", accent: "text-blue-800 dark:text-blue-300" },
-  Gastroenterology: { bg: "bg-[#eef8f0]", darkBg: "dark:bg-[#0e1810]", accent: "text-emerald-800 dark:text-emerald-300" },
-  Pulmonology:      { bg: "bg-[#f0f5f8]", darkBg: "dark:bg-[#0e1214]", accent: "text-cyan-800 dark:text-cyan-300" },
-  Rheumatology:     { bg: "bg-[#f8f0f5]", darkBg: "dark:bg-[#180e14]", accent: "text-pink-800 dark:text-pink-300" },
-  Dermatology:      { bg: "bg-[#f5f0e8]", darkBg: "dark:bg-[#141008]", accent: "text-orange-800 dark:text-orange-300" },
+  Endocrinology:      { bg: "bg-[#fdf8ed]", darkBg: "dark:bg-[#1a1710]", accent: "text-amber-800 dark:text-amber-300" },
+  "Medical AI":       { bg: "bg-[#eef3fb]", darkBg: "dark:bg-[#0e1118]", accent: "text-blue-800 dark:text-blue-300" },
+  Oncology:           { bg: "bg-[#fdf2f0]", darkBg: "dark:bg-[#1a100e]", accent: "text-rose-800 dark:text-rose-300" },
+  "General medicine": { bg: "bg-[#eef8f0]", darkBg: "dark:bg-[#0e1810]", accent: "text-emerald-800 dark:text-emerald-300" },
+  Neurology:          { bg: "bg-[#f0eef8]", darkBg: "dark:bg-[#12101a]", accent: "text-violet-800 dark:text-violet-300" },
+  Genetics:           { bg: "bg-[#f0f5f8]", darkBg: "dark:bg-[#0e1214]", accent: "text-cyan-800 dark:text-cyan-300" },
 };
 
 const defaultStyle: CategoryStyle = {

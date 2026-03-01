@@ -12,14 +12,12 @@ export const revalidate = 300;
 
 // Display order — categories listed here appear first, rest follow alphabetically
 const CATEGORY_ORDER = [
-  "Oncology",
-  "Neurology",
   "Endocrinology",
-  "Cardiology",
-  "Gastroenterology",
-  "Pulmonology",
-  "Rheumatology",
-  "Dermatology",
+  "Medical AI",
+  "Oncology",
+  "General medicine",
+  "Neurology",
+  "Genetics",
 ];
 
 export default async function Home() {

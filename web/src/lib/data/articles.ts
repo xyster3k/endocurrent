@@ -142,14 +142,60 @@ export async function getCategories(): Promise<Category[]> {
   }
 }
 
+/**
+ * Build a mapping from subcategory → parent category using menu_items.
+ * E.g. "Diabetes" → "Endocrinology", "AI" → "Medical AI"
+ */
+async function getSubcategoryToParentMap(): Promise<Record<string, string>> {
+  const map: Record<string, string> = {};
+
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    return map;
+  }
+
+  try {
+    const supabase = await createSupabaseServerClient();
+    const { data: items, error } = await supabase
+      .from("menu_items")
+      .select("id, label, category, parent_id");
+    if (error || !items) return map;
+
+    // Build id → item lookup
+    const byId: Record<string, { label: string; category: string | null; parent_id: string | null }> = {};
+    for (const item of items as any[]) {
+      byId[item.id] = { label: item.label, category: item.category, parent_id: item.parent_id };
+    }
+
+    // For each child item (has parent_id), map its category to the parent's label
+    for (const item of items as any[]) {
+      if (item.parent_id && item.category) {
+        const parent = byId[item.parent_id];
+        if (parent) {
+          // Map subcategory name → parent label (case-insensitive lookup later)
+          map[item.category.toLowerCase()] = parent.label;
+        }
+      }
+    }
+  } catch {
+    // Silently fall back to no mapping
+  }
+
+  return map;
+}
+
 export async function getArticlesGroupedByCategory(
   maxPerCategory = 4
 ): Promise<Record<string, ArticleSummary[]>> {
-  const { data: articles } = await getArticles({ pageSize: 100 });
+  const [{ data: articles }, subcatMap] = await Promise.all([
+    getArticles({ pageSize: 100 }),
+    getSubcategoryToParentMap(),
+  ]);
 
   const grouped: Record<string, ArticleSummary[]> = {};
   for (const article of articles) {
-    const cat = article.category || "General";
+    const rawCat = article.category || "General";
+    // Map subcategory to parent category if mapping exists
+    const cat = subcatMap[rawCat.toLowerCase()] || rawCat;
     if (!grouped[cat]) grouped[cat] = [];
     if (grouped[cat].length < maxPerCategory) {
       grouped[cat].push(article);
